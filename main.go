@@ -1,4 +1,4 @@
-package dopewars
+package main
 
 import (
 	"fmt"
@@ -48,7 +48,7 @@ func main() {
 	}
 	var district struct {
 		Name     string
-		NeighbouringDistricts [2]string
+		NeighbouringDistricts [2]district
 		DrugsAvailable        [5]Drug
 		hospital              bool
 		bank				  bool
@@ -80,11 +80,11 @@ func main() {
 	var machineGun = Weapon{"Machine Gun", 5000, 40, 30, 4, true, false, 10, false, 0, 0, 1}
 	var handgrenade = Weapon{"Handgrenade", 800, 50, 100, 1, false, false, 0, true, 30, 80, 8}
 
-	var manhattan = District{"Manhattan", ["Brooklyn", "Queens"], [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false}
-	var brooklyn = District{"Brooklyn", ["Staten Island", "Queens"], [5]Drug{amphetamine, meth, morphine, shrooms, heroin}, false, true, false}
-	var queens = District{"Queens", ["Manhattan", "Bronx"], [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false}
-	var statenIsland = District{"Staten Island", ["Manhattan", "Brooklyn"], [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false}
-	var bronx = District{"Bronx", ["Manhattan", "Queens"], [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true}
+	var manhattan = District{"Manhattan", [brooklyn, queens], [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false}
+	var brooklyn = District{"Brooklyn", [statenIsland, queens], [5]Drug{amphetamine, meth, morphine, shrooms, heroin}, false, true, false}
+	var queens = District{"Queens", [manhattan, bronx], [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false}
+	var statenIsland = District{"Staten Island", [manhattan, brooklyn], [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false}
+	var bronx = District{"Bronx", [manhattan, queens], [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true}
 	
 }
 
