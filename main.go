@@ -2,30 +2,30 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"math/rand"
+	"strconv"
 )
 
 func main() {
-	var Drug struct {
-		Name  string
-		Price int
-		Stock int
+	type Drug struct {
+		Name        string
+		Price       int
+		Stock       int
 		RaiseWanted int
 	}
 	var weapon struct {
-		Name     string
-		Price    int
-		Damage   int
-		Accuracy int
-		FiringRate int
-		Melee bool
-		MeleeOnly bool
-		MeleeDmg int
-		Throwable bool
-		ThrowingDamage int
+		Name             string
+		Price            int
+		Damage           int
+		Accuracy         int
+		FiringRate       int
+		Melee            bool
+		MeleeOnly        bool
+		MeleeDmg         int
+		Throwable        bool
+		ThrowingDamage   int
 		ThrowingAccuracy int
-		MaxStock int
+		MaxStock         int
 	}
 	if weapon.MeleeOnly == true {
 		weapon.Damage = weapon.MeleeDmg
@@ -39,29 +39,25 @@ func main() {
 		Name            string
 		Health          int
 		Reputation      int
-		cash			int
-		debt			int
+		cash            int
+		debt            int
+		drugs           [8]Drug
+		weapons         [3]weapon
 		WantedLevel     int
-		CurrentWeapon   []Weapon
 		CurrentDistrict string
 	}
-	player.cash := 10000
-	player.debt := 15000
+	player.cash = 10000
+	player.debt = 15000
 	var district struct {
-		Name     string
-		neighbour_a []district
-		neighbour_b []district
-		DrugsAvailable        [5]Drug
-		hospital              bool
-		bank				  bool
-		loanShark             bool
-}
-	var inventory struct {
-		Drugs     [8]Drug
-		Weapons   [2]Weapon
-		cash	  int
+		Name           string
+		neighbour_a    []district
+		neighbour_b    []district
+		DrugsAvailable [5]Drug
+		hospital       bool
+		bank           bool
+		loanShark      bool
 	}
-	
+
 	var weed = Drug{"Weed", 50, 0, 2}
 	var cocaine = Drug{"Cocaine", 300, 0, 4}
 	var heroin = Drug{"Heroin", 200, 0, 6}
@@ -70,8 +66,8 @@ func main() {
 	var amphetamine = Drug{"Amphetamine", 60, 0, 3}
 	var meth = Drug{"Meth", 150, 0, 5}
 	var morphine = Drug{"Morphine", 80, 0, 5}
-	var shrooms = Drug{"Shrooms", 30, 0, 1}	
-	
+	var shrooms = Drug{"Shrooms", 30, 0, 1}
+
 	var knuckle = Weapon{"Knuckle", 0, 3, 100, 1, true, true, 1, false, 0, 0, 1}
 	var knife = Weapon{"Knife", 100, 10, 100, 1, false, true, 0, true, 5, 50, 5}
 	var baseballBat = Weapon{"Baseball Bat", 200, 20, 100, 1, false, true, 0, false, 0, 0, 1}
@@ -87,7 +83,7 @@ func main() {
 	var queens = district{"Queens", manhattan, bronx, [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false}
 	var statenIsland = district{"Staten Island", manhattan, brooklyn, [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false}
 	var bronx = district{"Bronx", manhattan, queens, [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true}
-	
+
 }
 
 func init() {
@@ -122,7 +118,7 @@ func keys() {
 	fmt.println("Press enter to continue.")
 	fmt.Scanln()
 }
-func reputation(){
+func reputation() {
 
 	switch {
 	case player.Reputation > 0 && player.Reputation < 10:
@@ -164,10 +160,9 @@ func reputation(){
 					inventory.Drugs[i].Price = int(float64(inventory.Drugs[i].Price) * 2)
 				}
 			}
+		}
 	}
 }
-	}
-
 
 func buyDrug() {
 	fmt.Println("You have $" + strconv.Itoa(inventory.cash) + " to spend.")
@@ -186,6 +181,7 @@ func buyDrug() {
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 }
+
 // sellDrug is a function that allows the player to sell drugs. Each sale will increase the player's reputation, but also increase the wanted level, multiplied by the amount of drugs sold.
 func sellDrug() {
 	fmt.Println("You have " + strconv.Itoa(inventory.Drugs[0].Stock) + " " + inventory.Drugs[0].Name + " to sell.")
@@ -218,21 +214,60 @@ func sellDrug() {
 		fmt.Println("Press enter to continue.")
 		fmt.Scanln()
 	}
-			//If the player has a reputation lower than 25, the reputation will increase by 4 for each 4 units sold.
-			if player.Reputation < 25 {
-				player.Reputation += 4 * (unitsSell / 4)
-			} else {
-				//If the player has a reputation higher than 25 and lower than 50, the reputation will increase by 3 for each 5 units sold.
-				if player.Reputation > 25 && player.Reputation < 50 {
-					player.Reputation += 3 * (unitsSell / 5)
-				} else {
-					//If the player has a reputation higher than 50, the reputation will increase by 2 for each 6 units sold.
-					if player.Reputation > 50 {
-						player.Reputation += 2 * (unitsSell / 6)
-					}
-				}
+	//If the player has a reputation lower than 25, the reputation will increase by 4 for each 4 units sold.
+	if player.Reputation < 25 {
+		player.Reputation += 4 * (unitsSell / 4)
+	} else {
+		//If the player has a reputation higher than 25 and lower than 50, the reputation will increase by 3 for each 5 units sold.
+		if player.Reputation > 25 && player.Reputation < 50 {
+			player.Reputation += 3 * (unitsSell / 5)
+		} else {
+			//If the player has a reputation higher than 50, the reputation will increase by 2 for each 6 units sold.
+			if player.Reputation > 50 {
+				player.Reputation += 2 * (unitsSell / 6)
 			}
+		}
+	}
 
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
+}
+
+func buyWeapon() {
+	fmt.Println("You have $" + strconv.Itoa(inventory.cash) + " to spend.")
+	fmt.Println("Press enter to continue.")
+	fmt.Scanln()
+	fmt.Println("What weapon would you like to buy?")
+	//print a numbered list of weapons available to the player, based on their reputation, writable to a weaponChoice variable
+	for i := 0; i < len(weaponsAvailable); i++ {
+		if weaponsAvailable[i].Price > 0 {
+			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+weaponsAvailable[i].Name+" - $"+strconv.Itoa(weaponsAvailable[i].Price)+" per unit")
+		}
+	}
+	//prompt the player to select the number of the weapon to buy, using the weapon's number in the list as the index
+	fmt.Println("Type the number of the weapon you would like to buy and press enter.")
+	fmt.Scanln(&weaponChoice)
+	//charge the player the price of the weapon
+	player.cash -= weaponsAvailable[weaponChoice-1].Price
+	//add the weapon to the player's inventory
+	player.Weapons = append(player.Weapons, weaponsAvailable[weaponChoice-1])
+}
+
+func travel() {
+	currentDistrict := player.District
+	//read the t keypress
+	fmt.Scanln(t)
+	//the player can travel to neighbour_a or neighbour_b
+	fmt.Println("Where would you like to travel to?")
+	fmt.Println("1. " + currentDistrict.NeighbourA.Name)
+	fmt.Println("2. " + currentDistrict.NeighbourB.Name)
+	fmt.Scanln(&travelChoice)
+	//if the player selects 1, travel to neighbour_a
+	if travelChoice == 1 {
+		player.District = currentDistrict.NeighbourA
+	} else {
+		//if the player selects 2, travel to neighbour_b
+		player.District = currentDistrict.NeighbourB
+	}
+	fmt.Println("You have arrived at " + player.District.Name + ".")
 }
