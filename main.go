@@ -13,7 +13,7 @@ func main() {
 		Stock int
 		RaiseWanted int
 	}
-	var Weapon struct {
+	var weapon struct {
 		Name     string
 		Price    int
 		Damage   int
@@ -32,23 +32,25 @@ func main() {
 		weapon.Melee = true
 	}
 	if weapon.Throwable == true {
-		weapon.ThrowingDamage == 0
-		weapon.ThrowingAccuracy == 0
+		weapon.ThrowingDamage = 0
+		weapon.ThrowingAccuracy = 0
 	}
-	cash := 10000
-	debt := 15000
 	var player struct {
 		Name            string
 		Health          int
 		Reputation      int
-		Armed           bool
+		cash			int
+		debt			int
 		WantedLevel     int
 		CurrentWeapon   []Weapon
 		CurrentDistrict string
 	}
+	player.cash := 10000
+	player.debt := 15000
 	var district struct {
 		Name     string
-		NeighbouringDistricts [2]district
+		neighbour_a []district
+		neighbour_b []district
 		DrugsAvailable        [5]Drug
 		hospital              bool
 		bank				  bool
@@ -80,11 +82,11 @@ func main() {
 	var machineGun = Weapon{"Machine Gun", 5000, 40, 30, 4, true, false, 10, false, 0, 0, 1}
 	var handgrenade = Weapon{"Handgrenade", 800, 50, 100, 1, false, false, 0, true, 30, 80, 8}
 
-	var manhattan = District{"Manhattan", [brooklyn, queens], [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false}
-	var brooklyn = District{"Brooklyn", [statenIsland, queens], [5]Drug{amphetamine, meth, morphine, shrooms, heroin}, false, true, false}
-	var queens = District{"Queens", [manhattan, bronx], [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false}
-	var statenIsland = District{"Staten Island", [manhattan, brooklyn], [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false}
-	var bronx = District{"Bronx", [manhattan, queens], [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true}
+	var manhattan = district{"Manhattan", brooklyn, queens, [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false}
+	var brooklyn = district{"Brooklyn", statenIsland, queens, [5]Drug{amphetamine, meth, morphine, shrooms, heroin}, false, true, false}
+	var queens = district{"Queens", manhattan, bronx, [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false}
+	var statenIsland = district{"Staten Island", manhattan, brooklyn, [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false}
+	var bronx = district{"Bronx", manhattan, queens, [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true}
 	
 }
 
@@ -142,6 +144,7 @@ func reputation(){
 					inventory.Drugs[i].Price = int(float64(inventory.Drugs[i].Price) * 1.5)
 				}
 			}
+		}
 	case player.Reputation > 25 && player.Reputation < 50:
 		weaponsAvailable = [6]Weapon{knife, baseballBat, machete, pistol, SMG, shotgun}
 		//a chance of 60% to multiply the price of up to 4 drugs in the inventory by 1.75
@@ -165,7 +168,6 @@ func reputation(){
 }
 	}
 
-}
 
 func buyDrug() {
 	fmt.Println("You have $" + strconv.Itoa(inventory.cash) + " to spend.")
