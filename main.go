@@ -3,6 +3,7 @@ package dopewars
 import (
 	"fmt"
 	"strconv"
+	"math/rand"
 )
 
 func main() {
