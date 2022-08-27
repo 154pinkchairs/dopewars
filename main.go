@@ -13,7 +13,7 @@ func main() {
 		Stock       int
 		RaiseWanted int
 	}
-	var weapon struct {
+	type weapon struct {
 		Name             string
 		Price            int
 		Damage           int
@@ -27,14 +27,7 @@ func main() {
 		ThrowingAccuracy int
 		MaxStock         int
 	}
-	if weapon.MeleeOnly == true {
-		weapon.Damage = weapon.MeleeDmg
-		weapon.Melee = true
-	}
-	if weapon.Throwable == true {
-		weapon.ThrowingDamage = 0
-		weapon.ThrowingAccuracy = 0
-	}
+
 	var player struct {
 		Name            string
 		Health          int
@@ -93,9 +86,8 @@ func init() {
 	fmt.Println("Welcome to the world of Dope Wars, " + player.Name + "!")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
-	fmt.Println("You are a small time drug dealer in the city of New York.")
-	fmt.Println("After failing one job after another, you have decided to start a small business. You have a small amount of cash, but you need to make a lot of money.")
-	fmt.Println("After one of your drug deals went down, you were left with a debt.")
+	fmt.Println("You are a small time drug dealer in the city of New York.\n After failing one job after another, you have decided to start a small business.")
+	fmt.Println("You have a small amount of cash, but you need to make a lot of money.\nAfter one of your drug deals went down, you were left with a debt.")
 	fmt.Println("You have $" + strconv.Itoa(debt) + " to pay off.")
 	fmt.Println("Press h for help. Press q to quit.")
 	fmt.Scanln()
