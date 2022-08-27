@@ -120,6 +120,7 @@ func keys() {
 	fmt.Scanln()
 }
 func reputation(){
+
 	switch {
 	case player.Reputation > 0 && player.Reputation < 10:
 		weaponsAvailable = [2]Weapon{knife, baseballBat}
@@ -179,6 +180,56 @@ func buyDrug() {
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("You have bought " + strconv.Itoa(inventory.Drugs[0].Stock) + " " + inventory.Drugs[0].Name + ".")
+	fmt.Println("Press enter to continue.")
+	fmt.Scanln()
+}
+// sellDrug is a function that allows the player to sell drugs. Each sale will increase the player's reputation, but also increase the wanted level, multiplied by the amount of drugs sold.
+func sellDrug() {
+	fmt.Println("You have " + strconv.Itoa(inventory.Drugs[0].Stock) + " " + inventory.Drugs[0].Name + " to sell.")
+	fmt.Println("Press enter to continue.")
+	fmt.Scanln()
+	// print the numbered list of drugs in the inventory with their current stock and price per unit
+	for i := 0; i < len(inventory.Drugs); i++ {
+		if inventory.Drugs[i].Stock > 0 {
+			fmt.Println(strconv.Itoa(i+1) + ". " + inventory.Drugs[i].Name + " - " + strconv.Itoa(inventory.Drugs[i].Stock) + " units - $" + strconv.Itoa(inventory.Drugs[i].Price) + " per unit")
+		}
+	}
+	fmt.Println("Which drug would you like to sell?.  Please type the number and press enter.")
+	fmt.Scanln(&inventory.Drugs[0].Name)
+	fmt.Println("How many would you like to sell?")
+	fmt.Scanln(&unitsSell)
+
+	if unitsSell > inventory.Drugs[0].Stock {
+		fmt.Println("You don't have that many units to sell.")
+		fmt.Println("Press enter to continue.")
+		fmt.Scanln()
+	} else {
+		inventory.Drugs[0].Stock -= unitsSell
+		inventory.cash += unitsSell * inventory.Drugs[0].Price
+		player.WantedLevel += inventory.Drugs[0].RaiseWanted * unitsSell
+		fmt.Println("You have sold " + strconv.Itoa(unitsSell) + " " + inventory.Drugs[0].Name + ".")
+		fmt.Println("You have" + strconv.Itoa(inventory.Drugs[0].Stock) + " " + inventory.Drugs[0].Name + " left.")
+		fmt.Println("Your current cash is $" + strconv.Itoa(inventory.cash) + ".")
+		fmt.Println("Your reputation has increased to " + strconv.Itoa(player.Reputation) + ".")
+		fmt.Println("Your wanted level has increased to " + strconv.Itoa(player.WantedLevel) + ".")
+		fmt.Println("Press enter to continue.")
+		fmt.Scanln()
+	}
+			//If the player has a reputation lower than 25, the reputation will increase by 4 for each 4 units sold.
+			if player.Reputation < 25 {
+				player.Reputation += 4 * (unitsSell / 4)
+			} else {
+				//If the player has a reputation higher than 25 and lower than 50, the reputation will increase by 3 for each 5 units sold.
+				if player.Reputation > 25 && player.Reputation < 50 {
+					player.Reputation += 3 * (unitsSell / 5)
+				} else {
+					//If the player has a reputation higher than 50, the reputation will increase by 2 for each 6 units sold.
+					if player.Reputation > 50 {
+						player.Reputation += 2 * (unitsSell / 6)
+					}
+				}
+			}
+
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 }
