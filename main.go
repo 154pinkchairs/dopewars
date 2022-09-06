@@ -8,19 +8,17 @@ import (
 )
 
 type Weapon struct {
-	name             string
-	Price            int
-	Damage           int
-	Accuracy         int
-	FiringRate       int
-	Melee            bool
-	MeleeOnly        bool
-	MeleeDmg         int
-	Throwable        bool
-	ThrowingDamage   int
-	ThrowingAccuracy int
-	MaxStock         int
-	Default          bool
+	name                         string
+	Price                        int
+	Damage, Accuracy, FiringRate int
+	Melee                        bool
+	MeleeOnly                    bool
+	MeleeDmg                     int
+	Throwable                    bool
+	ThrowingDamage               int
+	ThrowingAccuracy             int
+	MaxStock                     int
+	Default                      bool
 }
 
 var knuckle = Weapon{"Knuckle", 0, 3, 100, 1, true, true, 1, false, 0, 0, 1, true}
@@ -56,28 +54,24 @@ type weaponUnits struct {
 }
 
 var Player struct {
-	Name             string
-	Health           int
-	Reputation       int
-	cash             int
-	debt             int
-	drugs            [8]Drug
-	weaponsAvailable [8]Weapon
-	weaponUnits      weaponUnits
-	weapons          [4]Weapon
-	WantedLevel      int
-	CurrentDistrict  string
+	Name                    string
+	Health                  int
+	Reputation, WantedLevel int
+	cash, debt              int
+	drugs                   [8]Drug
+	weaponsAvailable        [8]Weapon
+	weaponUnits             weaponUnits
+	weapons                 [4]Weapon
+	CurrentDistrict         district
 }
 
 type district struct {
-	Name           string
-	neighbour_a    []district
-	neighbour_b    []district
-	drugsAvailable [5]Drug
-	hospital       bool
-	bank           bool
-	loanShark      bool
-	starting       bool
+	Name                      string
+	neighbour_a               []district
+	neighbour_b               []district
+	drugsAvailable            [5]Drug
+	hospital, bank, loanShark bool
+	starting                  bool
 }
 
 var manhattan = district{"Manhattan", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false, false}
@@ -182,6 +176,10 @@ func buyDrug() {
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("What drug would you like to buy?")
+	//prints the drugs in the current district
+	//if the drug is not available, it will not be printed
+	//get the current district
+
 	fmt.Println(district.drugsAvailable)
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
@@ -256,6 +254,7 @@ func buyWeapon() {
 	fmt.Println("What weapon would you like to buy?")
 	//print a numbered list of weapons available to the Player, based on their reputation, writable to a weaponChoice variable
 	var weaponChoice int
+	var maxObtainable int
 	for i := 0; i < len(Player.weaponsAvailable); i++ {
 		if Player.weaponsAvailable[i].Price > 0 {
 			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+Player.weaponsAvailable[i].Name+" - $"+strconv.Itoa(Player.weaponsAvailable[i].Price)+" per unit")
@@ -267,14 +266,44 @@ func buyWeapon() {
 	//if weapon.MaxStock > 1, prompt the Player to provide the quantity. Read the weapon quantity owned.
 	//If the Player owns at least 1 unit of a weapon, subtract the quantity owned and set the maxObtainable variable.
 	minObtainable := 1
+	//max obtainable is the minimum of the max stock and the Player's cash modulo divided by the weapon's price
+	maxObtainable = min(Player.weaponsAvailable[weaponChoice].MaxStock, Player.cash/Player.weaponsAvailable[weaponChoice].Price)
 	if Weapon.MaxStock > 1 {
-		maxObtainable := Player.weaponUnits - Weapon.MaxStock
+		maxObtainable == Player.weaponUnits-Weapon.MaxStock
 	} else if Player.weaponUnits == 1 {
-		maxObtainable := 0
+		maxObtainable == 0
 	} else {
-		maxObtainable := 1
+		maxObtainable == 1
 	}
 	fmt.Println("Please provide the quantity you wish to purchase (%d - %d):", minObtainable, maxObtainable)
+	fmt.Scanln(&weaponQuantity)
+	switch {
+	case weaponQuantity < minObtainable:
+		//terminate the function if the Player tries to buy less than 1 unit
+		return
+	case weaponQuantity > maxObtainable:
+		fmt.Println("You cannot afford or carry that many.")
+		fmt.Println("Press space to continue. To abort purchase, press c.")
+		fmt.Scanln(&terminateOrContinue)
+		if terminateOrContinue == "c" {
+			return
+		}
+	default:
+		//if the Player has enough cash, subtract the cost of the weapon from the Player's cash and add the weapon to the Player's inventory
+		if Player.cash >= weaponQuantity*Player.weaponsAvailable[weaponChoice].Price {
+			Player.cash -= weaponQuantity * Player.weaponsAvailable[weaponChoice].Price
+			Player.weapons[weaponChoice].Stock += weaponQuantity
+			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + Player.weaponsAvailable[weaponChoice].Name + ".")
+			fmt.Println("You have $" + strconv.Itoa(Player.cash) + " left.")
+			fmt.Println("Press enter to continue.")
+			fmt.Scanln()
+		} else {
+			fmt.Println("You cannot afford that many.")
+			fmt.Println("Press enter to continue.")
+			fmt.Scanln()
+		}
+
+	}
 	//charge the Player the price of the weapon
 	Player.cash -= Player.weaponsAvailable[weaponChoice-1].Price
 	//add the weapon to the Player's Player
@@ -294,7 +323,7 @@ func travel() {
 	bronx.neighbour_a = manhattan
 	bronx.neighbour_b = queens
 
-	currentDistrict := Player.District
+	currentDistrict := Player.CurrentDistrict
 	//read the t keypress
 	fmt.Scanln(t)
 	//the Player can travel to neighbour_a or neighbour_b
@@ -304,10 +333,10 @@ func travel() {
 	fmt.Scanln("%s", &travelChoice)
 	//if the Player selects 1, travel to neighbour_a
 	if travelChoice == 1 {
-		Player.District = currentDistrict.NeighbourA
+		Player.CurrentDistrict = currentDistrict.NeighbourA
 	} else {
 		//if the Player selects 2, travel to neighbour_b
-		Player.District = currentDistrict.NeighbourB
+		Player.CurrentDistrict = currentDistrict.NeighbourB
 	}
 	fmt.Println("You have arrived at " + Player.District.Name + ".")
 }
