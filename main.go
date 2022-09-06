@@ -62,23 +62,55 @@ var Player struct {
 	weaponsAvailable        [8]Weapon
 	weaponUnits             weaponUnits
 	weapons                 [4]Weapon
-	CurrentDistrict         district
+	CurrentDistrict         districtProperties
+}
+type districtProperties struct {
+	name string
+	neighbour_a []district
+	neighbour_b []district
+	drugsAvailable [5]Drug
+	hospital bool
+	bank bool
+	loanShark bool
+}
+type district interface {
+	Name()                      string
+	neighbour_a()               []district
+	neighbour_b()               []district
+	drugsAvailable()            [5]Drug
+	hospital()					bool
+	bank()						bool
+	loanShark() 				bool
+	starting()                  bool
+	ID()						int
+	Properties()				districtProperties
 }
 
-type district struct {
-	Name                      string
-	neighbour_a               []district
-	neighbour_b               []district
-	drugsAvailable            [5]Drug
-	hospital, bank, loanShark bool
-	starting                  bool
+type dist struct {
+	properties districtProperties
+	ID int
 }
+//create a manhattan struct. The drugs can be the same for each, they should be updated upon drugs_available() call
+var manhattan = dist{ districtProperties{"Manhattan", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, false, false, false}, 0}
+var brooklyn = dist{ districtProperties{"Brooklyn", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, false, false, false}, 1}
+var queens = dist{ districtProperties{"Queens", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, false, false, false}, 2}
+var bronx = dist{ districtProperties{"Bronx", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, false, false, false}, 3}
+var statenIsland = dist{ districtProperties{"Staten Island", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, false, false, false}, 4}
+//create a manhattan array
 
-var manhattan = district{"Manhattan", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false, false}
-var brooklyn = district{"Brooklyn", nil, nil, [5]Drug{amphetamine, meth, morphine, shrooms, heroin}, false, true, false, false}
-var queens = district{"Queens", nil, nil, [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false, false}
-var statenIsland = district{"Staten Island", nil, nil, [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false, false}
-var bronx = district{"Bronx", nil, nil, [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true, false}
+//var manhattan = district{"Manhattan", nil, nil, [5]Drug{weed, cocaine, heroin, meth, ketamine}, true, true, false, false}
+//var brooklyn = district{"Brooklyn", nil, nil, [5]Drug{amphetamine, meth, morphine, shrooms, heroin}, false, true, false, false}
+//var queens = district{"Queens", nil, nil, [5]Drug{weed, cocaine, heroin, acid, amphetamine}, true, false, false, false}
+//var statenIsland = district{"Staten Island", nil, nil, [5]Drug{weed, amphetamine, shrooms, acid, ketamine}, false, true, false, false}
+//var bronx = district{"Bronx", nil, nil, [5]Drug{meth, morphine, heroin, shrooms, acid}, true, false, true, false}
+
+func drugs_available() {
+	alldrugs := [8]Drug{weed, cocaine, heroin, acid, ketamine, amphetamine, meth, morphine}
+	//write 5 random drugs to player's current district. Load upon entering district
+	for i := 0; i < 5; i++ {
+		Player.CurrentDistrict.drugsAvailable[i] = alldrugs[rand.Intn(8)]
+	}
+}
 
 func main() {
 	fmt.Println("Welcome to the city of New York.")
@@ -245,6 +277,13 @@ func sellDrug() {
 	fmt.Scanln()
 }
 
+func min (a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 func buyWeapon() {
 	Player.weapons = [4]Weapon{knuckle, knuckle, knuckle, knuckle}
 
@@ -268,14 +307,8 @@ func buyWeapon() {
 	minObtainable := 1
 	//max obtainable is the minimum of the max stock and the Player's cash modulo divided by the weapon's price
 	maxObtainable = min(Player.weaponsAvailable[weaponChoice].MaxStock, Player.cash/Player.weaponsAvailable[weaponChoice].Price)
-	if Weapon.MaxStock > 1 {
-		maxObtainable == Player.weaponUnits-Weapon.MaxStock
-	} else if Player.weaponUnits == 1 {
-		maxObtainable == 0
-	} else {
-		maxObtainable == 1
-	}
 	fmt.Println("Please provide the quantity you wish to purchase (%d - %d):", minObtainable, maxObtainable)
+	var weaponQuantity int
 	fmt.Scanln(&weaponQuantity)
 	switch {
 	case weaponQuantity < minObtainable:
@@ -284,8 +317,9 @@ func buyWeapon() {
 	case weaponQuantity > maxObtainable:
 		fmt.Println("You cannot afford or carry that many.")
 		fmt.Println("Press space to continue. To abort purchase, press c.")
-		fmt.Scanln(&terminateOrContinue)
-		if terminateOrContinue == "c" {
+		var abort string
+		fmt.Scanln(&abort)
+		if abort == "c" {
 			return
 		}
 	default:
@@ -307,36 +341,29 @@ func buyWeapon() {
 	//charge the Player the price of the weapon
 	Player.cash -= Player.weaponsAvailable[weaponChoice-1].Price
 	//add the weapon to the Player's Player
-	Player.Weapons = append(Player.Weapons, Player.weaponsAvailable[weaponChoice-1])
+	Player.weapons = append(Player.weapons, Player.weaponsAvailable[weaponChoice-1])
 }
 
 func travel() {
-	//update the 2nd and 3rd positions for manhattan to be brooklyn and queens
-	manhattan.neighbour_a = brooklyn
-	manhattan.neighbour_b = queens
-	brooklyn.neighbour_a = statenIsland
-	brooklyn.neighbour_b = queens
-	queens.neighbour_a = manhattan
-	queens.neighbour_b = bronx
-	statenIsland.neighbour_a = manhattan
-	statenIsland.neighbour_b = brooklyn
-	bronx.neighbour_a = manhattan
-	bronx.neighbour_b = queens
+	//update neighbour_a and neighbour_b in districtProperties for each district
+	manhattan.properties.neighbour_a = brooklyn
+	manhattan.properties.neighbour_b = queens
+
 
 	currentDistrict := Player.CurrentDistrict
 	//read the t keypress
-	fmt.Scanln(t)
 	//the Player can travel to neighbour_a or neighbour_b
-	fmt.Println("Where would you like to travel to?")
-	fmt.Println("1. " + currentDistrict.NeighbourA.Name)
-	fmt.Println("2. " + currentDistrict.NeighbourB.Name)
+	fmt.Println("Where would you like to travel to? Type 1 or 2 and press enter.")
+	var travelChoice int
+	fmt.Println("1. " + currentDistrict.properties.neighbour_a.name)
+	fmt.Println("2. " + currentDistrict.properties.neighbour_b.Name)
 	fmt.Scanln("%s", &travelChoice)
 	//if the Player selects 1, travel to neighbour_a
 	if travelChoice == 1 {
-		Player.CurrentDistrict = currentDistrict.NeighbourA
+		Player.CurrentDistrict = currentDistrict.properties.neighbour_a()[0]
 	} else {
 		//if the Player selects 2, travel to neighbour_b
-		Player.CurrentDistrict = currentDistrict.NeighbourB
+		Player.CurrentDistrict = currentDistrict.neighbour_b()[0]
 	}
 	fmt.Println("You have arrived at " + Player.District.Name + ".")
 }
