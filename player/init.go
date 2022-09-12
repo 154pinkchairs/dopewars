@@ -1,20 +1,25 @@
 package player
 
 import (
-	"../city"
+	"dopewars/city"
+	"dopewars/combat"
 	"fmt"
 	"os"
 	"strconv"
 )
 
-type character struct {
+type Character struct {
 	Name                    string
 	Health                  int
 	Reputation, WantedLevel int
-	cash, debt              int
+	cash                    int
+	debt                    int
 	CurrentDistrict         city.District
 	drugs                   Drugs
+	weapons                 combat.WeaponUnits
 }
+
+//export character
 
 /*
 	func NewPlayer(c *character)Set(name string, reputation int, CurrentDistrict city.District) {
