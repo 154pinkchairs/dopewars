@@ -7,17 +7,17 @@ import (
 
 type districtProperties struct {
 	name           string
-	neighbour_a    district
-	neighbour_b    district
+	neighbour_a    District
+	neighbour_b    District
 	drugsAvailable p.Drugs
 	hospital       bool
 	bank           bool
 	loanShark      bool
 }
-type district interface {
+type District interface {
 	Name() string
-	neighbour_a() []district
-	neighbour_b() []district
+	neighbour_a() []District
+	neighbour_b() []District
 	//list of up to 5 drugs available in the district. This must be indexable
 	drugsAvailable() p.Drugs
 	hospital() bool
@@ -38,7 +38,7 @@ func travel() {
 	manhattan.properties.neighbour_a = brooklyn
 	manhattan.properties.neighbour_b = queens
 
-	currentDistrict := Player.CurrentDistrict
+	currentDistrict := p.Character.CurrentDistrict
 	//read the t keypress
 	//the Player can travel to neighbour_a or neighbour_b
 	fmt.Println("Where would you like to travel to? Type 1 or 2 and press enter.")
@@ -48,10 +48,10 @@ func travel() {
 	fmt.Scanln("%s", &travelChoice)
 	//if the Player selects 1, travel to neighbour_a
 	if travelChoice == 1 {
-		Player.CurrentDistrict = currentDistrict.properties.neighbour_a()[0]
+		p.Character.CurrentDistrict = currentDistrict.properties.neighbour_a()[0]
 	} else {
 		//if the Player selects 2, travel to neighbour_b
-		Player.CurrentDistrict = currentDistrict.neighbour_b()[0]
+		p.Character.CurrentDistrict = currentDistrict.neighbour_b()[0]
 	}
-	fmt.Println("You have arrived at " + Player.District.Name + ".")
+	fmt.Println("You have arrived at " + p.character.District.Name + ".")
 }

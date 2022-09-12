@@ -1,7 +1,6 @@
 package player
 
 import (
-	"../city"
 	"fmt"
 	"math/rand"
 	"strconv"
@@ -50,7 +49,7 @@ func declareDrugs() {
 	drugs[8].RaiseWanted = 1
 }
 
-func (c *player.character) drugsAvailable() {
+func (c *Character) drugsAvailable() {
 	//get up to 5 random drugs from the drugs array.
 	for i := 0; i < 5; i++ {
 		rand.Seed(time.Now().UnixNano())
@@ -66,7 +65,7 @@ func (c *player.character) drugsAvailable() {
 	}
 }
 
-func (c *player.character) buyDrug() {
+func (c *Character) buyDrug() {
 	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
