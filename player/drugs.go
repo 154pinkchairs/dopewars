@@ -5,6 +5,8 @@ import (
 	"math/rand"
 	"strconv"
 	"time"
+
+	"../city"
 )
 
 type Drug struct {
@@ -74,7 +76,7 @@ func (c *Character) buyDrug() {
 	//if the drug is not available, it will not be printed
 	//get the current district
 
-	fmt.Println(city.district.drugsAvailable)
+	fmt.Println(city.District.drugsAvailable)
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("How many would you like to buy?")
@@ -88,7 +90,7 @@ func (c *Character) buyDrug() {
 }
 
 // sellDrug is a function that allows the character to sell drugs. Each sale will increase the character's reputation, but also increase the wanted level, multiplied by the amount of d sold.
-func (c *character) sellDrug() {
+func (c *Character) sellDrug() {
 	fmt.Println("You have " + strconv.Itoa(c.drugs[0].Stock) + " " + c.drugs[0].Name + " to sell.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()

@@ -26,6 +26,13 @@ type WeaponUnits struct {
 	Count int
 }
 
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
 var knuckle = Weapon{"Knuckle", 0, 3, 100, 1, true, true, 1, false, 0, 0, 1, true}
 var knife = Weapon{"Knife", 100, 10, 100, 1, false, true, 0, true, 5, 50, 5, false}
 var baseballBat = Weapon{"Baseball Bat", 200, 20, 100, 1, false, true, 0, false, 0, 0, 1, false}
@@ -37,29 +44,29 @@ var machineGun = Weapon{"Machine Gun", 5000, 40, 30, 4, true, false, 10, false, 
 var handgrenade = Weapon{"Handgrenade", 800, 50, 100, 1, false, false, 0, true, 30, 80, 8, false}
 
 func unlockWeapons() {
-	//unlock weapons based on the p.Character's reputation
-	if p.Character.reputation >= 0 {
+	//unlock weapons based on the p.Character's Reputation
+	if p.Character.Reputation >= 0 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, knife)
 	}
-	if p.Character.reputation >= 1 {
+	if p.Character.Reputation >= 1 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, baseballBat)
 	}
-	if p.Character.reputation >= 2 {
+	if p.Character.Reputation >= 2 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, machete)
 	}
-	if p.Character.reputation >= 3 {
+	if p.Character.Reputation >= 3 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, pistol)
 	}
-	if p.Character.reputation >= 4 {
+	if p.Character.Reputation >= 4 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, SMG)
 	}
-	if p.Character.reputation >= 5 {
+	if p.Character.Reputation >= 5 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, shotgun)
 	}
-	if p.Character.reputation >= 6 {
+	if p.Character.Reputation >= 6 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, machineGun)
 	}
-	if p.Character.reputation >= 7 {
+	if p.Character.Reputation >= 7 {
 		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, handgrenade)
 	}
 }
@@ -70,7 +77,7 @@ func buyWeapon() {
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("What weapon would you like to buy?")
-	//print a numbered list of weapons available to the p.Character, based on their reputation, writable to a weaponChoice variable
+	//print a numbered list of weapons available to the p.Character, based on their Reputation, writable to a weaponChoice variable
 	var weaponChoice int
 	var maxObtainable int
 	for i := 0; i < len(p.Character.weaponsAvailable); i++ {

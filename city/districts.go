@@ -1,8 +1,9 @@
 package city
 
 import (
-	p "dopewars/player"
 	"fmt"
+
+	p "github.com/154pinkchairs/dopewars/player"
 )
 
 type districtProperties struct {

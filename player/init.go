@@ -43,7 +43,7 @@ type Character struct {
 }
 */
 
-func (c *character) init() {
+func (c *Character) init() {
 	c.cash = 10000
 	c.debt = 15000
 	fmt.Println("Welcome to Dope Wars!")

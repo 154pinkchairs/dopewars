@@ -1,4 +1,4 @@
-package main
+package dopewars
 
 import (
 	"fmt"
@@ -30,4 +30,11 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+}
+func execute() {
+	//create a character
+	//create a city
+	//create a district
+	//create a district
+	main()
 }
