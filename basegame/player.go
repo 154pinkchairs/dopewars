@@ -1,8 +1,6 @@
-package player
+package basegame
 
 import (
-	"dopewars/city"
-	"dopewars/combat"
 	"fmt"
 	"os"
 	"strconv"
@@ -14,9 +12,10 @@ type Character struct {
 	Reputation, WantedLevel int
 	cash                    int
 	debt                    int
-	CurrentDistrict         city.District
+	CurrentDistrict         District
 	drugs                   Drugs
-	weapons                 combat.WeaponUnits
+	weapons                 WeaponUnits
+	weaponsAvailable        Weapons
 }
 
 //export character

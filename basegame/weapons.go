@@ -1,10 +1,8 @@
-package combat
+package basegame
 
 import (
 	"fmt"
 	"strconv"
-
-	p "dopewars/player"
 )
 
 type Weapon struct {
@@ -43,62 +41,62 @@ var shotgun = Weapon{"Shotgun", 2000, 30, 60, 1, false, false, 0, false, 0, 0, 1
 var machineGun = Weapon{"Machine Gun", 5000, 40, 30, 4, true, false, 10, false, 0, 0, 1, false}
 var handgrenade = Weapon{"Handgrenade", 800, 50, 100, 1, false, false, 0, true, 30, 80, 8, false}
 
-func unlockWeapons() {
-	//unlock weapons based on the p.Character's Reputation
-	if p.Character.Reputation >= 0 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, knife)
+func unlockWeapons(c *Character) {
+	//unlock weapons based on the Character's Reputation
+	if c.Reputation >= 0 {
+		c.weaponsAvailable = append(c.weaponsAvailable, knife)
 	}
-	if p.Character.Reputation >= 1 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, baseballBat)
+	if c.Reputation >= 1 {
+		c.weaponsAvailable = append(c.weaponsAvailable, baseballBat)
 	}
-	if p.Character.Reputation >= 2 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, machete)
+	if c.Reputation >= 2 {
+		c.weaponsAvailable = append(c.weaponsAvailable, machete)
 	}
-	if p.Character.Reputation >= 3 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, pistol)
+	if c.Reputation >= 3 {
+		c.weaponsAvailable = append(c.weaponsAvailable, pistol)
 	}
-	if p.Character.Reputation >= 4 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, SMG)
+	if c.Reputation >= 4 {
+		c.weaponsAvailable = append(c.weaponsAvailable, SMG)
 	}
-	if p.Character.Reputation >= 5 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, shotgun)
+	if c.Reputation >= 5 {
+		c.weaponsAvailable = append(c.weaponsAvailable, shotgun)
 	}
-	if p.Character.Reputation >= 6 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, machineGun)
+	if c.Reputation >= 6 {
+		c.weaponsAvailable = append(c.weaponsAvailable, machineGun)
 	}
-	if p.Character.Reputation >= 7 {
-		p.Character.weaponsAvailable = append(p.Character.weaponsAvailable, handgrenade)
+	if c.Reputation >= 7 {
+		c.weaponsAvailable = append(c.weaponsAvailable, handgrenade)
 	}
 }
 
-func buyWeapon() {
-	p.Character.weapons = [4]Weapon{knuckle, knuckle, knuckle, knuckle}
-	fmt.Println("You have $" + strconv.Itoa(p.Character.cash) + " to spend.")
+func buyWeapon(c *Character) {
+	c.weapons = [4]Weapon{knuckle, knuckle, knuckle, knuckle}
+	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("What weapon would you like to buy?")
-	//print a numbered list of weapons available to the p.Character, based on their Reputation, writable to a weaponChoice variable
+	//print a numbered list of weapons available to the c, based on their Reputation, writable to a weaponChoice variable
 	var weaponChoice int
 	var maxObtainable int
-	for i := 0; i < len(p.Character.weaponsAvailable); i++ {
-		if p.Character.weaponsAvailable[i].Price > 0 {
-			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+p.Character.weaponsAvailable[i].Name+" - $"+strconv.Itoa(p.Character.weaponsAvailable[i].Price)+" per unit")
+	for i := 0; i < len(c.weaponsAvailable); i++ {
+		if c.weaponsAvailable[i].Price > 0 {
+			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+c.weaponsAvailable[i].Name+" - $"+strconv.Itoa(c.weaponsAvailable[i].Price)+" per unit")
 		}
 	}
-	//prompt the p.Character to select the number of the weapon to buy, using the weapon's number in the list as the index
+	//prompt the c to select the number of the weapon to buy, using the weapon's number in the list as the index
 	fmt.Println("Type the number of the weapon you would like to buy and press enter.")
 	fmt.Scanln(&weaponChoice)
-	//if weapon.MaxStock > 1, prompt the p.Character to provide the quantity. Read the weapon quantity owned.
-	//If the p.Character owns at least 1 unit of a weapon, subtract the quantity owned and set the maxObtainable variable.
+	//if weapon.MaxStock > 1, prompt the c to provide the quantity. Read the weapon quantity owned.
+	//If the c owns at least 1 unit of a weapon, subtract the quantity owned and set the maxObtainable variable.
 	minObtainable := 1
-	//max obtainable is the minimum of the max stock and the p.Character's cash modulo divided by the weapon's price
-	maxObtainable = min(p.Character.weaponsAvailable[weaponChoice].MaxStock, p.Character.cash/p.Character.weaponsAvailable[weaponChoice].Price)
+	//max obtainable is the minimum of the max stock and the c's cash modulo divided by the weapon's price
+	maxObtainable = min(c.weaponsAvailable[weaponChoice].MaxStock, c.cash/c.weaponsAvailable[weaponChoice].Price)
 	fmt.Println("Please provide the quantity you wish to purchase (%d - %d):", minObtainable, maxObtainable)
 	var weaponQuantity int
 	fmt.Scanln(&weaponQuantity)
 	switch {
 	case weaponQuantity < minObtainable:
-		//terminate the function if the p.Character tries to buy less than 1 unit
+		//terminate the function if the c tries to buy less than 1 unit
 		return
 	case weaponQuantity > maxObtainable:
 		fmt.Println("You cannot afford or carry that many.")
@@ -109,12 +107,12 @@ func buyWeapon() {
 			return
 		}
 	default:
-		//if the p.Character has enough cash, subtract the cost of the weapon from the p.Character's cash and add the weapon to the p.Character's inventory
-		if p.Character.cash >= weaponQuantity*p.Character.weaponsAvailable[weaponChoice].Price {
-			p.Character.cash -= weaponQuantity * p.Character.weaponsAvailable[weaponChoice].Price
-			p.Character.weapons[weaponChoice].Stock += weaponQuantity
-			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + p.Character.weaponsAvailable[weaponChoice].Name + ".")
-			fmt.Println("You have $" + strconv.Itoa(p.Character.cash) + " left.")
+		//if the c has enough cash, subtract the cost of the weapon from the c's cash and add the weapon to the c's inventory
+		if c.cash >= weaponQuantity*c.weaponsAvailable[weaponChoice].Price {
+			c.cash -= weaponQuantity * c.weaponsAvailable[weaponChoice].Price
+			c.weapons[weaponChoice].Stock += weaponQuantity
+			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].Name + ".")
+			fmt.Println("You have $" + strconv.Itoa(c.cash) + " left.")
 			fmt.Println("Press enter to continue.")
 			fmt.Scanln()
 		} else {
@@ -124,8 +122,8 @@ func buyWeapon() {
 		}
 
 	}
-	//charge the p.Character the price of the weapon
-	p.Character.cash -= p.Character.weaponsAvailable[weaponChoice-1].Price
-	//add the weapon to the p.Character's p.Character
-	p.Character.weapons = append(p.Character.weapons, p.Character.weaponsAvailable[weaponChoice-1])
+	//charge the c the price of the weapon
+	c.cash -= c.weaponsAvailable[weaponChoice-1].Price
+	//add the weapon to the c's c
+	c.weapons = append(c.weapons, c.weaponsAvailable[weaponChoice-1])
 }

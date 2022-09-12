@@ -1,12 +1,10 @@
-package player
+package basegame
 
 import (
 	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
-
-	"../city"
 )
 
 type Drug struct {
@@ -76,7 +74,7 @@ func (c *Character) buyDrug() {
 	//if the drug is not available, it will not be printed
 	//get the current district
 
-	fmt.Println(city.District.drugsAvailable)
+	fmt.Println(District.drugsAvailable)
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("How many would you like to buy?")
