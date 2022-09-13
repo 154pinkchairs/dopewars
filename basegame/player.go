@@ -12,6 +12,7 @@ type Character struct {
 	Health                  int
 	Reputation, WantedLevel int
 	cash                    int
+	bank                    int
 	debt                    int
 	CurrentDistrict         District
 	drugs                   Drugs
@@ -19,31 +20,7 @@ type Character struct {
 	weaponsAvailable        []Weapon
 }
 
-//export character
-
-/*
-	func NewPlayer(c *character)Set(name string, reputation int, CurrentDistrict city.District) {
-		return &character{
-			Name:        name,
-			Health:      100,
-			Reputation:  0,
-			WantedLevel: 0,
-			cash:        5000,
-			debt:        10000,
-		}
-	}
-*/
-/*func ModPlayer(reputation int, wantedLevel int, cash int, debt int) *character {
-	return &character{
-		Reputation:  reputation,
-		WantedLevel: wantedLevel,
-		cash:        cash,
-		debt:        debt,
-	}
-}
-*/
-
-func (c *Character) Player() {
+func Player(c *Character) {
 	c.cash = 10000
 	c.debt = 15000
 	fmt.Println("Welcome to Dope Wars!")

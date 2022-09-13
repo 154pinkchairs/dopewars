@@ -88,16 +88,16 @@ func unlockWeapons(c *Character) {
 	if c.Reputation >= 2 {
 		c.weaponsAvailable = append(c.weaponsAvailable, machete)
 	}
-	if c.Reputation >= 3 {
+	if c.Reputation >= 5 {
 		c.weaponsAvailable = append(c.weaponsAvailable, pistol)
 	}
-	if c.Reputation >= 4 {
+	if c.Reputation >= 8 {
 		c.weaponsAvailable = append(c.weaponsAvailable, SMG)
 	}
-	if c.Reputation >= 5 {
+	if c.Reputation >= 12 {
 		c.weaponsAvailable = append(c.weaponsAvailable, shotgun)
 	}
-	if c.Reputation >= 6 {
+	if c.Reputation >= 25 {
 		c.weaponsAvailable = append(c.weaponsAvailable, machineGun)
 	}
 	if c.Reputation >= 7 {

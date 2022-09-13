@@ -1,0 +1,33 @@
+{
+    "Character": [
+        {
+            "Name": "Heisenberg",
+            "Health": 100,
+            "Reputation": 0,
+            "WantedLevel": 0,
+            "cash": 10000,
+            "bank": 0,
+            "debt": 15000,
+            "CurrentDistrict": "Bronx",
+            "Inventory": [
+                {
+                    "name": "weed",
+                    "type": "drug",
+                    "amount": 10
+                },
+                {
+                    "name": "knuckles",
+                    "type": "weapon",
+                    "amount": 1
+                }
+            ],
+            "weaponsAvailable": [
+                {
+                    "name": "knife",
+                    "type": "weapon",
+                    "amount": 5
+                }
+            ]
+        }
+    ]
+}
