@@ -69,8 +69,9 @@ func unlockWeapons(c *Character) {
 	}
 }
 
-func buyWeapon(c *Character, w *Weapon) {
-	c.weapons = [4]Weapon{knuckle, knuckle, knuckle, knuckle}
+func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
+	c.weapons.Count = 1
+	c.weapons.Name = knuckle
 	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
@@ -80,7 +81,7 @@ func buyWeapon(c *Character, w *Weapon) {
 	var maxObtainable int
 	for i := 0; i < len(c.weaponsAvailable); i++ {
 		if c.weaponsAvailable[i].Price > 0 {
-			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+c.weaponsAvailable[i].Name+" - $"+strconv.Itoa(c.weaponsAvailable[i].Price)+" per unit")
+			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+c.weaponsAvailable[i].name+" - $"+strconv.Itoa(c.weaponsAvailable[i].Price)+" per unit")
 		}
 	}
 	//prompt the c to select the number of the weapon to buy, using the weapon's number in the list as the index
@@ -110,7 +111,7 @@ func buyWeapon(c *Character, w *Weapon) {
 		//if the c has enough cash, subtract the cost of the weapon from the c's cash and add the weapon to the c's inventory
 		if c.cash >= weaponQuantity*c.weaponsAvailable[weaponChoice].Price {
 			c.cash -= weaponQuantity * c.weaponsAvailable[weaponChoice].Price
-			c.weapons[weaponChoice].Stock += weaponQuantity
+			c.weapons[weaponChoice].Count += weaponQuantity
 			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].Name + ".")
 			fmt.Println("You have $" + strconv.Itoa(c.cash) + " left.")
 			fmt.Println("Press enter to continue.")
