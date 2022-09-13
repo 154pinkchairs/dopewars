@@ -1,4 +1,4 @@
-** Dopewars **
+**Dopewars**
 
 Welcome to the classic game of dopewars. This is a text-based adventure. 
 
