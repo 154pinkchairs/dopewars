@@ -1,4 +1,4 @@
-package dopewars
+package main
 
 import (
 	"fmt"
