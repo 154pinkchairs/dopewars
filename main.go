@@ -1,16 +1,31 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"log"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
+type Game struct{}
+
+func (g *Game) Update() error {
+	return nil
+}
+
+func (g *Game) Draw(screen *ebiten.Image) {
+	ebitenutil.DebugPrint(screen, "Welcome to the city of New York.")
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	return 854, 480
+}
+
 func main() {
-	fmt.Println("Welcome to the city of New York.")
-	err := os.Remove("save.txt")
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	ebiten.SetWindowSize(960, 540)
+	ebiten.SetWindowTitle("Dopewars 2D")
+	if err := ebiten.RunGame(&Game{}); err != nil {
+		log.Fatal(err)
 	}
 }
 func execute() {
