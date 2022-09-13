@@ -76,13 +76,11 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("What weapon would you like to buy?")
-	//print a numbered list of weapons available to the c, based on their Reputation, writable to a weaponChoice variable
+	//print a numbered list of weapons available to the c, based on their Reputation and amount of cash, writable to a weaponChoice variable
 	var weaponChoice int
 	var maxObtainable int
 	for i := 0; i < len(c.weaponsAvailable); i++ {
-		if c.weaponsAvailable[i].Price > 0 {
-			weaponChoice = append(weaponChoice, strconv.Itoa(i+1)+". "+c.weaponsAvailable[i].name+" - $"+strconv.Itoa(c.weaponsAvailable[i].Price)+" per unit")
-		}
+		fmt.Println(strconv.Itoa(i+1) + ". " + c.weaponsAvailable[i].name + " $" + strconv.Itoa(c.weaponsAvailable[i].Price))
 	}
 	//prompt the c to select the number of the weapon to buy, using the weapon's number in the list as the index
 	fmt.Println("Type the number of the weapon you would like to buy and press enter.")
@@ -111,8 +109,10 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 		//if the c has enough cash, subtract the cost of the weapon from the c's cash and add the weapon to the c's inventory
 		if c.cash >= weaponQuantity*c.weaponsAvailable[weaponChoice].Price {
 			c.cash -= weaponQuantity * c.weaponsAvailable[weaponChoice].Price
-			c.weapons[weaponChoice].Count += weaponQuantity
-			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].Name + ".")
+			//give c the weapon(s) they bought, by modifying the c's weapons name and count
+			c.weapons.Name = c.weaponsAvailable[weaponChoice]
+			c.weapons.Count = weaponQuantity
+			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].name + ".")
 			fmt.Println("You have $" + strconv.Itoa(c.cash) + " left.")
 			fmt.Println("Press enter to continue.")
 			fmt.Scanln()
@@ -123,8 +123,4 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 		}
 
 	}
-	//charge the c the price of the weapon
-	c.cash -= c.weaponsAvailable[weaponChoice-1].Price
-	//add the weapon to the c's c
-	c.weapons = append(c.weapons, c.weaponsAvailable[weaponChoice-1])
 }
