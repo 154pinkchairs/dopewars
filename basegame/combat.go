@@ -5,24 +5,59 @@ import (
 	"strconv"
 )
 
+type FightFlight interface {
+	MeleeAttack()
+	RangedAttack()
+	Throw()
+	Dodge()
+	Bribe()
+	Submit()
+	Run()
+}
+
 type Weapon struct {
-	name                         string
-	Price                        int
-	Damage, Accuracy, FiringRate int
-	Melee                        bool
-	MeleeOnly                    bool
-	MeleeDmg                     int
-	Throwable                    bool
-	ThrowingDamage               int
-	ThrowingAccuracy             int
-	MaxStock                     int
-	Default                      bool
+	name             string
+	Price            int
+	Damage, Accuracy int
+	FiringRate       float32
+	Melee            bool
+	MeleeOnly        bool
+	MeleeDmg         int
+	Throwable        bool
+	ThrowingDamage   int
+	ThrowingAccuracy int
+	MaxStock         int
+	Default          bool
 }
 
 type WeaponUnits struct {
 	Name  Weapon
 	Count int
 }
+
+type Enemy struct {
+	Name         string
+	HP           int
+	Weapon       Weapon
+	Weapon2      Weapon
+	Speed        float64
+	Perseverance float32
+	likelihood   float32
+	canSteal     bool
+	canArrest    bool
+}
+
+var PolicePed = Enemy{"Police Officer on foot", 100, pistol, baton, 1.0, 1.0, 0.5, false, true}                //TODO: likelihood will depend on WantedLevel. If the c has a very high reputation, it will be possible to visit the police station and bribe the police to decrease the WantedLevel and the likelihood of encounter.
+var PoliceCar = Enemy{"Police Officer in a car", 100, pistol, baton, 2.5, 1.5, 0.33, false, true}              //TODO: add cars for the player
+var PoliceHeli = Enemy{"Police Officer in a helicopter", 100, machineGun, shotgun, 5.0, 3.0, 0.1, false, true} //TODO: fights escalation
+var Crook = Enemy{"Crook", 100, knuckle, knife, 1.2, 1.0, 0.4, true, false}                                    //print only that he's armed with a knife
+var Junkie = Enemy{"Junkie", 70, knuckle, knife, 1.0, 1.75, 0.6, true, false}                                  //TODO: random junkie health, changes depending on which drug the player is selling the most
+var Gangster = Enemy{"Gangster", 100, pistol, machete, 1.5, 2.0, 0.08, true, false}
+
+// TODO: weapon randomization
+var Gangster2 = Enemy{"Gangster", 100, SMG, baseballBat, 1.3, 1.9, 0.1, true, false}
+var Gangster3 = Enemy{"Gangster", 100, shotgun, knuckle, 2.0, 2.1, 0.07, true, false}
+var GangLeader = Enemy{"Gang Leader", 100, machineGun, pistol, 1.7, 2.5, 0.05, true, false}
 
 func min(x, y int) int {
 	if x < y {
@@ -31,9 +66,10 @@ func min(x, y int) int {
 	return y
 }
 
-var knuckle = Weapon{"Knuckle", 0, 3, 100, 1, true, true, 1, false, 0, 0, 1, true}
-var knife = Weapon{"Knife", 100, 10, 100, 1, false, true, 0, true, 5, 50, 5, false}
-var baseballBat = Weapon{"Baseball Bat", 200, 20, 100, 1, false, true, 0, false, 0, 0, 1, false}
+var knuckle = Weapon{"Knuckle", 0, 3, 100, 1.0, true, true, 1, false, 0, 0, 1, true}
+var knife = Weapon{"Knife", 100, 10, 100, 1.0, false, true, 0, true, 5, 50, 5, false}
+var baton = Weapon{"Police Baton", 160, 22, 100, 0.75, false, true, 0, false, 0, 0, 1, false}
+var baseballBat = Weapon{"Baseball Bat", 200, 20, 100, 0.67, false, true, 0, false, 0, 0, 1, false}
 var machete = Weapon{"Machete", 300, 30, 100, 1, false, true, 0, true, 15, 30, 2, false}
 var pistol = Weapon{"Pistol", 1200, 10, 80, 2, false, false, 0, false, 0, 0, 1, false}
 var SMG = Weapon{"SMG", 3000, 20, 50, 3, false, false, 0, false, 0, 0, 1, false}
