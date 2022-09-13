@@ -21,7 +21,7 @@ type districtProperties struct {
 // create the districts and their properties just like in New York
 var manhattan = District{
 	name:           "Manhattan",
-	drugsAvailable: make(Drugs, 5),
+	drugsAvailable: make(Drugs, 6),
 	ID:             0,
 	properties: districtProperties{
 		hospital:     true,
@@ -32,7 +32,7 @@ var manhattan = District{
 }
 var brooklyn = District{
 	name:           "Brooklyn",
-	drugsAvailable: make(Drugs, 5),
+	drugsAvailable: make(Drugs, 6),
 	ID:             1,
 	properties: districtProperties{
 		hospital:     true,
@@ -43,7 +43,7 @@ var brooklyn = District{
 }
 var queens = District{
 	name:           "Queens",
-	drugsAvailable: make(Drugs, 5),
+	drugsAvailable: make(Drugs, 6),
 	ID:             2,
 	properties: districtProperties{
 		hospital:     false,
@@ -54,7 +54,7 @@ var queens = District{
 }
 var bronx = District{
 	name:           "Bronx",
-	drugsAvailable: make(Drugs, 5),
+	drugsAvailable: make(Drugs, 6),
 	ID:             3,
 	properties: districtProperties{
 		hospital:     true,
@@ -65,7 +65,7 @@ var bronx = District{
 }
 var statenIsland = District{
 	name:           "Staten Island",
-	drugsAvailable: make(Drugs, 5),
+	drugsAvailable: make(Drugs, 6),
 	ID:             4,
 	properties: districtProperties{
 		hospital:     false,
@@ -74,6 +74,8 @@ var statenIsland = District{
 		neighbourids: []int{1},
 	},
 }
+
+var districts = []District{manhattan, brooklyn, queens, bronx, statenIsland}
 
 /*type District interface {
 	Name() string

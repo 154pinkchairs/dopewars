@@ -2,6 +2,7 @@ package basegame
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strconv"
 )
@@ -52,6 +53,10 @@ func (c *Character) init() {
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("You are a small time drug dealer in the city of New York.\n After failing one job after another, you have decided to start a small business.")
+	//place the player in a random district from the districts slice
+	c.CurrentDistrict = districts[rand.Intn(len(districts))]
+	fmt.Println("You have decided to start your business in " + c.CurrentDistrict.name + ".")
+	//randomize the district's availability of drugs
 	fmt.Println("You have a small amount of cash, but you need to make a lot of money.\nAfter one of your drug deals went down, you were left with a debt.")
 	fmt.Println("You have $" + strconv.Itoa(c.debt) + " to pay off.")
 	fmt.Println("Press h for help. Press q to quit.")
