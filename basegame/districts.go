@@ -119,8 +119,8 @@ func travel(c *Character, d *District) {
 		fmt.Println("You have cancelled your travel.")
 		return
 	} else {
-		switch c.CurrentDistrict {
-		case manhattan:
+		switch c.CurrentDistrict.ID {
+		case 0:
 			switch travelChoice {
 			case 1:
 				c.CurrentDistrict = brooklyn
@@ -129,7 +129,7 @@ func travel(c *Character, d *District) {
 			case 3:
 				c.CurrentDistrict = bronx
 			}
-		case brooklyn:
+		case 1:
 			switch travelChoice {
 			case 1:
 				c.CurrentDistrict = manhattan
@@ -138,7 +138,7 @@ func travel(c *Character, d *District) {
 			case 3:
 				c.CurrentDistrict = statenIsland
 			}
-		case queens:
+		case 2:
 			switch travelChoice {
 			case 1:
 				c.CurrentDistrict = manhattan
@@ -147,14 +147,14 @@ func travel(c *Character, d *District) {
 			case 3:
 				c.CurrentDistrict = bronx
 			}
-		case bronx:
+		case 3:
 			switch travelChoice {
 			case 1:
 				c.CurrentDistrict = manhattan
 			case 2:
 				c.CurrentDistrict = queens
 			}
-		case statenIsland:
+		case 4:
 			switch travelChoice {
 			case 1:
 				c.CurrentDistrict = brooklyn
@@ -163,5 +163,5 @@ func travel(c *Character, d *District) {
 	}
 
 	fmt.Scanln("%s", &travelChoice)
-	fmt.Println("You have arrived at " + c.CurrentDistrict.Name + ".")
+	fmt.Println("You have arrived at " + c.CurrentDistrict.name + ".")
 }

@@ -74,7 +74,7 @@ func (c *Character) buyDrug() {
 	//if the drug is not available, it will not be printed
 	//get the current district
 
-	fmt.Println(District.drugsAvailable)
+	fmt.Println(c.CurrentDistrict.drugsAvailable)
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("How many would you like to buy?")

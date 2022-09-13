@@ -15,7 +15,7 @@ type Character struct {
 	CurrentDistrict         District
 	drugs                   Drugs
 	weapons                 WeaponUnits
-	weaponsAvailable        Weapons
+	weaponsAvailable        []Weapon
 }
 
 //export character

@@ -69,7 +69,7 @@ func unlockWeapons(c *Character) {
 	}
 }
 
-func buyWeapon(c *Character) {
+func buyWeapon(c *Character, w *Weapon) {
 	c.weapons = [4]Weapon{knuckle, knuckle, knuckle, knuckle}
 	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
