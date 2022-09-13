@@ -1,6 +1,7 @@
 package main
 
 import (
+	"dopewars/basegame"
 	"fmt"
 	"os"
 )
@@ -37,4 +38,5 @@ func execute() {
 	//create a district
 	//create a district
 	main()
+	basegame.Character.Player()
 }
