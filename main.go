@@ -152,11 +152,11 @@ func (g *Game) Activate() error {
 		if mouseOverButton(340, 250, 280, 50) {
 			//do something
 		}
-		if mouseOverButton(340, 300, 280, 50) {
+		if mouseOverButton(340, 300, 280, 50) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			//open the issues page in the browser
 			os.Open("https://github.com/154pinkchairs/dopewars/issues")
 		}
-		if mouseOverButton(340, 350, 280, 50) {
+		if mouseOverButton(340, 350, 280, 50) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 			//exit the game
 			os.Exit(0)
 		}
