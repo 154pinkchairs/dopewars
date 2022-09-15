@@ -15,5 +15,5 @@
 # vendor/
 toolchain/typefix.go
 .env
-.vscode/*
 *.xcf
+.vscode/i
