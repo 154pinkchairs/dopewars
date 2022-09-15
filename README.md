@@ -1,6 +1,7 @@
-**Dopewars**
+# Dopewars
 
-Welcome to the classic game of dopewars. This is a text-based adventure. 
+This game is being created with the intention of being the best Dopewars game ever. Initially it was meant to be just a text-based adventure,
+but now it is going to use Ebiten, while there will still be a boilerplate branch for CLI.
 
 You are a small time drug dealer in the city of New York. After failing one job after another, you have decided to start a small business.
 This game features:
