@@ -1,11 +1,34 @@
 package basegame
 
 import (
-	"fmt"
-	"math/rand"
+	"encoding/json"
+	"image/color"
+	"io/ioutil"
+	"log"
 	"os"
-	"strconv"
+	"time"
+
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/tinne26/etxt"
 )
+
+type Game struct{ txtRenderer *etxt.Renderer }
+
+func (self *Game) Layout(int, int) (int, int) { return 960, 540 }
+func (self *Game) Update() error              { return nil }
+func (self *Game) Draw(screen *ebiten.Image) {
+	millis := time.Now().UnixMilli() // (you should usually avoid using time)
+	blue := (millis / 16) % 512
+	if blue >= 256 {
+		blue = 511 - blue
+	}
+	changingColor := color.RGBA{0, 255, uint8(blue), 255}
+
+	// set relevant text renderer properties and draw
+	self.txtRenderer.SetTarget(screen)
+	self.txtRenderer.SetColor(changingColor)
+	self.txtRenderer.Draw("Welcome to Dope Wars 2D!", 480, 200)
+}
 
 type Character struct {
 	Name                    string
@@ -20,7 +43,8 @@ type Character struct {
 	weaponsAvailable        []Weapon
 }
 
-func Player(c *Character) {
+//leave this here for debugging only
+/*func Player(c *Character) {
 	c.cash = 10000
 	c.debt = 15000
 	fmt.Println("Welcome to Dope Wars!")
@@ -58,5 +82,84 @@ func Player(c *Character) {
 		fmt.Scanln()
 	} else if key == "q" {
 		os.Exit(0)
+	}
+}
+*/
+
+//using the following doc: https://docs.rocketnine.space/code.rocketnine.space/tslocum/messeji/
+//create a new text field at the bottom of the screen
+//window will be 1152x648
+//text field will be 1152x200
+//set the font.Face to assets/VT323_Regular.17.ttf
+//set the font size to 32
+//var textField = messeji.NewTextField(image.Rect(0, 448, 1152, 648), font.Face("assets/VT323_Regular.ttf"))
+
+type Save struct {
+	Name                    string
+	Health                  int
+	Reputation, WantedLevel int
+	Cash                    int
+	Bank                    int
+	Debt                    int
+	CurrentDistrict         District
+	Drugs                   Drugs
+	Weapons                 WeaponUnits
+	WeaponsAvailable        []Weapon
+}
+
+//parse the ../savegame.json file and pass the data to the character struct. If any fields are missing, use the default values
+func Loadsave(c *Character) {
+	//open the file
+	file, err := os.Open("../savegame.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	//read the file
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//parse the json
+	var save Save
+	err = json.Unmarshal(data, &save)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	//set the character struct values
+	c.Name = save.Name
+	c.Health = save.Health
+	c.Reputation = save.Reputation
+	c.WantedLevel = save.WantedLevel
+	c.cash = save.Cash
+	c.bank = save.Bank
+	c.debt = save.Debt
+	c.CurrentDistrict = save.CurrentDistrict
+	c.drugs = save.Drugs
+	c.weapons = save.Weapons
+	c.weaponsAvailable = save.WeaponsAvailable
+}
+
+func NewGame() {
+	// load font library
+	fontLib := etxt.NewFontLibrary()
+	_, _, err := fontLib.ParseDirFonts("assets/fonts")
+	if err != nil {
+		log.Fatalf("Error while loading fonts: %s", err.Error())
+	}
+	txtRenderer := etxt.NewStdRenderer()
+	glyphsCache := etxt.NewDefaultCache(10 * 1024 * 1024) // 10MB
+	txtRenderer.SetCacheHandler(glyphsCache.NewHandler())
+	txtRenderer.SetFont(fontLib.GetFont("VT323 Regular"))
+	txtRenderer.SetAlign(etxt.Bottom, etxt.XCenter)
+	txtRenderer.SetSizePx(36)
+
+	ebiten.SetWindowSize(400, 400)
+	err = ebiten.RunGame(&Game{txtRenderer})
+	if err != nil {
+		log.Fatal(err)
 	}
 }

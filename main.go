@@ -1,13 +1,16 @@
 package main
 
 import (
+	"dopewars/basegame"
+	"fmt"
 	_ "image/png"
 	"log"
 	"os"
-
+	"os/exec"
+	"runtime"
+	"github.com/yohamta/furex/v2"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 )
 
 var bg *ebiten.Image
@@ -56,6 +59,9 @@ func init() {
 		log.Fatal(err6)
 	}
 	quitimg, _, err = ebitenutil.NewImageFromFile("assets/quit.png")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	loadsave_hoover, _, err7 = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
 	if err7 != nil {
@@ -120,8 +126,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	pos5.GeoM.Translate(340, 350)
 	screen.DrawImage(quitimg, pos5)
 	if mouseOverButton(340, 350, 280, 50) {
-		//dump the old image and draw the hoover image
-		//screen.Clear()
 		screen.DrawImage(quitimg_hoover, pos5)
 	}
 }
@@ -139,30 +143,37 @@ func mouseOverButton(x, y, width, height int) bool {
 	return false
 }
 
-func (g *Game) Activate() error {
-	//check if the left mouse button is pressed
-	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-		//check if the mouse is over the button
-		if mouseOverButton(340, 150, 280, 50) {
-			//do something
-		}
-		if mouseOverButton(340, 200, 280, 50) {
-			//do something
-		}
-		if mouseOverButton(340, 250, 280, 50) {
-			//do something
-		}
-		if mouseOverButton(340, 300, 280, 50) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-			//open the issues page in the browser
-			os.Open("https://github.com/154pinkchairs/dopewars/issues")
-		}
-		if mouseOverButton(340, 350, 280, 50) && inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-			//exit the game
-			os.Exit(0)
-		}
-	}
-	return nil
+type ButtonBox struct {
+	x, y, width, height int
 }
+
+
+/* Add a handle from inpututil interface. Define button boxes (boundaries) for each pos. Button at pos1 calls basegame.run().
+Button at pos2 calls basegame.Loadsave() and then basegame.NewGame().
+Button at pos3 opens https://liberapay.com/ in browser. Add a inline comment that this has to be changed to the actual donation link.
+Button at pos4 opens https://github.com/154pinkchairs/dopewars/issues in the browser.
+Button at pos5 calls os.Exit(0) */
+
+func openbrowser(url string) {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+}
+
+
 
 // // create the districts and their properties just like
 
@@ -172,10 +183,9 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func main() {
 	ebiten.SetWindowSize(960, 540)
-	ebiten.SetWindowResizable(true)
+	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 	ebiten.SetWindowTitle("Dopewars 2D")
 	if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
 	}
 }
-
