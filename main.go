@@ -11,6 +11,7 @@ import (
 )
 
 var bg *ebiten.Image
+
 var loadsave *ebiten.Image
 var newgameimg *ebiten.Image
 var donate *ebiten.Image
@@ -55,9 +56,7 @@ func init() {
 		log.Fatal(err6)
 	}
 	quitimg, _, err = ebitenutil.NewImageFromFile("assets/quit.png")
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	loadsave_hoover, _, err7 = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
 	if err7 != nil {
 		log.Fatal(err7)
@@ -180,12 +179,3 @@ func main() {
 	}
 }
 
-/*func execute() {
-	//create a character
-	//create a city
-	//create a district
-	//create a district
-	main()
-	//basegame.Player.Character()
-}
-*/
