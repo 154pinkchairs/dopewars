@@ -2,11 +2,13 @@ package basegame
 
 import (
 	"encoding/json"
+	"fmt"
 	"image/color"
 	"io/ioutil"
 	"log"
 	"os"
 	"time"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/tinne26/etxt"
 	"golang.org/x/exp/shiny/screen"
@@ -16,34 +18,42 @@ type Game struct{
 	txtRenderer *etxt.Renderer
     screen      *screen.Screen }
 
-func (self *Game) Layout(int, int) (int, int) { return 960, 540 }
-func (self *Game) Update() error              { return nil }
-func (self *Game) Draw(screen *ebiten.Image) {
+func (g *Game) Layout(int, int) (int, int) { return 960, 540 }
+func (g *Game) Update() error              { return nil }
+func (g *Game) Draw(screen *ebiten.Image) {
 	millis := time.Now().UnixMilli() // (you should usually avoid using time)
 	blue := (millis / 16) % 512
+	Bgnew := ebiten.NewImage(960, 540)
+	Bgnew.Fill(color.RGBA{0, 0, 0, 255})
+	//draw the bgnew image to the screen
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(0, 0)
+	screen.DrawImage(Bgnew, op)
 	if blue >= 256 {
 		blue = 511 - blue
 	}
 	changingColor := color.RGBA{0, 255, uint8(blue), 255}
 
 	// set relevant text renderer properties and draw
-	self.txtRenderer.SetTarget(screen)
-	self.txtRenderer.SetColor(changingColor)
-	self.txtRenderer.Draw("Welcome to Dope Wars 2D!", 480, 200)
+	g.txtRenderer.SetTarget(screen)
+	g.txtRenderer.SetColor(changingColor)
+	g.txtRenderer.Draw("Welcome to Dope Wars 2D!", 480, 200)
 }
 
 type Character struct {
 	Name                    string
 	Health                  int
 	Reputation, WantedLevel int
-	cash                    int
-	bank                    int
-	debt                    int
+	Cash                    int
+	Days					int
+	Bank                    int
+	Debt                    int
 	CurrentDistrict         District
 	drugs                   Drugs
-	weapons                 WeaponUnits
+	Weapons                 WeaponUnits
 	weaponsAvailable        []Weapon
 }
+
 
 //leave this here for debugging only
 /*func Player(c *Character) {
@@ -71,9 +81,9 @@ type Character struct {
 		fmt.Println("i - Player")
 		fmt.Println("d - district info and the available drugs. Press d again to see the drugs in stock.\n to buy a drug, type the drug number and press enter.")
 		fmt.Println("t - travel to a district. Press t again to see the districts you can travel to.\n to travel to a district, type the district number and press enter.")
-		fmt.Println("w - weapon info and the available weapons. Press w again to see the weapons in stock.\n to buy a weapon, type the weapon number and press enter.")
+		fmt.Println("w - weapon info and the available weapoWs. Press w again to see the weapoWs in stock.\n to buy a weapon, type the weapon number and press enter.")
 		fmt.Println("a - current weapon info. Press a again to see the current weapon stats. Press s to sell the current weapon.")
-		fmt.Println("f - fight the opponent. For throwable weapons, press j to throw the weapon. Note you will lose the weapon if you do not deal a critical hit\n or if it's a handgrenade.")
+		fmt.Println("f - fight the opponent. For throwable weapoWs, press j to throw the weapon. Note you will lose the weapon if you do not deal a critical hit\n or if it's a handgrenade.")
 		fmt.Println("s - sell the drugs. Type the drug number and press enter.")
 		fmt.Println("o - make a payment or withdraw/borrow money from the bank or loan shark. Type the amount and press enter.")
 		fmt.Println("r - run away. You might lose some cash or drugs and the wanted level will go down.")
@@ -101,6 +111,7 @@ type Save struct {
 	Health                  int
 	Reputation, WantedLevel int
 	Cash                    int
+	Days					int
 	Bank                    int
 	Debt                    int
 	CurrentDistrict         District
@@ -136,17 +147,17 @@ func Loadsave(c *Character) {
 	c.Health = save.Health
 	c.Reputation = save.Reputation
 	c.WantedLevel = save.WantedLevel
-	c.cash = save.Cash
-	c.bank = save.Bank
-	c.debt = save.Debt
+	c.Cash = save.Cash
+	c.Bank = save.Bank
+	c.Debt = save.Debt
+	c.Days = save.Days
 	c.CurrentDistrict = save.CurrentDistrict
 	c.drugs = save.Drugs
-	c.weapons = save.Weapons
+	c.Weapons = save.Weapons
 	c.weaponsAvailable = save.WeaponsAvailable
 }
 
-func NewGame() {
-	//clear the ebiten.Image bg, newgameimg, donate, issues, quitimg
+func NewGame(g *Game) {
 	// load font library
 	fontLib := etxt.NewFontLibrary()
 	_, _, err := fontLib.ParseDirFonts("assets/fonts")
@@ -166,7 +177,13 @@ func NewGame() {
 	err = ebiten.RunGame(&Game{
 		txtRenderer: txtRenderer,
 	})
+	bgnew := ebiten.NewImage(960, 540)
+	bgnew.Fill(color.RGBA{0, 0, 0, 255})
+	//invoke the Draw function
+	g.Draw(bgnew)
+	fmt.Println("test")
 	if err != nil {
 		log.Fatal(err)
 	}
 }
+

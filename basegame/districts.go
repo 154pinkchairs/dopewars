@@ -52,7 +52,7 @@ var queens = District{
 		neighbourids: []int{0, 1, 3},
 	},
 }
-var bronx = District{
+var Bronx = District{
 	name:           "Bronx",
 	drugsAvailable: make(Drugs, 6),
 	ID:             3,
@@ -75,7 +75,7 @@ var statenIsland = District{
 	},
 }
 
-var districts = []District{manhattan, brooklyn, queens, bronx, statenIsland}
+var districts = []District{manhattan, brooklyn, queens, Bronx, statenIsland}
 
 /*type District interface {
 	Name() string
@@ -103,7 +103,7 @@ func (d District) PrintNeighbours() {
 		case 2:
 			fmt.Printf("%d. %s", i+1, queens.name)
 		case 3:
-			fmt.Printf("%d. %s", i+1, bronx.name)
+			fmt.Printf("%d. %s", i+1, Bronx.name)
 		case 4:
 			fmt.Printf("%d. %s", i+1, statenIsland.name)
 		}
@@ -129,7 +129,7 @@ func travel(c *Character, d *District) {
 			case 2:
 				c.CurrentDistrict = queens
 			case 3:
-				c.CurrentDistrict = bronx
+				c.CurrentDistrict = Bronx
 			}
 		case 1:
 			switch travelChoice {
@@ -147,7 +147,7 @@ func travel(c *Character, d *District) {
 			case 2:
 				c.CurrentDistrict = brooklyn
 			case 3:
-				c.CurrentDistrict = bronx
+				c.CurrentDistrict = Bronx
 			}
 		case 3:
 			switch travelChoice {

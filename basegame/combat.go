@@ -30,10 +30,9 @@ type Weapon struct {
 	Default          bool
 }
 
-type WeaponUnits struct {
-	Name  Weapon
-	Count int
-}
+
+//change WeaponUnits to a map of Weapon to int
+type WeaponUnits map[Weapon]int
 
 type Enemy struct {
 	Name         string
@@ -50,13 +49,13 @@ type Enemy struct {
 var PolicePed = Enemy{"Police Officer on foot", 100, pistol, baton, 1.0, 1.0, 0.5, false, true}                //TODO: likelihood will depend on WantedLevel. If the c has a very high reputation, it will be possible to visit the police station and bribe the police to decrease the WantedLevel and the likelihood of encounter.
 var PoliceCar = Enemy{"Police Officer in a car", 100, pistol, baton, 2.5, 1.5, 0.33, false, true}              //TODO: add cars for the player
 var PoliceHeli = Enemy{"Police Officer in a helicopter", 100, machineGun, shotgun, 5.0, 3.0, 0.1, false, true} //TODO: fights escalation
-var Crook = Enemy{"Crook", 100, knuckle, knife, 1.2, 1.0, 0.4, true, false}                                    //print only that he's armed with a knife
-var Junkie = Enemy{"Junkie", 70, knuckle, knife, 1.0, 1.75, 0.6, true, false}                                  //TODO: random junkie health, changes depending on which drug the player is selling the most
+var Crook = Enemy{"Crook", 100, Knuckle, knife, 1.2, 1.0, 0.4, true, false}                                    //print only that he's armed with a knife
+var Junkie = Enemy{"Junkie", 70, Knuckle, knife, 1.0, 1.75, 0.6, true, false}                                  //TODO: random junkie health, changes depending on which drug the player is selling the most
 var Gangster = Enemy{"Gangster", 100, pistol, machete, 1.5, 2.0, 0.08, true, false}
 
 // TODO: weapon randomization
 var Gangster2 = Enemy{"Gangster", 100, SMG, baseballBat, 1.3, 1.9, 0.1, true, false}
-var Gangster3 = Enemy{"Gangster", 100, shotgun, knuckle, 2.0, 2.1, 0.07, true, false}
+var Gangster3 = Enemy{"Gangster", 100, shotgun, Knuckle, 2.0, 2.1, 0.07, true, false}
 var GangLeader = Enemy{"Gang Leader", 100, machineGun, pistol, 1.7, 2.5, 0.05, true, false}
 
 func min(x, y int) int {
@@ -66,7 +65,7 @@ func min(x, y int) int {
 	return y
 }
 
-var knuckle = Weapon{"Knuckle", 0, 3, 100, 1.0, true, true, 1, false, 0, 0, 1, true}
+var Knuckle = Weapon{"Knuckle", 0, 3, 100, 1.0, true, true, 1, false, 0, 0, 1, true}
 var knife = Weapon{"Knife", 100, 10, 100, 1.0, false, true, 0, true, 5, 50, 5, false}
 var baton = Weapon{"Police Baton", 160, 22, 100, 0.75, false, true, 0, false, 0, 0, 1, false}
 var baseballBat = Weapon{"Baseball Bat", 200, 20, 100, 0.67, false, true, 0, false, 0, 0, 1, false}
@@ -106,13 +105,13 @@ func unlockWeapons(c *Character) {
 }
 
 func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
-	c.weapons.Count = 1
-	c.weapons.Name = knuckle
-	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
+	//using a map of Weapon to int give c one unit of Knuckle
+	(*wu)[Knuckle] = 1
+	fmt.Println("You have $" + strconv.Itoa(c.Cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("What weapon would you like to buy?")
-	//print a numbered list of weapons available to the c, based on their Reputation and amount of cash, writable to a weaponChoice variable
+	//print a numbered list of weapons available to the c, based on their Reputation and amount of Cash, writable to a weaponChoice variable
 	var weaponChoice int
 	var maxObtainable int
 	for i := 0; i < len(c.weaponsAvailable); i++ {
@@ -124,8 +123,8 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 	//if weapon.MaxStock > 1, prompt the c to provide the quantity. Read the weapon quantity owned.
 	//If the c owns at least 1 unit of a weapon, subtract the quantity owned and set the maxObtainable variable.
 	minObtainable := 1
-	//max obtainable is the minimum of the max stock and the c's cash modulo divided by the weapon's price
-	maxObtainable = min(c.weaponsAvailable[weaponChoice].MaxStock, c.cash/c.weaponsAvailable[weaponChoice].Price)
+	//max obtainable is the minimum of the max stock and the c's Cash modulo divided by the weapon's price
+	maxObtainable = min(c.weaponsAvailable[weaponChoice].MaxStock, c.Cash/c.weaponsAvailable[weaponChoice].Price)
 	fmt.Println("Please provide the quantity you wish to purchase (%d - %d):", minObtainable, maxObtainable)
 	var weaponQuantity int
 	fmt.Scanln(&weaponQuantity)
@@ -142,14 +141,13 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 			return
 		}
 	default:
-		//if the c has enough cash, subtract the cost of the weapon from the c's cash and add the weapon to the c's inventory
-		if c.cash >= weaponQuantity*c.weaponsAvailable[weaponChoice].Price {
-			c.cash -= weaponQuantity * c.weaponsAvailable[weaponChoice].Price
+		//if the c has enough Cash, subtract the cost of the weapon from the c's Cash and add the weapon to the c's inventory
+		if c.Cash >= weaponQuantity*c.weaponsAvailable[weaponChoice].Price {
+			c.Cash -= weaponQuantity * c.weaponsAvailable[weaponChoice].Price
 			//give c the weapon(s) they bought, by modifying the c's weapons name and count
-			c.weapons.Name = c.weaponsAvailable[weaponChoice]
-			c.weapons.Count = weaponQuantity
+			(*wu)[c.weaponsAvailable[weaponChoice]] = weaponQuantity
 			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].name + ".")
-			fmt.Println("You have $" + strconv.Itoa(c.cash) + " left.")
+			fmt.Println("You have $" + strconv.Itoa(c.Cash) + " left.")
 			fmt.Println("Press enter to continue.")
 			fmt.Scanln()
 		} else {

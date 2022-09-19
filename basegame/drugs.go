@@ -308,7 +308,7 @@ func randomizeDrugs(d *District, dr *Drug) {
 }
 
 func (c *Character) buyDrug() {
-	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
+	fmt.Println("You have $" + strconv.Itoa(c.Cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("What drug would you like to buy?")
@@ -321,7 +321,7 @@ func (c *Character) buyDrug() {
 	fmt.Scanln()
 	fmt.Println("How many would you like to buy?")
 	fmt.Scanln(&c.drugs[0].Stock)
-	fmt.Println("You have $" + strconv.Itoa(c.cash) + " to spend.")
+	fmt.Println("You have $" + strconv.Itoa(c.Cash) + " to spend.")
 	fmt.Println("Press enter to continue.")
 	fmt.Scanln()
 	fmt.Println("You have bought " + strconv.Itoa(c.drugs[0].Stock) + " " + c.drugs[0].Name + ".")
@@ -352,11 +352,11 @@ func (c *Character) sellDrug() {
 		fmt.Scanln()
 	} else {
 		c.drugs[0].Stock -= unitsSell
-		c.cash += unitsSell * c.drugs[0].Price
+		c.Cash += unitsSell * c.drugs[0].Price
 		c.WantedLevel += c.drugs[0].RaiseWanted * unitsSell
 		fmt.Println("You have sold " + strconv.Itoa(unitsSell) + " " + c.drugs[0].Name + ".")
 		fmt.Println("You have" + strconv.Itoa(c.drugs[0].Stock) + " " + c.drugs[0].Name + " left.")
-		fmt.Println("Your current cash is $" + strconv.Itoa(c.cash) + ".")
+		fmt.Println("Your current Cash is $" + strconv.Itoa(c.Cash) + ".")
 		fmt.Println("Your reputation has increased to " + strconv.Itoa(c.Reputation) + ".")
 		fmt.Println("Your wanted level has increased to " + strconv.Itoa(c.WantedLevel) + ".")
 		fmt.Println("Press enter to continue.")

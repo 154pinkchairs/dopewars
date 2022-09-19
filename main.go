@@ -145,6 +145,30 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 }
 
+
+/*create a new game function to:
+1. initialize the Character struct from basegame/player.go with default/pseudorandom values
+2. create a new savegame.json file
+3. Draw a new black screen and dismiss the menu assets and UI
+4. Render a new screen with the following text, using 	"github.com/tinne26/etxt" package in a 540x240 box at the bottom of the 960x540 screen:
+"Welcome to Dope Wars. Press enter to continue."
+5. Wait for the user to press enter
+The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
+*/
+func (g *Game) NewGame(c *basegame.Character) {
+	c.Name = "John Doe"
+	c.Cash = 10000
+	c.Debt = 15000
+	c.Reputation = 0
+	c.Days = 0
+	c.WantedLevel = 0
+	//place the player in Bronx (variable of type basegame.District)
+	c.CurrentDistrict = basegame.Bronx
+	//player has 1 unit of knuckles, which are of type basegame.WeaponUnits
+	c.Weapons = basegame.WeaponUnits{}
+
+}
+
 func (g *Game) setupUI() {
 
 
@@ -159,7 +183,7 @@ func (g *Game) setupUI() {
 			MarginRight:  5,
 			MarginBottom: 5,
 			Handler:      &components.Button{Text: "", OnClick: func() { 
-				basegame.NewGame()
+				basegame.NewGame(&basegame.Game{})
 			    bg.Clear()
 				newgameimg.Clear()
 				loadsave.Clear()
@@ -182,7 +206,7 @@ func (g *Game) setupUI() {
 			MarginBottom: 5,
 			Handler:      &components.Button{Text: "", OnClick: func() { 
 				basegame.Loadsave(&basegame.Character{})
-				basegame.NewGame()
+				basegame.NewGame(&basegame.Game{})
 				bg.Clear()
 				newgameimg.Clear()
 				loadsave.Clear()
