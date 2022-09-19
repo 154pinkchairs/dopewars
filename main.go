@@ -3,6 +3,7 @@ package main
 import (
 	"dopewars/basegame"
 	"fmt"
+	"image/color"
 	_ "image/png"
 	"log"
 	"os"
@@ -146,56 +147,56 @@ func (g *Game) setupUI() {
 
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
-			Top:          150,
+			Top:          210,
 			Left:         340,
 			Width:        200,
-			Height:       50,
-			MarginLeft:   5,
-			MarginTop:    5,
+			Height:       40,
+			MarginLeft:   360,
+			MarginTop:    25,
 			MarginRight:  5,
-			MarginBottom: 10,
+			MarginBottom: 5,
 			Handler:      &components.Button{Text: "New Game", OnClick: func() { basegame.NewGame() }},
 		})
 	}
 
 	loadSaveBtn := func() *furex.View {
 		return (&furex.View{
-			Top:          200,
+			Top:          250,
 			Left:         340,
-			Width:        200,
-			Height:       50,
-			MarginLeft:   5,
+			Width:        235,
+			Height:       40,
+			MarginLeft:   340,
 			MarginTop:    5,
 			MarginRight:  5,
-			MarginBottom: 10,
+			MarginBottom: 5,
 			Handler:      &components.Button{Text: "Load Save", OnClick: func() { basegame.Loadsave(&basegame.Character{}) }},
 		})
 	}
 
 	donateBtn := func() *furex.View {
 		return (&furex.View{
-			Top:          250,
+			Top:          290,
 			Left:         340,
-			Width:        200,
-			Height:       50,
-			MarginLeft:   5,
+			Width:        120,
+			Height:       40,
+			MarginLeft:   390,
 			MarginTop:    5,
 			MarginRight:  5,
-			MarginBottom: 10,
+			MarginBottom: 5,
 			Handler:      &components.Button{Text: "Donate", OnClick: func() { openbrowser("https://www.liberapay.com/") }},
 		})
 	}
 
 	issuesBtn := func() *furex.View {
 		return (&furex.View{
-			Top:          300,
+			Top:          330,
 			Left:         340,
 			Width:        200,
-			Height:       50,
-			MarginLeft:   5,
+			Height:       40,
+			MarginLeft:   360,
 			MarginTop:    5,
 			MarginRight:  5,
-			MarginBottom: 10,
+			MarginBottom: 5,
 			Handler:      &components.Button{Text: "Issues", OnClick: func() { openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
 			Wrap:         furex.NoWrap,
 		})
@@ -203,14 +204,14 @@ func (g *Game) setupUI() {
 
 	quitBtn := func() *furex.View {
 		return (&furex.View{
-			Top:          350,
-			Left:         340,
-			Width:        280,
-			Height:       50,
-			MarginLeft:   5,
+			Top:          370,
+			Left:         300,
+			Width:        110,
+			Height:       40,
+			MarginLeft:   400,
 			MarginTop:    5,
 			MarginRight:  5,
-			MarginBottom: 10,
+			MarginBottom: 285,
 			Handler:      &components.Button{Text: "Quit", OnClick: func() { os.Exit(0) }},
 		})
 	}
@@ -220,22 +221,54 @@ func (g *Game) setupUI() {
 		Height:       540,
 		Direction:    furex.Column,
 		Justify:      furex.JustifyCenter,
-		AlignItems:   furex.AlignItemCenter,
+		AlignItems:   furex.AlignItemStart, //place items in the center, one below the other
 		AlignContent: furex.AlignContentCenter,
 		Wrap:         furex.NoWrap,
 	}).AddChild(
 		(&furex.View{
-			Width:      960,
-			Height:     520,
+			Width:      640,
+			Height:     200,
 			Justify:    furex.JustifySpaceBetween,
 			AlignItems: furex.AlignItemCenter,
 		}).AddChild(
-			newGameBtn(),
-			loadSaveBtn(),
-			donateBtn(),
-			issuesBtn(),
-			quitBtn(),
-		))
+			&furex.View{
+				Width:   100,
+				Height:  5,
+				Handler: &components.Box{Color: color.RGBA{0, 0, 0, 0}},
+			},
+			&furex.View{
+				Width:   200,
+				Height:  5,
+				Handler: &components.Box{Color: color.RGBA{0, 0, 0, 0}},
+			},
+			&furex.View{
+				Width:   200,
+				Height:  5,
+				Handler: &components.Box{Color: color.RGBA{0, 0, 0, 0}},
+			},
+			&furex.View{
+				Width:   100,
+				Height:  5,
+				Handler: &components.Box{Color: color.RGBA{0, 0, 0, 0}},
+			},
+			&furex.View{
+				Width:   100,
+				Height:  5,
+				Handler: &components.Box{Color: color.RGBA{0, 0, 0, 0}},
+			},
+		),
+	).AddChild(&furex.View{
+		Width:      960,
+		Height:     60,
+		Justify:    furex.JustifyCenter,
+		AlignItems: furex.AlignItemEnd,
+	}).AddChild(
+		newGameBtn(),
+		loadSaveBtn(),
+		donateBtn(),
+		issuesBtn(),
+		quitBtn(),
+	)
 }
 
 // create a function that checks if the mouse is over a button
