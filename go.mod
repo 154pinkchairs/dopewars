@@ -12,9 +12,8 @@ require (
 	github.com/hajimehoshi/file2byteslice v0.0.0-20210813153925-5340248a8f41 // indirect
 	github.com/jezek/xgb v1.0.1 // indirect
 	github.com/tinne26/etxt v0.0.6
-	github.com/yohamta/furex v0.6.3
 	github.com/yohamta/furex/v2 v2.1.7
-	golang.org/x/exp v0.0.0-20211008200323-95152d363a1c // indirect
+	golang.org/x/exp v0.0.0-20211008200323-95152d363a1c
 	golang.org/x/image v0.0.0-20220722155232-062f8c9fd539 // indirect
 	golang.org/x/mobile v0.0.0-20220722155234-aaac322e2105 // indirect
 	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect

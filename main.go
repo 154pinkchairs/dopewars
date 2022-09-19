@@ -13,6 +13,7 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/tinne26/etxt"
 	"github.com/yohamta/furex/v2"
 	"github.com/yohamta/furex/v2/components"
 	"golang.org/x/exp/shiny/screen"
@@ -95,6 +96,7 @@ type Game struct {
 	gameUI *furex.View
 	screen screen.Screen
 	Character basegame.Character
+	txtRenderer *etxt.Renderer
 }
 
 func (g *Game) Update() error {
@@ -157,6 +159,20 @@ func (g *Game) Draw(screen *ebiten.Image) {
 5. Wait for the user to press enter
 The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
 */
+func (g *Game) Redraw(screen *ebiten.Image) {
+	g.Character = basegame.Character{}
+	if screen != nil {
+		screen.Fill(color.Black)
+		g.txtRenderer.SetTarget(screen)
+	} else {
+		screen = ebiten.NewImage(960, 540)
+		screen.Fill(color.Black)
+		g.txtRenderer.SetTarget(screen)
+	}
+	g.txtRenderer.SetColor(color.White)
+	g.txtRenderer.Draw("Welcome to Dope Wars. Press enter to continue.", 200, 200)
+}
+
 func (g *Game) NewGame(c *basegame.Character) {
 	c.Name = "John Doe"
 	c.Cash = 10000
@@ -170,13 +186,27 @@ func (g *Game) NewGame(c *basegame.Character) {
 		c.Weapons = make(map[basegame.Weapon]int)
 	c.Weapons[basegame.Knuckle] = 1
 	}
-	//save the values to a new savegame.json file
-	/*savegame, err := json.MarshalIndent(c, "", " ")
+		// load font library
+	fontLib := etxt.NewFontLibrary()
+	_, _, err := fontLib.ParseDirFonts("assets/fonts")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error while loading fonts: %s", err.Error())
 	}
-	err = ioutil.WriteFile("savegame.json", savegame, 0644)*/
-	//create a new black screen and dismiss the menu assets and UI using ebiten.NewImage, bg.Clear, newgameimg.Clear, loadsave.Clear, donate.Clear, issues.Clear, quitimg.Clear and ebiten.Fill
+
+	// check that we have the fonts we want
+	// (shown for completeness, you don't need this in most cases)
+
+	// create a new text renderer and configure it
+	txtRenderer := etxt.NewStdRenderer()
+	glyphsCache := etxt.NewDefaultCache(10*1024*1024) // 10MB
+	txtRenderer.SetCacheHandler(glyphsCache.NewHandler())
+	txtRenderer.SetFont(fontLib.GetFont("VT323 Regular"))
+	txtRenderer.SetAlign(etxt.YCenter, etxt.XCenter)
+	txtRenderer.SetSizePx(72)
+
+	// run the "game"
+	ebiten.SetWindowSize(960, 540)
+	ebiten.SetWindowTitle("Dope Wars 2D")
 	bg.Clear()
 	newgameimg.Clear()
 	loadsave.Clear()
@@ -185,12 +215,24 @@ func (g *Game) NewGame(c *basegame.Character) {
 	quitimg.Clear()
 	bgnew := ebiten.NewImage(960, 540)
 	bgnew.Fill(color.Black)
+	//make bgnew.NewBuffer poit to an image.Point
+	x, x1 := bg.NewBuffer(bgnew.Bounds().Size())
+	g.screen = x, x1
+	if err := ebiten.RunGame(g); err != nil {
+		log.Fatal(err)
+	}
+
+	//save the values to a new savegame.json file
+	/*savegame, err := json.MarshalIndent(c, "", " ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile("savegame.json", savegame, 0644)*/
+	//create a new black screen and dismiss the menu assets and UI using ebiten.NewImage, bg.Clear, newgameimg.Clear, loadsave.Clear, donate.Clear, issues.Clear, quitimg.Clear and ebiten.Fill
+	//set the text color to white
 	//render a new screen with the following text, using 	"github.com/tinne26/etxt" package in a 540x240 box at the bottom of the 960x540 screen:
-	//"Welcome to Dope Wars. Press enter to continue."
 	//The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
-	//Wait for the user to press enter
 	ebitenutil.DebugPrintAt(bgnew, "Welcome to Dope Wars. Press enter to continue.", 210, 300)
-	//scan for the enter key
 	//if enter is pressed, print the keybindings menu (q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help)
 	ebitenutil.DebugPrintAt(bgnew, "Press q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help", 210, 330)
 	ebitenutil.DebugPrintAt(bgnew, "Press enter to continue", 210, 360)
