@@ -1,16 +1,18 @@
 package main
 
 import (
-	"dopewars/basegame"
 	"fmt"
+	"image/color"
 	_ "image/png"
 	"log"
-	"os"
 	"os/exec"
 	"runtime"
-	"github.com/yohamta/furex/v2"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/yohamta/furex/v2"
+	"github.com/yohamta/furex/v2/components"
+	"golang.org/x/exp/shiny/screen"
 )
 
 var bg *ebiten.Image
@@ -85,15 +87,24 @@ func init() {
 	}
 }
 
-type Game struct{}
+type Game struct {
+	init   bool
+	gameUI *furex.View
+	screen screen.Screen
+}
 
 func (g *Game) Update() error {
+	if !g.init {
+		g.init = true
+		g.setupUI()
+	}
+	g.gameUI.UpdateWithSize(ebiten.WindowSize())
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(bg, nil)
-
+	g.gameUI.Draw(screen)
 	pos1 := &ebiten.DrawImageOptions{}
 	pos1.GeoM.Translate(340, 150)
 	screen.DrawImage(newgameimg, pos1)
@@ -130,6 +141,32 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 }
 
+func (g *Game) setupUI() {
+	g.gameUI = &furex.View{
+		Width:        960,
+		Height:       540,
+		Direction:    furex.Row,
+		Justify:      furex.JustifyCenter,
+		AlignItems:   furex.AlignItemCenter,
+		AlignContent: furex.AlignContentCenter,
+		Wrap:         furex.NoWrap,
+	}
+
+	for i := 0; i < 20; i++ {
+		g.gameUI.AddChild(&furex.View{
+			Width:  960,
+			Height: 540,
+			Handler: &components.Box{
+				colors[i%len(colors)],
+			},
+		})
+	}
+}
+
+var colors = []color.Color{
+	color.RGBA{0, 0, 0, 0},
+}
+
 // create a function that checks if the mouse is over a button
 func mouseOverButton(x, y, width, height int) bool {
 	//get the mouse position
@@ -146,7 +183,6 @@ func mouseOverButton(x, y, width, height int) bool {
 type ButtonBox struct {
 	x, y, width, height int
 }
-
 
 /* Add a handle from inpututil interface. Define button boxes (boundaries) for each pos. Button at pos1 calls basegame.run().
 Button at pos2 calls basegame.Loadsave() and then basegame.NewGame().
@@ -172,8 +208,6 @@ func openbrowser(url string) {
 	}
 
 }
-
-
 
 // // create the districts and their properties just like
 
