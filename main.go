@@ -1,10 +1,11 @@
 package main
 
 import (
+	"dopewars/basegame"
 	"fmt"
-	"image/color"
 	_ "image/png"
 	"log"
+	"os"
 	"os/exec"
 	"runtime"
 
@@ -142,29 +143,99 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) setupUI() {
-	g.gameUI = &furex.View{
+
+	newGameBtn := func() *furex.View {
+		return (&furex.View{
+			Top:          150,
+			Left:         340,
+			Width:        200,
+			Height:       50,
+			MarginLeft:   5,
+			MarginTop:    5,
+			MarginRight:  5,
+			MarginBottom: 10,
+			Handler:      &components.Button{Text: "New Game", OnClick: func() { basegame.NewGame() }},
+		})
+	}
+
+	loadSaveBtn := func() *furex.View {
+		return (&furex.View{
+			Top:          200,
+			Left:         340,
+			Width:        200,
+			Height:       50,
+			MarginLeft:   5,
+			MarginTop:    5,
+			MarginRight:  5,
+			MarginBottom: 10,
+			Handler:      &components.Button{Text: "Load Save", OnClick: func() { basegame.Loadsave(&basegame.Character{}) }},
+		})
+	}
+
+	donateBtn := func() *furex.View {
+		return (&furex.View{
+			Top:          250,
+			Left:         340,
+			Width:        200,
+			Height:       50,
+			MarginLeft:   5,
+			MarginTop:    5,
+			MarginRight:  5,
+			MarginBottom: 10,
+			Handler:      &components.Button{Text: "Donate", OnClick: func() { openbrowser("https://www.liberapay.com/") }},
+		})
+	}
+
+	issuesBtn := func() *furex.View {
+		return (&furex.View{
+			Top:          300,
+			Left:         340,
+			Width:        200,
+			Height:       50,
+			MarginLeft:   5,
+			MarginTop:    5,
+			MarginRight:  5,
+			MarginBottom: 10,
+			Handler:      &components.Button{Text: "Issues", OnClick: func() { openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
+			Wrap:         furex.NoWrap,
+		})
+	}
+
+	quitBtn := func() *furex.View {
+		return (&furex.View{
+			Top:          350,
+			Left:         340,
+			Width:        280,
+			Height:       50,
+			MarginLeft:   5,
+			MarginTop:    5,
+			MarginRight:  5,
+			MarginBottom: 10,
+			Handler:      &components.Button{Text: "Quit", OnClick: func() { os.Exit(0) }},
+		})
+	}
+
+	g.gameUI = (&furex.View{
 		Width:        960,
 		Height:       540,
-		Direction:    furex.Row,
+		Direction:    furex.Column,
 		Justify:      furex.JustifyCenter,
 		AlignItems:   furex.AlignItemCenter,
 		AlignContent: furex.AlignContentCenter,
 		Wrap:         furex.NoWrap,
-	}
-
-	for i := 0; i < 20; i++ {
-		g.gameUI.AddChild(&furex.View{
-			Width:  960,
-			Height: 540,
-			Handler: &components.Box{
-				colors[i%len(colors)],
-			},
-		})
-	}
-}
-
-var colors = []color.Color{
-	color.RGBA{0, 0, 0, 0},
+	}).AddChild(
+		(&furex.View{
+			Width:      960,
+			Height:     520,
+			Justify:    furex.JustifySpaceBetween,
+			AlignItems: furex.AlignItemCenter,
+		}).AddChild(
+			newGameBtn(),
+			loadSaveBtn(),
+			donateBtn(),
+			issuesBtn(),
+			quitBtn(),
+		))
 }
 
 // create a function that checks if the mouse is over a button
