@@ -2,11 +2,9 @@ package main
 
 import (
 	"dopewars/basegame"
-	"encoding/json"
 	"fmt"
 	"image/color"
 	_ "image/png"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -167,14 +165,17 @@ func (g *Game) NewGame(c *basegame.Character) {
 	c.Days = 0
 	c.WantedLevel = 0
 	c.CurrentDistrict = basegame.Bronx
+	//check if this map is not nil
+	if c.Weapons != nil {
+		c.Weapons = make(map[basegame.Weapon]int)
 	c.Weapons[basegame.Knuckle] = 1
-
+	}
 	//save the values to a new savegame.json file
-	savegame, err := json.MarshalIndent(c, "", " ")
+	/*savegame, err := json.MarshalIndent(c, "", " ")
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = ioutil.WriteFile("savegame.json", savegame, 0644)
+	err = ioutil.WriteFile("savegame.json", savegame, 0644)*/
 	//create a new black screen and dismiss the menu assets and UI using ebiten.NewImage, bg.Clear, newgameimg.Clear, loadsave.Clear, donate.Clear, issues.Clear, quitimg.Clear and ebiten.Fill
 	bg.Clear()
 	newgameimg.Clear()
