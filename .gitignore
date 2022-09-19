@@ -17,3 +17,4 @@ toolchain/typefix.go
 .env
 *.xcf
 .vscode/i
+dopewars

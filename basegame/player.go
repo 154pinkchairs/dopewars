@@ -7,12 +7,14 @@ import (
 	"log"
 	"os"
 	"time"
-
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/tinne26/etxt"
+	"golang.org/x/exp/shiny/screen"
 )
 
-type Game struct{ txtRenderer *etxt.Renderer }
+type Game struct{ 
+	txtRenderer *etxt.Renderer
+    screen      *screen.Screen }
 
 func (self *Game) Layout(int, int) (int, int) { return 960, 540 }
 func (self *Game) Update() error              { return nil }
@@ -144,6 +146,7 @@ func Loadsave(c *Character) {
 }
 
 func NewGame() {
+	//clear the ebiten.Image bg, newgameimg, donate, issues, quitimg
 	// load font library
 	fontLib := etxt.NewFontLibrary()
 	_, _, err := fontLib.ParseDirFonts("assets/fonts")
@@ -156,9 +159,13 @@ func NewGame() {
 	txtRenderer.SetFont(fontLib.GetFont("VT323 Regular"))
 	txtRenderer.SetAlign(etxt.Bottom, etxt.XCenter)
 	txtRenderer.SetSizePx(36)
-
-	ebiten.SetWindowSize(400, 400)
-	err = ebiten.RunGame(&Game{txtRenderer})
+	txtRenderer.SetColor(color.RGBA{255, 255, 255, 255})
+	ebiten.SetWindowSize(960, 540)
+	ebiten.SetWindowTitle("Dope Wars")
+	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
+	err = ebiten.RunGame(&Game{
+		txtRenderer: txtRenderer,
+	})
 	if err != nil {
 		log.Fatal(err)
 	}

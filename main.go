@@ -158,9 +158,17 @@ func (g *Game) setupUI() {
 			MarginTop:    25,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { basegame.NewGame() }},
+			Handler:      &components.Button{Text: "", OnClick: func() { 
+				basegame.NewGame()
+			    bg.Clear()
+				newgameimg.Clear()
+				loadsave.Clear()
+				donate.Clear()
+				issues.Clear()
+				quitimg.Clear()}},
 		})
 	}
+
 
 	loadSaveBtn := func() *furex.View {
 		return (&furex.View{
@@ -172,7 +180,16 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { basegame.Loadsave(&basegame.Character{}) }},
+			Handler:      &components.Button{Text: "", OnClick: func() { 
+				basegame.Loadsave(&basegame.Character{})
+				basegame.NewGame()
+				bg.Clear()
+				newgameimg.Clear()
+				loadsave.Clear()
+				donate.Clear()
+				issues.Clear()
+				quitimg.Clear()},
+			},
 		})
 	}
 
