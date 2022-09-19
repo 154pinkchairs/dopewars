@@ -112,7 +112,9 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(newgameimg, pos1)
 	if mouseOverButton(340, 150, 200, 50) {
 		screen.DrawImage(newgameimg_hoover, pos1)
-	}
+	} 
+	// add a handler for the new game button using MouseleftButtonHandler from furex
+
 
 	pos2 := &ebiten.DrawImageOptions{}
 	pos2.GeoM.Translate(340, 200)
@@ -145,6 +147,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 func (g *Game) setupUI() {
 
+
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
 			Top:          210,
@@ -155,7 +158,7 @@ func (g *Game) setupUI() {
 			MarginTop:    25,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "New Game", OnClick: func() { basegame.NewGame() }},
+			Handler:      &components.Button{Text: "", OnClick: func() { basegame.NewGame() }},
 		})
 	}
 
@@ -169,7 +172,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "Load Save", OnClick: func() { basegame.Loadsave(&basegame.Character{}) }},
+			Handler:      &components.Button{Text: "", OnClick: func() { basegame.Loadsave(&basegame.Character{}) }},
 		})
 	}
 
@@ -183,7 +186,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "Donate", OnClick: func() { openbrowser("https://www.liberapay.com/") }},
+			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://www.liberapay.com/") }},
 		})
 	}
 
@@ -197,7 +200,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "Issues", OnClick: func() { openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
+			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
 			Wrap:         furex.NoWrap,
 		})
 	}
@@ -212,7 +215,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 285,
-			Handler:      &components.Button{Text: "Quit", OnClick: func() { os.Exit(0) }},
+			Handler:      &components.Button{Text: "", OnClick: func() { os.Exit(0) }},
 		})
 	}
 
@@ -284,9 +287,7 @@ func mouseOverButton(x, y, width, height int) bool {
 	return false
 }
 
-type ButtonBox struct {
-	x, y, width, height int
-}
+
 
 /* Add a handle from inpututil interface. Define button boxes (boundaries) for each pos. Button at pos1 calls basegame.run().
 Button at pos2 calls basegame.Loadsave() and then basegame.NewGame().
