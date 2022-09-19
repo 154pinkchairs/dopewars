@@ -2,13 +2,16 @@ package main
 
 import (
 	"dopewars/basegame"
+	"encoding/json"
 	"fmt"
 	"image/color"
 	_ "image/png"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -93,6 +96,7 @@ type Game struct {
 	init   bool
 	gameUI *furex.View
 	screen screen.Screen
+	Character basegame.Character
 }
 
 func (g *Game) Update() error {
@@ -162,11 +166,68 @@ func (g *Game) NewGame(c *basegame.Character) {
 	c.Reputation = 0
 	c.Days = 0
 	c.WantedLevel = 0
-	//place the player in Bronx (variable of type basegame.District)
 	c.CurrentDistrict = basegame.Bronx
-	//player has 1 unit of knuckles, which are of type basegame.WeaponUnits
-	c.Weapons = basegame.WeaponUnits{}
+	c.Weapons[basegame.Knuckle] = 1
 
+	//save the values to a new savegame.json file
+	savegame, err := json.MarshalIndent(c, "", " ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile("savegame.json", savegame, 0644)
+	//create a new black screen and dismiss the menu assets and UI using ebiten.NewImage, bg.Clear, newgameimg.Clear, loadsave.Clear, donate.Clear, issues.Clear, quitimg.Clear and ebiten.Fill
+	bg.Clear()
+	newgameimg.Clear()
+	loadsave.Clear()
+	donate.Clear()
+	issues.Clear()
+	quitimg.Clear()
+	bgnew := ebiten.NewImage(960, 540)
+	bgnew.Fill(color.Black)
+	//render a new screen with the following text, using 	"github.com/tinne26/etxt" package in a 540x240 box at the bottom of the 960x540 screen:
+	//"Welcome to Dope Wars. Press enter to continue."
+	//The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
+	//Wait for the user to press enter
+	ebitenutil.DebugPrintAt(bgnew, "Welcome to Dope Wars. Press enter to continue.", 210, 300)
+	//scan for the enter key
+	//if enter is pressed, print the keybindings menu (q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help)
+	ebitenutil.DebugPrintAt(bgnew, "Press q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help", 210, 330)
+	ebitenutil.DebugPrintAt(bgnew, "Press enter to continue", 210, 360)
+	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
+		ebitenutil.DebugPrintAt(bgnew, "You pressed enter", 210, 390)
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyQ) {
+		os.Exit(0)
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyI) {
+		//display character info
+		ebitenutil.DebugPrintAt(bgnew, "Name: "+c.Name, 210, 420)
+		ebitenutil.DebugPrintAt(bgnew, "Cash: "+strconv.Itoa(c.Cash), 210, 450)
+		ebitenutil.DebugPrintAt(bgnew, "Debt: "+strconv.Itoa(c.Debt), 210, 480)
+		ebitenutil.DebugPrintAt(bgnew, "Reputation: "+strconv.Itoa(c.Reputation), 210, 510)
+		ebitenutil.DebugPrintAt(bgnew, "Days: "+strconv.Itoa(c.Days), 210, 540)
+		ebitenutil.DebugPrintAt(bgnew, "Wanted Level: "+strconv.Itoa(c.WantedLevel), 210, 570)
+		x := c.CurrentDistrict.Name
+		ebitenutil.DebugPrintAt(bgnew, "Current District: "+string(x), 210, 600)
+		//enumerate the weapons names and quantities in the character's inventory from basegame.WeaponUnits map
+		for k, v := range c.Weapons {
+			ebitenutil.DebugPrintAt(bgnew, k.Name+": "+strconv.Itoa(v), 210, 630)
+		}
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyD) {
+		ebitenutil.DebugPrintAt(bgnew, "District Name: "+c.CurrentDistrict.Name, 210, 420)
+		
+			ebitenutil.DebugPrintAt(bgnew, "Hospital: "+strconv.FormatBool(c.CurrentDistrict.Properties.Hospital), 210, 480)
+			ebitenutil.DebugPrintAt(bgnew, "Bank: "+strconv.FormatBool(c.CurrentDistrict.Properties.Bank), 210, 510)
+			ebitenutil.DebugPrintAt(bgnew, "LoanShark: "+strconv.FormatBool(c.CurrentDistrict.Properties.LoanShark), 210, 540)
+			for _, v := range c.CurrentDistrict.Properties.NeighbourIDs {
+				ebitenutil.DebugPrintAt(bgnew, "Neighbour Districts: "+string(v), 210, 570)
+			}
+		for _, v := range c.CurrentDistrict.DrugsAvailable {
+			ebitenutil.DebugPrintAt(bgnew, v.Name+": "+strconv.Itoa(v.Price), 210, 630)
+		}
+	}
+	//create a menu to choose the weapon about which to display info		
 }
 
 func (g *Game) setupUI() {
@@ -183,13 +244,7 @@ func (g *Game) setupUI() {
 			MarginRight:  5,
 			MarginBottom: 5,
 			Handler:      &components.Button{Text: "", OnClick: func() { 
-				basegame.NewGame(&basegame.Game{})
-			    bg.Clear()
-				newgameimg.Clear()
-				loadsave.Clear()
-				donate.Clear()
-				issues.Clear()
-				quitimg.Clear()}},
+				g.NewGame(&g.Character)}},
 		})
 	}
 

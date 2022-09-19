@@ -5,107 +5,107 @@ import (
 )
 
 type District struct {
-	name           string
-	drugsAvailable Drugs
+	Name           string
+	DrugsAvailable Drugs
 	ID             int
-	properties     districtProperties
+	Properties     DistrictProperties
 }
 
-type districtProperties struct {
-	hospital     bool
-	bank         bool
-	loanShark    bool
-	neighbourids []int
+type DistrictProperties struct {
+	Hospital     bool
+	Bank         bool
+	LoanShark    bool
+	NeighbourIDs []int
 }
 
-// create the districts and their properties just like in New York
+// create the Districts and their Properties just like in New York
 var manhattan = District{
-	name:           "Manhattan",
-	drugsAvailable: make(Drugs, 6),
+	Name:           "Manhattan",
+	DrugsAvailable: make(Drugs, 6),
 	ID:             0,
-	properties: districtProperties{
-		hospital:     true,
-		bank:         true,
-		loanShark:    true,
-		neighbourids: []int{1, 2, 3},
+	Properties: DistrictProperties{
+		Hospital:     true,
+		Bank:         true,
+		LoanShark:    true,
+		NeighbourIDs: []int{1, 2, 3},
 	},
 }
 var brooklyn = District{
-	name:           "Brooklyn",
-	drugsAvailable: make(Drugs, 6),
+	Name:           "Brooklyn",
+	DrugsAvailable: make(Drugs, 6),
 	ID:             1,
-	properties: districtProperties{
-		hospital:     true,
-		bank:         false,
-		loanShark:    false,
-		neighbourids: []int{0, 2, 4},
+	Properties: DistrictProperties{
+		Hospital:     true,
+		Bank:         false,
+		LoanShark:    false,
+		NeighbourIDs: []int{0, 2, 4},
 	},
 }
 var queens = District{
-	name:           "Queens",
-	drugsAvailable: make(Drugs, 6),
+	Name:           "Queens",
+	DrugsAvailable: make(Drugs, 6),
 	ID:             2,
-	properties: districtProperties{
-		hospital:     false,
-		bank:         true,
-		loanShark:    false,
-		neighbourids: []int{0, 1, 3},
+	Properties: DistrictProperties{
+		Hospital:     false,
+		Bank:         true,
+		LoanShark:    false,
+		NeighbourIDs: []int{0, 1, 3},
 	},
 }
 var Bronx = District{
-	name:           "Bronx",
-	drugsAvailable: make(Drugs, 6),
+	Name:           "Bronx",
+	DrugsAvailable: make(Drugs, 6),
 	ID:             3,
-	properties: districtProperties{
-		hospital:     true,
-		bank:         false,
-		loanShark:    true,
-		neighbourids: []int{0, 2},
+	Properties: DistrictProperties{
+		Hospital:     true,
+		Bank:         false,
+		LoanShark:    true,
+		NeighbourIDs: []int{0, 2},
 	},
 }
 var statenIsland = District{
-	name:           "Staten Island",
-	drugsAvailable: make(Drugs, 6),
+	Name:           "Staten Island",
+	DrugsAvailable: make(Drugs, 6),
 	ID:             4,
-	properties: districtProperties{
-		hospital:     false,
-		bank:         true,
-		loanShark:    false,
-		neighbourids: []int{1},
+	Properties: DistrictProperties{
+		Hospital:     false,
+		Bank:         true,
+		LoanShark:    false,
+		NeighbourIDs: []int{1},
 	},
 }
 
-var districts = []District{manhattan, brooklyn, queens, Bronx, statenIsland}
+var Districts = []District{manhattan, brooklyn, queens, Bronx, statenIsland}
 
 /*type District interface {
 	Name() string
 	neighbour_a() []District
 	neighbour_b() []District
-	//list of up to 5 drugs available in the district. This must be indexable
-	drugsAvailable() Drugs
-	hospital() bool
-	bank() bool
-	loanShark() bool
+	//list of up to 5 drugs available in the District. This must be indexable
+	DrugsAvailable() Drugs
+	Hospital() bool
+	Bank() bool
+	LoanShark() bool
 	starting() bool
 	ID() int
-	Properties() districtProperties
+	Properties() DistrictProperties
 }
 */
-// print a numbered list of the districts the player can travel with their names to according to their IDs. The length of the list will change depending on the length of the player's current district's neighbourids slice. A switch case will be used, where the cases are currentDistrict.ID and the cases are the IDs of the districts in the neighbourids slice. The player will be able to travel to any of the districts in the neighbourids slice.
+// print a numbered list of the Districts the player can travel with their Names to according to their IDs. The length of the list will change depending on the length of the player's current District's NeighbourIDs slice. A switch case will be used, where the cases are currentDistrict.ID and the cases are the IDs of the Districts in the NeighbourIDs slice. The player will be able to travel to any of the Districts in the NeighbourIDs slice.
 func (d District) PrintNeighbours() {
-	fmt.Println("You can travel to the following districts:")
-	for i, v := range d.properties.neighbourids {
+	fmt.Println("You can travel to the following Districts:")
+	for i, v := range d.Properties.NeighbourIDs {
 		switch v {
 		case 0:
-			fmt.Printf("%d. %s", i+1, manhattan.name)
+			fmt.Printf("%d. %s", i+1, manhattan.Name)
 		case 1:
-			fmt.Printf("%d. %s", i+1, brooklyn.name)
+			fmt.Printf("%d. %s", i+1, brooklyn.Name)
 		case 2:
-			fmt.Printf("%d. %s", i+1, queens.name)
+			fmt.Printf("%d. %s", i+1, queens.Name)
 		case 3:
-			fmt.Printf("%d. %s", i+1, Bronx.name)
+			fmt.Printf("%d. %s", i+1, Bronx.Name)
 		case 4:
-			fmt.Printf("%d. %s", i+1, statenIsland.name)
+			fmt.Printf("%d. %s", i+1, statenIsland.Name)
 		}
 	}
 }
@@ -114,10 +114,10 @@ func travel(c *Character, d *District) {
 
 	currentDistrict := c.CurrentDistrict
 	currentDistrict.PrintNeighbours()
-	fmt.Println("Type the number of the district you want to travel to. To cancel, press any other numeric key.")
+	fmt.Println("Type the number of the District you want to travel to. To cancel, press any other numeric key.")
 	var travelChoice int
 	fmt.Scan(&travelChoice)
-	if travelChoice > len(currentDistrict.properties.neighbourids) || travelChoice < 1 {
+	if travelChoice > len(currentDistrict.Properties.NeighbourIDs) || travelChoice < 1 {
 		fmt.Println("You have cancelled your travel.")
 		return
 	} else {
@@ -165,5 +165,5 @@ func travel(c *Character, d *District) {
 	}
 
 	fmt.Scanln("%s", &travelChoice)
-	fmt.Println("You have arrived at " + c.CurrentDistrict.name + ".")
+	fmt.Println("You have arrived at " + c.CurrentDistrict.Name + ".")
 }

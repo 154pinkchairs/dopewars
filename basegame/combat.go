@@ -16,7 +16,7 @@ type FightFlight interface {
 }
 
 type Weapon struct {
-	name             string
+	Name             string
 	Price            int
 	Damage, Accuracy int
 	FiringRate       float32
@@ -49,8 +49,8 @@ type Enemy struct {
 var PolicePed = Enemy{"Police Officer on foot", 100, pistol, baton, 1.0, 1.0, 0.5, false, true}                //TODO: likelihood will depend on WantedLevel. If the c has a very high reputation, it will be possible to visit the police station and bribe the police to decrease the WantedLevel and the likelihood of encounter.
 var PoliceCar = Enemy{"Police Officer in a car", 100, pistol, baton, 2.5, 1.5, 0.33, false, true}              //TODO: add cars for the player
 var PoliceHeli = Enemy{"Police Officer in a helicopter", 100, machineGun, shotgun, 5.0, 3.0, 0.1, false, true} //TODO: fights escalation
-var Crook = Enemy{"Crook", 100, Knuckle, knife, 1.2, 1.0, 0.4, true, false}                                    //print only that he's armed with a knife
-var Junkie = Enemy{"Junkie", 70, Knuckle, knife, 1.0, 1.75, 0.6, true, false}                                  //TODO: random junkie health, changes depending on which drug the player is selling the most
+var Crook = Enemy{"Crook", 100, Knuckle, Knife, 1.2, 1.0, 0.4, true, false}                                    //print only that he's armed with a Knife
+var Junkie = Enemy{"Junkie", 70, Knuckle, Knife, 1.0, 1.75, 0.6, true, false}                                  //TODO: random junkie health, changes depending on which drug the player is selling the most
 var Gangster = Enemy{"Gangster", 100, pistol, machete, 1.5, 2.0, 0.08, true, false}
 
 // TODO: weapon randomization
@@ -66,7 +66,7 @@ func min(x, y int) int {
 }
 
 var Knuckle = Weapon{"Knuckle", 0, 3, 100, 1.0, true, true, 1, false, 0, 0, 1, true}
-var knife = Weapon{"Knife", 100, 10, 100, 1.0, false, true, 0, true, 5, 50, 5, false}
+var Knife = Weapon{"Knife", 100, 10, 100, 1.0, false, true, 0, true, 5, 50, 5, false}
 var baton = Weapon{"Police Baton", 160, 22, 100, 0.75, false, true, 0, false, 0, 0, 1, false}
 var baseballBat = Weapon{"Baseball Bat", 200, 20, 100, 0.67, false, true, 0, false, 0, 0, 1, false}
 var machete = Weapon{"Machete", 300, 30, 100, 1, false, true, 0, true, 15, 30, 2, false}
@@ -79,7 +79,7 @@ var handgrenade = Weapon{"Handgrenade", 800, 50, 100, 1, false, false, 0, true, 
 func unlockWeapons(c *Character) {
 	//unlock weapons based on the Character's Reputation
 	if c.Reputation >= 0 {
-		c.weaponsAvailable = append(c.weaponsAvailable, knife)
+		c.weaponsAvailable = append(c.weaponsAvailable, Knife)
 	}
 	if c.Reputation >= 1 {
 		c.weaponsAvailable = append(c.weaponsAvailable, baseballBat)
@@ -115,7 +115,7 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 	var weaponChoice int
 	var maxObtainable int
 	for i := 0; i < len(c.weaponsAvailable); i++ {
-		fmt.Println(strconv.Itoa(i+1) + ". " + c.weaponsAvailable[i].name + " $" + strconv.Itoa(c.weaponsAvailable[i].Price))
+		fmt.Println(strconv.Itoa(i+1) + ". " + c.weaponsAvailable[i].Name + " $" + strconv.Itoa(c.weaponsAvailable[i].Price))
 	}
 	//prompt the c to select the number of the weapon to buy, using the weapon's number in the list as the index
 	fmt.Println("Type the number of the weapon you would like to buy and press enter.")
@@ -144,9 +144,9 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 		//if the c has enough Cash, subtract the cost of the weapon from the c's Cash and add the weapon to the c's inventory
 		if c.Cash >= weaponQuantity*c.weaponsAvailable[weaponChoice].Price {
 			c.Cash -= weaponQuantity * c.weaponsAvailable[weaponChoice].Price
-			//give c the weapon(s) they bought, by modifying the c's weapons name and count
+			//give c the weapon(s) they bought, by modifying the c's weapons Name and count
 			(*wu)[c.weaponsAvailable[weaponChoice]] = weaponQuantity
-			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].name + ".")
+			fmt.Println("You have purchased " + strconv.Itoa(weaponQuantity) + " " + c.weaponsAvailable[weaponChoice].Name + ".")
 			fmt.Println("You have $" + strconv.Itoa(c.Cash) + " left.")
 			fmt.Println("Press enter to continue.")
 			fmt.Scanln()
