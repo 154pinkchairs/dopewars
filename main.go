@@ -215,9 +215,6 @@ func (g *Game) NewGame(c *basegame.Character) {
 	quitimg.Clear()
 	bgnew := ebiten.NewImage(960, 540)
 	bgnew.Fill(color.Black)
-	//make bgnew.NewBuffer poit to an image.Point
-	x, x1 := bg.NewBuffer(bgnew.Bounds().Size())
-	g.screen = x, x1
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
 	}
