@@ -188,9 +188,6 @@ func (g *Game) NewGame(c *basegame.Character) {
 		log.Fatalf("Error while loading fonts: %s", err.Error())
 	}
 
-	// check that we have the fonts we want
-	// (shown for completeness, you don't need this in most cases)
-
 	// create a new text renderer and configure it
 	txtRenderer := etxt.NewStdRenderer()
 	glyphsCache := etxt.NewDefaultCache(10 * 1024 * 1024) // 10MB
@@ -199,7 +196,7 @@ func (g *Game) NewGame(c *basegame.Character) {
 	txtRenderer.SetAlign(etxt.YCenter, etxt.XCenter)
 	txtRenderer.SetSizePx(72)
 
-	// run the "game"
+	// run the game
 	ebiten.SetWindowSize(960, 540)
 	ebiten.SetWindowTitle("Dope Wars 2D")
 	bg.Clear()
@@ -218,7 +215,6 @@ func (g *Game) NewGame(c *basegame.Character) {
 		log.Fatal(err)
 	}
 	err = ioutil.WriteFile("savegame.json", savegame, 0644)*/
-	//create a new black screen and dismiss the menu assets and UI using ebiten.NewImage, bg.Clear, newgameimg.Clear, loadsave.Clear, donate.Clear, issues.Clear, quitimg.Clear and ebiten.Fill
 	//set the text color to white
 	//render a new screen with the following text, using 	"github.com/tinne26/etxt" package in a 540x240 box at the bottom of the 960x540 screen:
 	//The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
@@ -260,7 +256,7 @@ func (g *Game) NewGame(c *basegame.Character) {
 			ebitenutil.DebugPrintAt(bgnew, v.Name+": "+strconv.Itoa(v.Price), 210, 630)
 		}
 	}
-	//create a menu to choose the weapon about which to display info
+	//TODO: create a menu to choose the weapon about which to display info
 }
 
 func (g *Game) setupUI() {
@@ -317,7 +313,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://www.liberapay.com/") }},
+			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://www.liberapay.com/") }}, //TODO: setup donations
 		})
 	}
 
@@ -418,12 +414,6 @@ func mouseOverButton(x, y, width, height int) bool {
 	return false
 }
 
-/* Add a handle from inpututil interface. Define button boxes (boundaries) for each pos. Button at pos1 calls basegame.run().
-Button at pos2 calls basegame.Loadsave() and then basegame.NewGame().
-Button at pos3 opens https://liberapay.com/ in browser. Add a inline comment that this has to be changed to the actual donation link.
-Button at pos4 opens https://github.com/154pinkchairs/dopewars/issues in the browser.
-Button at pos5 calls os.Exit(0) */
-
 func openbrowser(url string) {
 	var err error
 
@@ -442,8 +432,6 @@ func openbrowser(url string) {
 	}
 
 }
-
-// // create the districts and their properties just like
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return 960, 540
