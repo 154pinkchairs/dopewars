@@ -1,4 +1,4 @@
-# Dopewars
+# Dopewars 2D
 
 This game is being created with the intention of being the best Dopewars game ever. Initially it was meant to be just a text-based adventure,
 but now it is going to use Ebiten, while there will still be a boilerplate branch for CLI.

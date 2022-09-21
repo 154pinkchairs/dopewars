@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dopewars/basegame"
+	"dopewars2d/basegame"
 	"fmt"
 	"image/color"
 	_ "image/png"
