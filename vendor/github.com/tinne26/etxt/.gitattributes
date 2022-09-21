@@ -1,2 +1,0 @@
-# make .kage shaders be highlighted in Github like Go code
-*.kage linguist-language=Go

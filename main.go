@@ -92,10 +92,10 @@ func init() {
 }
 
 type Game struct {
-	init   bool
-	gameUI *furex.View
-	screen screen.Screen
-	Character basegame.Character
+	init        bool
+	gameUI      *furex.View
+	screen      screen.Screen
+	Character   basegame.Character
 	txtRenderer *etxt.Renderer
 }
 
@@ -116,9 +116,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(newgameimg, pos1)
 	if mouseOverButton(340, 150, 200, 50) {
 		screen.DrawImage(newgameimg_hoover, pos1)
-	} 
+	}
 	// add a handler for the new game button using MouseleftButtonHandler from furex
-
 
 	pos2 := &ebiten.DrawImageOptions{}
 	pos2.GeoM.Translate(340, 200)
@@ -149,8 +148,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 }
 
-
-/*create a new game function to:
+/*
+create a new game function to:
 1. initialize the Character struct from basegame/player.go with default/pseudorandom values
 2. create a new savegame.json file
 3. Draw a new black screen and dismiss the menu assets and UI
@@ -159,21 +158,17 @@ func (g *Game) Draw(screen *ebiten.Image) {
 5. Wait for the user to press enter
 The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
 */
-func (g *Game) Redraw(screen *ebiten.Image) {
-	g.Character = basegame.Character{}
-	if screen != nil {
-		screen.Fill(color.Black)
-		g.txtRenderer.SetTarget(screen)
-	} else {
-		screen = ebiten.NewImage(960, 540)
-		screen.Fill(color.Black)
-		g.txtRenderer.SetTarget(screen)
-	}
-	g.txtRenderer.SetColor(color.White)
-	g.txtRenderer.Draw("Welcome to Dope Wars. Press enter to continue.", 200, 200)
-}
 
 func (g *Game) NewGame(c *basegame.Character) {
+	bgnew := ebiten.NewImage(960, 540)
+	bgnew.Fill(color.Black)
+	//g.Redraw(bgnew)
+		nwopts := screen.NewWindowOptions{
+		Width:  960,
+		Height: 540,
+		Title:  "Dope Wars",
+	}
+	g.screen.NewWindow(&nwopts)
 	c.Name = "John Doe"
 	c.Cash = 10000
 	c.Debt = 15000
@@ -184,9 +179,9 @@ func (g *Game) NewGame(c *basegame.Character) {
 	//check if this map is not nil
 	if c.Weapons != nil {
 		c.Weapons = make(map[basegame.Weapon]int)
-	c.Weapons[basegame.Knuckle] = 1
+		c.Weapons[basegame.Knuckle] = 1
 	}
-		// load font library
+	// load font library
 	fontLib := etxt.NewFontLibrary()
 	_, _, err := fontLib.ParseDirFonts("assets/fonts")
 	if err != nil {
@@ -198,7 +193,7 @@ func (g *Game) NewGame(c *basegame.Character) {
 
 	// create a new text renderer and configure it
 	txtRenderer := etxt.NewStdRenderer()
-	glyphsCache := etxt.NewDefaultCache(10*1024*1024) // 10MB
+	glyphsCache := etxt.NewDefaultCache(10 * 1024 * 1024) // 10MB
 	txtRenderer.SetCacheHandler(glyphsCache.NewHandler())
 	txtRenderer.SetFont(fontLib.GetFont("VT323 Regular"))
 	txtRenderer.SetAlign(etxt.YCenter, etxt.XCenter)
@@ -213,11 +208,6 @@ func (g *Game) NewGame(c *basegame.Character) {
 	donate.Clear()
 	issues.Clear()
 	quitimg.Clear()
-	bgnew := ebiten.NewImage(960, 540)
-	bgnew.Fill(color.Black)
-	//make bgnew.NewBuffer poit to an image.Point
-	x, x1 := bg.NewBuffer(bgnew.Bounds().Size())
-	g.screen = x, x1
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
 	}
@@ -259,22 +249,21 @@ func (g *Game) NewGame(c *basegame.Character) {
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
 		ebitenutil.DebugPrintAt(bgnew, "District Name: "+c.CurrentDistrict.Name, 210, 420)
-		
-			ebitenutil.DebugPrintAt(bgnew, "Hospital: "+strconv.FormatBool(c.CurrentDistrict.Properties.Hospital), 210, 480)
-			ebitenutil.DebugPrintAt(bgnew, "Bank: "+strconv.FormatBool(c.CurrentDistrict.Properties.Bank), 210, 510)
-			ebitenutil.DebugPrintAt(bgnew, "LoanShark: "+strconv.FormatBool(c.CurrentDistrict.Properties.LoanShark), 210, 540)
-			for _, v := range c.CurrentDistrict.Properties.NeighbourIDs {
-				ebitenutil.DebugPrintAt(bgnew, "Neighbour Districts: "+string(v), 210, 570)
-			}
+
+		ebitenutil.DebugPrintAt(bgnew, "Hospital: "+strconv.FormatBool(c.CurrentDistrict.Properties.Hospital), 210, 480)
+		ebitenutil.DebugPrintAt(bgnew, "Bank: "+strconv.FormatBool(c.CurrentDistrict.Properties.Bank), 210, 510)
+		ebitenutil.DebugPrintAt(bgnew, "LoanShark: "+strconv.FormatBool(c.CurrentDistrict.Properties.LoanShark), 210, 540)
+		for _, v := range c.CurrentDistrict.Properties.NeighbourIDs {
+			ebitenutil.DebugPrintAt(bgnew, "Neighbour Districts: "+fmt.Sprint(v), 210, 570)
+		}
 		for _, v := range c.CurrentDistrict.DrugsAvailable {
 			ebitenutil.DebugPrintAt(bgnew, v.Name+": "+strconv.Itoa(v.Price), 210, 630)
 		}
 	}
-	//create a menu to choose the weapon about which to display info		
+	//create a menu to choose the weapon about which to display info
 }
 
 func (g *Game) setupUI() {
-
 
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
@@ -286,11 +275,13 @@ func (g *Game) setupUI() {
 			MarginTop:    25,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { 
-				g.NewGame(&g.Character)}},
+			Handler: &components.Button{Text: "", OnClick: func() {
+				//update the ui to be blank, leaving only the background image
+				g.Update()
+				g.NewGame(&g.Character)
+			}},
 		})
 	}
-
 
 	loadSaveBtn := func() *furex.View {
 		return (&furex.View{
@@ -302,7 +293,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { 
+			Handler: &components.Button{Text: "", OnClick: func() {
 				basegame.Loadsave(&basegame.Character{})
 				basegame.NewGame(&basegame.Game{})
 				bg.Clear()
@@ -310,7 +301,8 @@ func (g *Game) setupUI() {
 				loadsave.Clear()
 				donate.Clear()
 				issues.Clear()
-				quitimg.Clear()},
+				quitimg.Clear()
+			},
 			},
 		})
 	}
@@ -425,8 +417,6 @@ func mouseOverButton(x, y, width, height int) bool {
 	}
 	return false
 }
-
-
 
 /* Add a handle from inpututil interface. Define button boxes (boundaries) for each pos. Button at pos1 calls basegame.run().
 Button at pos2 calls basegame.Loadsave() and then basegame.NewGame().
