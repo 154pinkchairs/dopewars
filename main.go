@@ -99,6 +99,21 @@ type Game struct {
 	txtRenderer *etxt.Renderer
 }
 
+type storyEvent struct {
+	dialog string
+	options []string
+	next *storyEvent
+
+}
+
+func (event *storyEvent) throwEvent(){
+	if event == nil {
+		return
+	}
+	fmt.Println(event.dialog)
+	event.nextEvent.throwEvent()
+}
+
 func (g *Game) Update() error {
 	if !g.init {
 		g.init = true
