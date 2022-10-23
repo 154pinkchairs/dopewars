@@ -163,7 +163,7 @@ func (g *Game) NewGame(c *basegame.Character) {
 	bgnew := ebiten.NewImage(960, 540)
 	bgnew.Fill(color.Black)
 	//g.Redraw(bgnew)
-		nwopts := screen.NewWindowOptions{
+	nwopts := screen.NewWindowOptions{
 		Width:  960,
 		Height: 540,
 		Title:  "Dope Wars",
@@ -445,3 +445,5 @@ func main() {
 		log.Fatal(err)
 	}
 }
+
+
