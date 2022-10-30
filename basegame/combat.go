@@ -30,8 +30,7 @@ type Weapon struct {
 	Default          bool
 }
 
-
-//change WeaponUnits to a map of Weapon to int
+// change WeaponUnits to a map of Weapon to int
 type WeaponUnits map[Weapon]int
 
 type Enemy struct {
@@ -125,7 +124,7 @@ func buyWeapon(c *Character, w *Weapon, wu *WeaponUnits) {
 	minObtainable := 1
 	//max obtainable is the minimum of the max stock and the c's Cash modulo divided by the weapon's price
 	maxObtainable = min(c.weaponsAvailable[weaponChoice].MaxStock, c.Cash/c.weaponsAvailable[weaponChoice].Price)
-	fmt.Println("Please provide the quantity you wish to purchase (%d - %d):", minObtainable, maxObtainable)
+	fmt.Printf("Please provide the quantity you wish to purchase (%d - %d):", minObtainable, maxObtainable)
 	var weaponQuantity int
 	fmt.Scanln(&weaponQuantity)
 	switch {

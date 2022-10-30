@@ -100,18 +100,17 @@ type Game struct {
 }
 
 type storyEvent struct {
-	dialog string
+	dialog  string
 	options []string
-	next *storyEvent
-
+	next    *storyEvent
 }
 
-func (event *storyEvent) throwEvent(){
+func (event *storyEvent) throwEvent() {
 	if event == nil {
 		return
 	}
 	fmt.Println(event.dialog)
-	event.nextEvent.throwEvent()
+	event.next.throwEvent()
 }
 
 func (g *Game) Update() error {
@@ -460,5 +459,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
-
