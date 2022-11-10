@@ -18,3 +18,4 @@ toolchain/typefix.go
 *.xcf
 .vscode/i
 dopewars
+.vscode/settings.json
