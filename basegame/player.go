@@ -123,7 +123,7 @@ type Save struct {
 //parse the ../savegame.json file and pass the data to the character struct. If any fields are missing, use the default values
 func Loadsave(c *Character) {
 	//open the file
-	file, err := os.Open("../savegame.json")
+	file, err := os.Open("savegame.json")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -155,6 +155,9 @@ func Loadsave(c *Character) {
 	c.drugs = save.Drugs
 	c.Weapons = save.Weapons
 	c.weaponsAvailable = save.WeaponsAvailable
+
+	//draw a new black background window
+
 }
 
 func NewGame(g *Game) {

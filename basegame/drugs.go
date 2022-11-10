@@ -51,24 +51,7 @@ func declareDrugs() {
 	drugs[9].RaiseWanted = 7
 }
 
-/*func (c *Character) DrugsAvailable() {
-	//get up to 5 random drugs from the drugs array.
-	for i := 0; i < 5; i++ {
-		rand.Seed(time.Now().UnixNano())
-		randIndex := rand.Intn(len(drugs))
-		//check if the drug is already in the array
-		//if it is, generate a new random number
-		//if it is not, add it to the array
-		if drugs[randIndex].Name == c.CurrentDistrict.DrugsAvailable[i].Name {
-			randIndex = rand.Intn(len(drugs))
-		} else {
-			c.CurrentDistrict.DrugsAvailable[i] = drugs[randIndex]
-		}
-	}
-}
-*/
-// randomizeDrugs changes the drugs available in the current district.
-//this baby needs some refactoring
+
 func randomizeDrugs(d *District, dr *Drug) {
 	d.DrugsAvailable = make([]Drug, rand.Intn(3)+3)
 	switch d.ID {

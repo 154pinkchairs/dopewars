@@ -277,19 +277,26 @@ func (g *Game) setupUI() {
 
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
-			Top:          210,
 			Left:         340,
+			Top:          210,
 			Width:        200,
 			Height:       40,
 			MarginLeft:   360,
 			MarginTop:    25,
 			MarginRight:  5,
 			MarginBottom: 5,
+			Position:     0,
 			Handler: &components.Button{Text: "", OnClick: func() {
-				//update the ui to be blank, leaving only the background image
 				g.Update()
 				g.NewGame(&g.Character)
 			}},
+			Direction:    0,
+			Wrap:         0,
+			Justify:      0,
+			AlignItems:   0,
+			AlignContent: 0,
+			Grow:         0,
+			Shrink:       0,
 		})
 	}
 
@@ -305,6 +312,7 @@ func (g *Game) setupUI() {
 			MarginBottom: 5,
 			Handler: &components.Button{Text: "", OnClick: func() {
 				basegame.Loadsave(&basegame.Character{})
+				//if savegame.json file does not exist, create it
 				basegame.NewGame(&basegame.Game{})
 				bg.Clear()
 				newgameimg.Clear()
@@ -459,3 +467,4 @@ func main() {
 		log.Fatal(err)
 	}
 }
+//Clear the screen when "New Game" is pressed
