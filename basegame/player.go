@@ -2,7 +2,6 @@ package basegame
 
 import (
 	"encoding/json"
-	"fmt"
 	"image/color"
 	"io/ioutil"
 	"log"
@@ -180,11 +179,17 @@ func NewGame(g *Game) {
 	err = ebiten.RunGame(&Game{
 		txtRenderer: txtRenderer,
 	})
-	bgnew := ebiten.NewImage(960, 540)
-	bgnew.Fill(color.RGBA{0, 0, 0, 255})
+	GameBG := ebiten.NewImage(960, 540)
+	GameBG.Fill(color.RGBA{0, 0, 0, 255})
 	//invoke the Draw function
-	g.Draw(bgnew)
-	fmt.Println("test")
+	/* curruntly we get th following error: panic: runtime error: invalid memory address or nil pointer dereference
+[signal SIGSEGV: segmentation violation code=0x1 addr=0x28 pc=0x66b197] */
+	g.Layout(960, 540)
+	g.Draw(GameBG)
+	g.Update()
+	ebiten.SetWindowTitle("Dope Wars")
+	ebiten.SetWindowSize(960, 540)
+	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 	if err != nil {
 		log.Fatal(err)
 	}
