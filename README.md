@@ -13,13 +13,13 @@ This game is going to feature:
 - Various random events.
 
 Roadmap:
-[x] Create main menu
-[x] Declare base game mechanics
-[] Create ingame sprites
-[] Implement a basic map and movement
-[] Create maps for other districts, add travel in fe
-[] Implement trading, reputation and wanted level into frontend
-[] Bring combat and weapons trading into fe, add hospitals
-[] Online mode!!
-[] Web frontend
-[] Random events
+- [x] Create main menu
+- [x] Declare base game mechanics
+- [] Create ingame sprites
+- [] Implement a basic map and movement
+- [] Create maps for other districts, add travel in fe
+- [] Implement trading, reputation and wanted level into frontend
+- [] Bring combat and weapons trading into fe, add hospitals
+- [] Online mode!!
+- [] Web frontend
+- [] Random events
