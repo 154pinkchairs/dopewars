@@ -183,7 +183,7 @@ func (g *Game) NewGame(c *basegame.Character) {
 		Title:  "Dope Wars",
 	}
 	g.screen.NewWindow(&nwopts)
-	c.Name = "John Doe"
+	c.Name = "Heisenberg"
 	c.Cash = 10000
 	c.Debt = 15000
 	c.Reputation = 0
