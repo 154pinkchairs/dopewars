@@ -173,16 +173,30 @@ create a new game function to:
 The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
 */
 
-func (g *Game) NewGame(c *basegame.Character) {
-	bgnew := ebiten.NewImage(960, 540)
-	bgnew.Fill(color.Black)
-	//g.Redraw(bgnew)
-	nwopts := screen.NewWindowOptions{
-		Width:  960,
-		Height: 540,
-		Title:  "Dope Wars",
+//get the current display's width and height
+
+// declare a function to create bgnew value that can be used to return bgnew to make it accessible to other functions
+func newbg() *ebiten.Image {
+	//change to use the function provided by helpers/graphics.go
+	g, err := game.NewGame()
+
+	if err != nil {
+		log.Fatal(err)
 	}
+<<<<<<< HEAD
 	g.screen.NewWindow(&nwopts)
+=======
+
+	bgnew = ebiten.NewImage(g.GetMaxX(), g.GetMaxY())
+	bgnew.Fill(color.RGBA{0, 0, 0, 255})
+	// we must now obtain a ebiten.Image object to draw the text on
+	bgimg
+	return bgnew
+}
+
+func (g *Game) NewGame(c *basegame.Character) error {
+
+>>>>>>> c1ee7c5 (add a helpers package for getting display size)
 	c.Name = "Heisenberg"
 	c.Cash = 10000
 	c.Debt = 15000
@@ -288,7 +302,7 @@ func (g *Game) setupUI() {
 			Position:     0,
 			Handler: &components.Button{Text: "", OnClick: func() {
 				g.Update()
-				g.NewGame(&g.Character)
+				g.NewGame(&g.Character, &bgnew)
 			}},
 			Direction:    0,
 			Wrap:         0,
@@ -467,4 +481,5 @@ func main() {
 		log.Fatal(err)
 	}
 }
+
 //Clear the screen when "New Game" is pressed

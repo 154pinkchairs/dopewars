@@ -1,0 +1,46 @@
+{
+  "Graphics": [
+    {
+      "Mointor Number": 0,
+      "Resolutions": [
+        {
+          "Width": 3840,
+          "Height": 2160
+        },
+        {
+          "Width": 2880,
+          "Height": 1800
+        },
+        {
+          "Width": 2560,
+          "Height": 1440
+        },
+        {
+          "Width": 1920,
+          "Height": 1080
+        },
+        {
+          "Width": 1600,
+          "Height": 900
+        },
+        {
+          "Width": 1280,
+          "Height": 720
+        },
+        {
+          "Width": 1024,
+          "Height": 768
+        },
+        {
+          "Width": 960,
+          "Height": 540
+        }
+      ],
+      "Width": 960,
+      "Height": 540,
+      "Refresh Rate": 60,
+      "Allow Fullscreen": true,
+      "Allow Resize": true
+    }
+  ]
+}

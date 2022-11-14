@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/hajimehoshi/ebiten/v2 v2.4.3
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e
 	github.com/tinne26/etxt v0.0.6
 	github.com/yohamta/furex/v2 v2.1.7
 	golang.org/x/exp/shiny v0.0.0-20220916125017-b168a2c6b86b
