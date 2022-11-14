@@ -2,6 +2,7 @@ package main
 
 import (
 	"dopewars/basegame"
+	"dopewars/helpers"
 	"fmt"
 	"image/color"
 	_ "image/png"
@@ -173,6 +174,7 @@ create a new game function to:
 The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
 */
 
+<<<<<<< HEAD
 //get the current display's width and height
 
 // declare a function to create bgnew value that can be used to return bgnew to make it accessible to other functions
@@ -194,6 +196,8 @@ func newbg() *ebiten.Image {
 	return bgnew
 }
 
+=======
+>>>>>>> c8206b1 (separate resolution determination for Windows)
 func (g *Game) NewGame(c *basegame.Character) error {
 
 >>>>>>> c1ee7c5 (add a helpers package for getting display size)
@@ -236,59 +240,51 @@ func (g *Game) NewGame(c *basegame.Character) error {
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
 	}
-
-	//save the values to a new savegame.json file
-	/*savegame, err := json.MarshalIndent(c, "", " ")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = ioutil.WriteFile("savegame.json", savegame, 0644)*/
-	//set the text color to white
-	//render a new screen with the following text, using 	"github.com/tinne26/etxt" package in a 540x240 box at the bottom of the 960x540 screen:
-	//The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
-	ebitenutil.DebugPrintAt(bgnew, "Welcome to Dope Wars. Press enter to continue.", 210, 300)
+	Bgnew := ebiten.NewImage(helpers.GetMaxX(), helpers.GetMaxY())
+	Bgnew.Fill(color.RGBA{0, 0, 0, 255})
+	ebitenutil.DebugPrintAt(Bgnew, "Welcome to Dope Wars. Press enter to continue.", 210, 300)
 	//if enter is pressed, print the keybindings menu (q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help)
-	ebitenutil.DebugPrintAt(bgnew, "Press q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help", 210, 330)
-	ebitenutil.DebugPrintAt(bgnew, "Press enter to continue", 210, 360)
+	ebitenutil.DebugPrintAt(Bgnew, "Press q to quit, i to display character info, d for district info, w for weapon info, s to sell drugs, o for bank, r to run if attacked and f to fight, b to bribe the police, u for hospital visit, t for time, r for reputation, h for help", 210, 330)
+	ebitenutil.DebugPrintAt(Bgnew, "Press enter to continue", 210, 360)
 	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
-		ebitenutil.DebugPrintAt(bgnew, "You pressed enter", 210, 390)
+		ebitenutil.DebugPrintAt(Bgnew, "You pressed enter", 210, 390)
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyQ) {
 		os.Exit(0)
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyI) {
 		//display character info
-		ebitenutil.DebugPrintAt(bgnew, "Name: "+c.Name, 210, 420)
-		ebitenutil.DebugPrintAt(bgnew, "Cash: "+strconv.Itoa(c.Cash), 210, 450)
-		ebitenutil.DebugPrintAt(bgnew, "Debt: "+strconv.Itoa(c.Debt), 210, 480)
-		ebitenutil.DebugPrintAt(bgnew, "Reputation: "+strconv.Itoa(c.Reputation), 210, 510)
-		ebitenutil.DebugPrintAt(bgnew, "Days: "+strconv.Itoa(c.Days), 210, 540)
-		ebitenutil.DebugPrintAt(bgnew, "Wanted Level: "+strconv.Itoa(c.WantedLevel), 210, 570)
+		ebitenutil.DebugPrintAt(Bgnew, "Name: "+c.Name, 210, 420)
+		ebitenutil.DebugPrintAt(Bgnew, "Cash: "+strconv.Itoa(c.Cash), 210, 450)
+		ebitenutil.DebugPrintAt(Bgnew, "Debt: "+strconv.Itoa(c.Debt), 210, 480)
+		ebitenutil.DebugPrintAt(Bgnew, "Reputation: "+strconv.Itoa(c.Reputation), 210, 510)
+		ebitenutil.DebugPrintAt(Bgnew, "Days: "+strconv.Itoa(c.Days), 210, 540)
+		ebitenutil.DebugPrintAt(Bgnew, "Wanted Level: "+strconv.Itoa(c.WantedLevel), 210, 570)
 		x := c.CurrentDistrict.Name
-		ebitenutil.DebugPrintAt(bgnew, "Current District: "+string(x), 210, 600)
+		ebitenutil.DebugPrintAt(Bgnew, "Current District: "+string(x), 210, 600)
 		//enumerate the weapons names and quantities in the character's inventory from basegame.WeaponUnits map
 		for k, v := range c.Weapons {
-			ebitenutil.DebugPrintAt(bgnew, k.Name+": "+strconv.Itoa(v), 210, 630)
+			ebitenutil.DebugPrintAt(Bgnew, k.Name+": "+strconv.Itoa(v), 210, 630)
 		}
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		ebitenutil.DebugPrintAt(bgnew, "District Name: "+c.CurrentDistrict.Name, 210, 420)
+		ebitenutil.DebugPrintAt(Bgnew, "District Name: "+c.CurrentDistrict.Name, 210, 420)
 
-		ebitenutil.DebugPrintAt(bgnew, "Hospital: "+strconv.FormatBool(c.CurrentDistrict.Properties.Hospital), 210, 480)
-		ebitenutil.DebugPrintAt(bgnew, "Bank: "+strconv.FormatBool(c.CurrentDistrict.Properties.Bank), 210, 510)
-		ebitenutil.DebugPrintAt(bgnew, "LoanShark: "+strconv.FormatBool(c.CurrentDistrict.Properties.LoanShark), 210, 540)
+		ebitenutil.DebugPrintAt(Bgnew, "Hospital: "+strconv.FormatBool(c.CurrentDistrict.Properties.Hospital), 210, 480)
+		ebitenutil.DebugPrintAt(Bgnew, "Bank: "+strconv.FormatBool(c.CurrentDistrict.Properties.Bank), 210, 510)
+		ebitenutil.DebugPrintAt(Bgnew, "LoanShark: "+strconv.FormatBool(c.CurrentDistrict.Properties.LoanShark), 210, 540)
 		for _, v := range c.CurrentDistrict.Properties.NeighbourIDs {
-			ebitenutil.DebugPrintAt(bgnew, "Neighbour Districts: "+fmt.Sprint(v), 210, 570)
+			ebitenutil.DebugPrintAt(Bgnew, "Neighbour Districts: "+fmt.Sprint(v), 210, 570)
 		}
 		for _, v := range c.CurrentDistrict.DrugsAvailable {
-			ebitenutil.DebugPrintAt(bgnew, v.Name+": "+strconv.Itoa(v.Price), 210, 630)
+			ebitenutil.DebugPrintAt(Bgnew, v.Name+": "+strconv.Itoa(v.Price), 210, 630)
 		}
 	}
 	//TODO: create a menu to choose the weapon about which to display info
+	return nil
 }
 
 func (g *Game) setupUI() {
-
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
 			Left:         340,
@@ -302,7 +298,7 @@ func (g *Game) setupUI() {
 			Position:     0,
 			Handler: &components.Button{Text: "", OnClick: func() {
 				g.Update()
-				g.NewGame(&g.Character, &bgnew)
+				g.NewGame(&g.Character)
 			}},
 			Direction:    0,
 			Wrap:         0,
