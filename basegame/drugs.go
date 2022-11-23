@@ -53,6 +53,16 @@ func declareDrugs() {
 
 //TODO: declare a function that is a merger of randomizeDrugs and declareDrugs
 
+// rewrite the next function with less cyclomatic complexity
+func (dr *Drug) randomizeAvailability() {
+	//district dependent
+	// poorer districts have less more crack, meth, and heroin
+	// richer districts have more acid, cocaine and shrooms
+	// middle class districts have more weed, ketamine, and amphetamine
+	// TODO: add a wealth field to the district struct
+	//this may help simplifying our method
+}
+
 func randomizeDrugs(d *District, dr *Drug) {
 	d.DrugsAvailable = make([]Drug, rand.Intn(3)+3)
 	switch d.ID {
