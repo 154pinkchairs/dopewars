@@ -15,7 +15,7 @@ This game is going to feature:
 Roadmap:
 - [x] Create main menu
 - [x] Declare base game mechanics
-- [x] World assets – use (iso tiles by Screaming Brain Studios (public domain))[https://screamingbrainstudios.itch.io/]
+- [x] World assets – use [iso tiles by Screaming Brain Studios (public domain)](https://screamingbrainstudios.itch.io/)
 - [ ] Entity assets
 - [ ] Implement a basic map and movement
 - [ ] Create maps for other districts, add travel between them
