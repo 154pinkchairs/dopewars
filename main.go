@@ -2,6 +2,7 @@ package main
 
 import (
 	"dopewars/basegame"
+	"dopewars/core"
 	"fmt"
 	"image/color"
 	_ "image/png"
@@ -17,6 +18,16 @@ import (
 	"github.com/yohamta/furex/v2/components"
 	"golang.org/x/exp/shiny/screen"
 )
+
+type Game struct {
+	init        bool
+	gameUI      *furex.View
+	screen      screen.Screen
+	Character   basegame.Character
+	txtRenderer *etxt.Renderer
+	//must implement ebiten.Game interface
+	ebiten.Game
+}
 
 var bg *ebiten.Image
 
@@ -49,27 +60,6 @@ func init() {
 	}
 }
 
-type Game struct {
-	init        bool
-	gameUI      *furex.View
-	screen      screen.Screen
-	Character   basegame.Character
-	txtRenderer *etxt.Renderer
-}
-
-type storyEvent struct {
-	dialog  string
-	options []string
-	next    *storyEvent
-}
-
-func (event *storyEvent) throwEvent() {
-	if event == nil {
-		return
-	}
-	fmt.Println(event.dialog)
-	event.next.throwEvent()
-}
 
 func (g *Game) Update() error {
 	if !g.init {
@@ -120,6 +110,31 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 }
 
+func StartGame(c *basegame.Character) error {
+	bg.Clear()
+	newgameimg.Clear()
+	loadsave.Clear()
+	donate.Clear()
+	issues.Clear()
+	quitimg.Clear()
+	loadsave_hoover.Clear()
+  donate_hoover.Clear()
+	issues_hoover.Clear()
+  quitimg_hoover.Clear()
+	
+	//run the game 
+	c.Name = "Heisenberg"
+	c.Cash = 10000
+	c.Debt = 15000
+	c.Reputation = 0
+	c.Days = 0
+	c.WantedLevel = 0
+	c.CurrentDistrict = basegame.Bronx
+ 
+	core.NewGame(c)
+	return nil
+}
+
 /*
 1. Render a new screen with the following text, using 	"github.com/tinne26/etxt" package in a 540x240 box at the bottom of the 960x540 screen:
 "Welcome to Dope Wars. Press enter to continue."
@@ -142,7 +157,7 @@ func (g *Game) setupUI() {
 			Position:     0,
 			Handler: &components.Button{Text: "", OnClick: func() {
 				g.Update()
-				g.NewGame(&g.Character)
+				StartGame(&g.Character)
 			}},
 			Direction:    0,
 			Wrap:         0,

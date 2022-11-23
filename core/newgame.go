@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"fmt"
@@ -14,15 +14,12 @@ import (
 	"github.com/tinne26/etxt"
 )
 
-func (g *Game) NewGame(c *basegame.Character) error {
+type Game struct {
+	ebiten.Game
+}
 
-	c.Name = "Heisenberg"
-	c.Cash = 10000
-	c.Debt = 15000
-	c.Reputation = 0
-	c.Days = 0
-	c.WantedLevel = 0
-	c.CurrentDistrict = basegame.Bronx
+func NewGame(c *basegame.Character) error {
+
 	//check if this map is not nil
 	if c.Weapons != nil {
 		c.Weapons = make(map[basegame.Weapon]int)
@@ -44,17 +41,9 @@ func (g *Game) NewGame(c *basegame.Character) error {
 	txtRenderer.SetSizePx(72)
 
 	// run the game
-	ebiten.SetWindowSize(960, 540)
+	ebiten.SetWindowSize(helpers.GetMaxX(), helpers.GetMaxY())
+	ebiten.SetFullscreen(true)
 	ebiten.SetWindowTitle("Dope Wars 2D")
-	bg.Clear()
-	newgameimg.Clear()
-	loadsave.Clear()
-	donate.Clear()
-	issues.Clear()
-	quitimg.Clear()
-	if err := ebiten.RunGame(g); err != nil {
-		log.Fatal(err)
-	}
 	Bgnew := ebiten.NewImage(helpers.GetMaxX(), helpers.GetMaxY())
 	Bgnew.Fill(color.RGBA{0, 0, 0, 255})
 	ebitenutil.DebugPrintAt(Bgnew, "Welcome to Dope Wars. Press enter to continue.", 210, 300)
