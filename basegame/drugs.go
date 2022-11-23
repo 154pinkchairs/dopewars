@@ -50,8 +50,8 @@ func declareDrugs() {
 	drugs[9].Price = rand.Intn(75) + 200
 	drugs[9].RaiseWanted = 7
 }
-//TODO: declare a function that is a merger of randomizeDrugs and declareDrugs
 
+//TODO: declare a function that is a merger of randomizeDrugs and declareDrugs
 
 func randomizeDrugs(d *District, dr *Drug) {
 	d.DrugsAvailable = make([]Drug, rand.Intn(3)+3)
