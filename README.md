@@ -1,7 +1,7 @@
 # Dopewars 2D
 
 This game is being created with the intention of being the best Dopewars game ever. Initially it was meant to be just a text-based adventure,
-but now it is going to use Ebiten, while there will still be a boilerplate branch for CLI.
+but I've decided to use [Ebiten](https://github.com/hajimeoshi/ebiten)
 
 You are a small time drug dealer in the city of New York. After failing one job after another, you have decided to start a small business.
 This game is going to feature:
