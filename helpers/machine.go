@@ -1,5 +1,4 @@
 //go:build darwin || linux
-// +build darwin linux
 
 package helpers
 
@@ -40,7 +39,7 @@ func GetMaxX() int {
 		if err != nil {
 			dispno = 0
 		}
-	//wrapper arround xdpyinfo -display :0 | grep dimensions: | awk '{print $2}' | awk -F x '{print $1}'	
+		//wrapper arround xdpyinfo -display :0 | grep dimensions: | awk '{print $2}' | awk -F x '{print $1}'
 		width, _ = exec.Command("xdpyinfo", "-display", ":"+fmt.Sprintf("%d", dispno), "|", "grep", "dimensions:", "|", "awk", "'{print $2}'", "|", "awk", "-F", "x", "'{print $1}'").Output()
 		if err != nil {
 			//use the helper Shell script ./width.sh
@@ -49,8 +48,8 @@ func GetMaxX() int {
 				log.Printf("Error getting width: %v", err)
 				log.Printf("Using default width of 1152")
 				width = []byte{0x04, 0x60} // 1152
+			}
 		}
-	}
 	} else {
 		width, err = exec.Command("system_profiler", "SPDisplaysDataType", "|", "grep", "Resolution:", "|", "awk", "'{print $2}'").Output()
 		if err != nil {
@@ -76,15 +75,15 @@ func GetMaxX() int {
 	if x == 0 {
 		x = 1920
 	}
-		return x
+	return x
 }
 
 func GetMaxY() int {
 	var y int
 	var height []byte
 	var err error
-		if runtime.GOOS == "linux" {
-			dispno, _ := strconv.Atoi(os.Getenv("DISPLAY"))
+	if runtime.GOOS == "linux" {
+		dispno, _ := strconv.Atoi(os.Getenv("DISPLAY"))
 		height, _ = exec.Command("xdpyinfo", "-display", ":"+fmt.Sprintf("%d", dispno), "|", "grep", "dimensions:", "|", "awk", "-F", "x", "'{print $2}'").Output()
 		if err != nil {
 			//use the helper Shell script ./height.sh
@@ -93,9 +92,9 @@ func GetMaxY() int {
 				log.Printf("Error getting height: %v", err)
 				log.Printf("Using default height of 864")
 				height = []byte{0x03, 0x60} // 864
-							}
+			}
 		}
-			} else {
+	} else {
 		// macOS
 		height, err = exec.Command("system_profiler", "SPDisplaysDataType", "|", "grep", "Resolution:", "|", "awk", "'{print $2}'").Output()
 		if err != nil {
@@ -103,19 +102,19 @@ func GetMaxY() int {
 			panic(err)
 		}
 	}
-		heightnew := make([]string, len(height))
-		for i := 0; i < len(height)-1; i++ {
-			heightnew[i] = string(height[i])
-		}
-		var ystr string
-		for i := 0; i < len(heightnew); i++ {
-			ystr += heightnew[i]
-		}
-		fmt.Println(ystr)
-		y, _ = strconv.Atoi(ystr)
-		fmt.Println(y)
-		if y == 0 {
-			y = 1080
-		}
-		return y
+	heightnew := make([]string, len(height))
+	for i := 0; i < len(height)-1; i++ {
+		heightnew[i] = string(height[i])
+	}
+	var ystr string
+	for i := 0; i < len(heightnew); i++ {
+		ystr += heightnew[i]
+	}
+	fmt.Println(ystr)
+	y, _ = strconv.Atoi(ystr)
+	fmt.Println(y)
+	if y == 0 {
+		y = 1080
+	}
+	return y
 }
