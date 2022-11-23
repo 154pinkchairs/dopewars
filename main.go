@@ -124,6 +124,7 @@ func clearScreen() error {
 	return nil
 }
 
+// TODO: convert the functions called here to gorooutines
 func (g *Game) StartGame(c *basegame.Character) error {
 	//run the game
 	clearScreen()
@@ -289,6 +290,7 @@ func (g *Game) setupUI() {
 		quitBtn(),
 	)
 	//if core.NewGame function has started, then .RemoveAll is called on the gameUI
+	//NOTE: got segfault here
 	if g.CG.HasStarted {
 		g.gameUI.RemoveAll()
 	}
