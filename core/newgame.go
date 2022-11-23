@@ -20,7 +20,7 @@ type Game struct {
 	HasStarted bool
 }
 
-func NewGame(c *basegame.Character) (error, g *Game) {
+func NewGame(c *basegame.Character) error {
 	//check if this map is not nil
 	if c.Weapons != nil {
 		c.Weapons = make(map[basegame.Weapon]int)
@@ -55,10 +55,21 @@ func NewGame(c *basegame.Character) (error, g *Game) {
 		ebitenutil.DebugPrintAt(Bgnew, "You pressed enter", 210, 390)
 		Keys(c)
 	}
-	if err == nil {
-		g.HasStarted = true
+	//create a game.lock file, so that we can check if the game is running
+	_, err = os.Create("game.lock")
+	if err != nil {
+		return err
 	}
-	return nil, g
+	return nil
+}
+
+func (g *Game) IsRunning() bool {
+	//check if the game is running
+	_, err := os.Stat("game.lock")
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
 
 func Keys(c *basegame.Character) error {

@@ -25,7 +25,7 @@ type Game struct {
 	screen      screen.Screen
 	Character   basegame.Character
 	txtRenderer *etxt.Renderer
-	CG          *core.Game
+	CG          core.Game
 	//must implement ebiten.Game interface
 	ebiten.Game
 }
