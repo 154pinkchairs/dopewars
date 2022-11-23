@@ -1,4 +1,4 @@
-module dopewars2d
+module github.com/154pinkchairs/dopewars2d
 
 go 1.19
 
