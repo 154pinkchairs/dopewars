@@ -1,14 +1,15 @@
 package main
 
 import (
-	"github.com/154pinkchairs/dopewars2d/basegame"
-	"github.com/154pinkchairs/dopewars2d/core"
 	"fmt"
 	"image/color"
 	"log"
 	"os"
 	"os/exec"
 	"runtime"
+
+	"github.com/154pinkchairs/dopewars2d/basegame"
+	"github.com/154pinkchairs/dopewars2d/core"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -24,6 +25,7 @@ type Game struct {
 	screen      screen.Screen
 	Character   basegame.Character
 	txtRenderer *etxt.Renderer
+	CG          *core.Game
 	//must implement ebiten.Game interface
 	ebiten.Game
 }
@@ -58,7 +60,6 @@ func init() {
 		log.Fatal(err)
 	}
 }
-
 
 func (g *Game) Update() error {
 	if !g.init {
@@ -109,7 +110,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	}
 }
 
-func StartGame(c *basegame.Character) error {
+func clearScreen() error {
 	bg.Clear()
 	newgameimg.Clear()
 	loadsave.Clear()
@@ -117,20 +118,18 @@ func StartGame(c *basegame.Character) error {
 	issues.Clear()
 	quitimg.Clear()
 	loadsave_hoover.Clear()
-  donate_hoover.Clear()
+	donate_hoover.Clear()
 	issues_hoover.Clear()
-  quitimg_hoover.Clear()
-	
-	//run the game 
-	c.Name = "Heisenberg"
-	c.Cash = 10000
-	c.Debt = 15000
-	c.Reputation = 0
-	c.Days = 0
-	c.WantedLevel = 0
-	c.CurrentDistrict = basegame.Bronx
- 
+	quitimg_hoover.Clear()
+	return nil
+}
+
+func (g *Game) StartGame(c *basegame.Character) error {
+	//run the game
+	clearScreen()
+	c.InitDefault()
 	core.NewGame(c)
+	g.CG.HasStarted = true
 	return nil
 }
 
@@ -140,7 +139,6 @@ func StartGame(c *basegame.Character) error {
 2. Wait for the user to press enter
 The text should be white and use the "assets//fonts/VT323_Regular.17.ttf" font in size 32
 */
-
 
 func (g *Game) setupUI() {
 	newGameBtn := func() *furex.View {
@@ -156,8 +154,9 @@ func (g *Game) setupUI() {
 			Position:     0,
 			Handler: &components.Button{Text: "", OnClick: func() {
 				g.Update()
-				StartGame(&g.Character)
-			}},
+				g.StartGame(&g.Character)
+			},
+			},
 			Direction:    0,
 			Wrap:         0,
 			Justify:      0,
@@ -289,6 +288,10 @@ func (g *Game) setupUI() {
 		issuesBtn(),
 		quitBtn(),
 	)
+	//if core.NewGame function has started, then .RemoveAll is called on the gameUI
+	if g.CG.HasStarted {
+		g.gameUI.RemoveAll()
+	}
 }
 
 // create a function that checks if the mouse is over a button

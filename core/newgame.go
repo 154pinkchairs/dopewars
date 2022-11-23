@@ -3,11 +3,12 @@ package core
 import (
 	"fmt"
 	"image/color"
-	"github.com/154pinkchairs/dopewars2d/basegame"
-	"github.com/154pinkchairs/dopewars2d/helpers"
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/154pinkchairs/dopewars2d/basegame"
+	"github.com/154pinkchairs/dopewars2d/helpers"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -16,10 +17,10 @@ import (
 
 type Game struct {
 	ebiten.Game
+	HasStarted bool
 }
 
-func NewGame(c *basegame.Character) error {
-
+func NewGame(c *basegame.Character) (error, g *Game) {
 	//check if this map is not nil
 	if c.Weapons != nil {
 		c.Weapons = make(map[basegame.Weapon]int)
@@ -52,11 +53,15 @@ func NewGame(c *basegame.Character) error {
 	ebitenutil.DebugPrintAt(Bgnew, "Press enter to continue", 210, 360)
 	if ebiten.IsKeyPressed(ebiten.KeyEnter) {
 		ebitenutil.DebugPrintAt(Bgnew, "You pressed enter", 210, 390)
+		Keys(c)
 	}
-	return nil
+	if err == nil {
+		g.HasStarted = true
+	}
+	return nil, g
 }
 
-func (g *Game) Keys(c *basegame.Character) error {
+func Keys(c *basegame.Character) error {
 	Bgnew := ebiten.NewImage(helpers.GetMaxX(), helpers.GetMaxY())
 	Bgnew.Fill(color.RGBA{0, 0, 0, 255})
 	if ebiten.IsKeyPressed(ebiten.KeyQ) {
@@ -92,5 +97,5 @@ func (g *Game) Keys(c *basegame.Character) error {
 	}
 	//TODO: create a menu to choose the weapon about which to display info
 	return nil
-}
 
+}

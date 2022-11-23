@@ -13,9 +13,10 @@ import (
 	"golang.org/x/exp/shiny/screen"
 )
 
-type Game struct{ 
+type Game struct {
 	txtRenderer *etxt.Renderer
-    screen      *screen.Screen }
+	screen      *screen.Screen
+}
 
 func (g *Game) Layout(int, int) (int, int) { return 960, 540 }
 func (g *Game) Update() error              { return nil }
@@ -44,7 +45,7 @@ type Character struct {
 	Health                  int
 	Reputation, WantedLevel int
 	Cash                    int
-	Days					int
+	Days                    int
 	Bank                    int
 	Debt                    int
 	CurrentDistrict         District
@@ -53,6 +54,15 @@ type Character struct {
 	weaponsAvailable        []Weapon
 }
 
+func (c *Character) InitDefault() {
+	c.Name = "Heisenberg"
+	c.Cash = 10000
+	c.Debt = 15000
+	c.Reputation = 0
+	c.Days = 0
+	c.WantedLevel = 0
+	c.CurrentDistrict = Bronx
+}
 
 //using the following doc: https://docs.rocketnine.space/code.rocketnine.space/tslocum/messeji/
 //create a new text field at the bottom of the screen
@@ -67,7 +77,7 @@ type Save struct {
 	Health                  int
 	Reputation, WantedLevel int
 	Cash                    int
-	Days					int
+	Days                    int
 	Bank                    int
 	Debt                    int
 	CurrentDistrict         District
@@ -76,7 +86,7 @@ type Save struct {
 	WeaponsAvailable        []Weapon
 }
 
-//parse the ../savegame.json file and pass the data to the character struct. If any fields are missing, use the default values
+// parse the ../savegame.json file and pass the data to the character struct. If any fields are missing, use the default values
 func Loadsave(c *Character) {
 	//open the file
 	file, err := os.Open("savegame.json")
@@ -140,7 +150,7 @@ func NewGame(g *Game) {
 	GameBG.Fill(color.RGBA{0, 0, 0, 255})
 	//invoke the Draw function
 	/* curruntly we get th following error: panic: runtime error: invalid memory address or nil pointer dereference
-[signal SIGSEGV: segmentation violation code=0x1 addr=0x28 pc=0x66b197] */
+	[signal SIGSEGV: segmentation violation code=0x1 addr=0x28 pc=0x66b197] */
 	g.Layout(960, 540)
 	g.Draw(GameBG)
 	g.Update()
@@ -151,4 +161,3 @@ func NewGame(g *Game) {
 		log.Fatal(err)
 	}
 }
-
