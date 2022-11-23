@@ -5,7 +5,6 @@ import (
 	"github.com/154pinkchairs/dopewars2d/core"
 	"fmt"
 	"image/color"
-	_ "image/png"
 	"log"
 	"os"
 	"os/exec"
