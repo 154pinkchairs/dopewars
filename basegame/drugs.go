@@ -54,248 +54,36 @@ func declareDrugs() {
 //TODO: declare a function that is a merger of randomizeDrugs and declareDrugs
 
 // rewrite the next function with less cyclomatic complexity
-func (dr *Drug) randomizeAvailability() {
-	//district dependent
+func (dr *Drug) randomizeAvailability(d *District) {
 	// poorer districts have less more crack, meth, and heroin
 	// richer districts have more acid, cocaine and shrooms
 	// middle class districts have more weed, ketamine, and amphetamine
-	// TODO: add a wealth field to the district struct
-	//this may help simplifying our method
-}
+	//Wealth scale 1-5
 
-func randomizeDrugs(d *District, dr *Drug) {
-	d.DrugsAvailable = make([]Drug, rand.Intn(3)+3)
-	switch d.ID {
-	case 0:
-		//make a slice, which can be populated with 3-6 drugs, with a random number of drugs and the likelihood of each drug being available as specified above (line 71)
-		for i := 0; i < len(d.DrugsAvailable); i++ {
-			//make weed, acid and cocaine always available, heroin 80-93%, ketamine 86-96%, amphetamine 69-82%, meth 54-72%, morphine 80-95%, shrooms 63-81%, crack 30-60%
-			if (dr.Name == "weed") || (dr.Name == "acid") || (dr.Name == "cocaine") {
-				d.DrugsAvailable[i] = drugs[i]
-			}
-			if dr.Name == "heroin" {
-				if rand.Intn(93) < 80 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "ketamine" {
-				if rand.Intn(96) < 86 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "amphetamine" {
-				if rand.Intn(82) < 69 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "meth" {
-				if rand.Intn(72) < 54 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "morphine" {
-				if rand.Intn(95) < 80 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "shrooms" {
-				if rand.Intn(81) < 63 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "crack" {
-				if rand.Intn(60) < 30 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-		}
-	case 1:
-		for i := 0; i < len(d.DrugsAvailable); i++ {
-			if dr.Name == "weed" {
-				d.DrugsAvailable[i] = drugs[i]
-			}
-			if dr.Name == "acid" {
-				if rand.Intn(90) < 70 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "cocaine" {
-				if rand.Intn(80) < 69 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "heroin" {
-				if rand.Intn(88) < 68 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "ketamine" {
-				if rand.Intn(81) < 67 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "amphetamine" {
-				if rand.Intn(66) < 36 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "meth" {
-				if rand.Intn(86) < 67 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "morphine" {
-				if rand.Intn(99) < 90 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "shrooms" {
-				if rand.Intn(66) < 44 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "crack" {
-				if rand.Intn(96) < 83 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-		}
-	case 2:
-		for i := 0; i < len(d.DrugsAvailable); i++ {
-			if dr.Name == "weed" {
-				d.DrugsAvailable[i] = drugs[i]
-			}
-			if dr.Name == "cocaine" {
-				if rand.Intn(92) < 80 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "heroin" {
-				if rand.Intn(80) < 60 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "ketamine" {
-				if rand.Intn(80) < 50 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "amphetamine" {
-				if rand.Intn(66) < 36 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "meth" {
-				if rand.Intn(72) < 54 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "morphine" {
-				if rand.Intn(95) < 80 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "shrooms" {
-				if rand.Intn(78) < 59 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "crack" {
-				if rand.Intn(74) < 48 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "acid" {
-				if rand.Intn(100) < 95 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-		}
-	case 3:
-		for i := 0; i < len(d.DrugsAvailable); i++ {
-			if (dr.Name == "weed") || (dr.Name == "heroin") || (dr.Name == "meth") {
-				d.DrugsAvailable[i] = drugs[i]
-			}
-			if dr.Name == "cocaine" {
-				if rand.Intn(66) < 45 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "acid" {
-				if rand.Intn(90) < 70 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "ketamine" {
-				if rand.Intn(88) < 58 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "amphetamine" {
-				if rand.Intn(82) < 69 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "morphine" {
-				if rand.Intn(99) < 90 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "shrooms" {
-				if rand.Intn(66) < 44 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-		}
-	case 4:
-		for i := 0; i < len(d.DrugsAvailable); i++ {
-			if dr.Name == "weed" {
-				d.DrugsAvailable[i] = drugs[i]
-			}
-			if dr.Name == "cocaine" {
-				if rand.Intn(85) < 72 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "heroin" {
-				if rand.Intn(70) < 54 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "ketamine" {
-				if rand.Intn(85) < 78 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "amphetamine" {
-				if rand.Intn(66) < 36 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "meth" {
-				if rand.Intn(64) < 48 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "morphine" {
-				if rand.Intn(95) < 80 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "shrooms" {
-				if rand.Intn(60) < 36 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "crack" {
-				if rand.Intn(51) < 25 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
-			}
-			if dr.Name == "acid" {
-				if rand.Intn(90) < 70 {
-					d.DrugsAvailable[i] = drugs[i]
-				}
+	//So to sum 2 things influence the presence of certain drugs in the d.DrugsAvailable array:
+	//1. The wealth of the district (d.Properties.Wealth)
+	//2. The random number generator
+	//weed always present
+	d.DrugsAvailable[0] = drugs[0]
+	rng := rand.Intn(100)
+	if (rng > 80 && d.Properties.Wealth == 5) || (rng < 70 && d.Properties.Wealth == 4) || (rng < 50 && d.Properties.Wealth == 3 || rng < 30 && d.Properties.Wealth < 3) {
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[1])
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[8])
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[4])
+	} else if (rng > 80 && d.Properties.Wealth == 1) || (rng < 70 && d.Properties.Wealth == 2) || (rng < 50 && d.Properties.Wealth == 3 || rng < 30 && d.Properties.Wealth > 3) {
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[2])
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[6])
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[9])
+	} else if (rng > 80 && d.Properties.Wealth == 3) || (rng < 70 && d.Properties.Wealth == 4) || (rng < 50 && d.Properties.Wealth == 5 || rng < 30 && d.Properties.Wealth < 2) {
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[3])
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[5])
+		d.DrugsAvailable = append(d.DrugsAvailable, drugs[7])
+	} else {
+		//append up 5 random other drugs to the array if it's not fully populated
+		for len(d.DrugsAvailable) < 6 {
+			rng := rand.Intn(9)
+			if d.DrugsAvailable[rng] != drugs[rng] {
+				d.DrugsAvailable = append(d.DrugsAvailable, drugs[rng])
 			}
 		}
 	}

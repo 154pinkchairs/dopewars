@@ -16,6 +16,7 @@ type DistrictProperties struct {
 	Bank         bool
 	LoanShark    bool
 	NeighbourIDs []int
+	Wealth       int
 }
 
 // create the Districts and their Properties just like in New York
@@ -28,6 +29,7 @@ var manhattan = District{
 		Bank:         true,
 		LoanShark:    true,
 		NeighbourIDs: []int{1, 2, 3},
+		Wealth:       5,
 	},
 }
 var brooklyn = District{
@@ -39,6 +41,7 @@ var brooklyn = District{
 		Bank:         false,
 		LoanShark:    false,
 		NeighbourIDs: []int{0, 2, 4},
+		Wealth:       3,
 	},
 }
 var queens = District{
@@ -50,6 +53,7 @@ var queens = District{
 		Bank:         true,
 		LoanShark:    false,
 		NeighbourIDs: []int{0, 1, 3},
+		Wealth:       2,
 	},
 }
 var Bronx = District{
@@ -61,6 +65,7 @@ var Bronx = District{
 		Bank:         false,
 		LoanShark:    true,
 		NeighbourIDs: []int{0, 2},
+		Wealth:       1,
 	},
 }
 var statenIsland = District{
@@ -72,25 +77,12 @@ var statenIsland = District{
 		Bank:         true,
 		LoanShark:    false,
 		NeighbourIDs: []int{1},
+		Wealth:       4,
 	},
 }
 
 var Districts = []District{manhattan, brooklyn, queens, Bronx, statenIsland}
 
-/*type District interface {
-	Name() string
-	neighbour_a() []District
-	neighbour_b() []District
-	//list of up to 5 drugs available in the District. This must be indexable
-	DrugsAvailable() Drugs
-	Hospital() bool
-	Bank() bool
-	LoanShark() bool
-	starting() bool
-	ID() int
-	Properties() DistrictProperties
-}
-*/
 // print a numbered list of the Districts the player can travel with their Names to according to their IDs. The length of the list will change depending on the length of the player's current District's NeighbourIDs slice. A switch case will be used, where the cases are currentDistrict.ID and the cases are the IDs of the Districts in the NeighbourIDs slice. The player will be able to travel to any of the Districts in the NeighbourIDs slice.
 func (d District) PrintNeighbours() {
 	fmt.Println("You can travel to the following Districts:")
