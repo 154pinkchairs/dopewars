@@ -39,7 +39,7 @@ func GetMaxX() int {
 		if err != nil {
 			dispno = 0
 		}
-		//wrapper arround xdpyinfo -display :0 | grep dimensions: | awk '{print $2}' | awk -F x '{print $1}'
+		//wrapper around xdpyinfo -display :0 | grep dimensions: | awk '{print $2}' | awk -F x '{print $1}'
 		width, _ = exec.Command("xdpyinfo", "-display", ":"+fmt.Sprintf("%d", dispno), "|", "grep", "dimensions:", "|", "awk", "'{print $2}'", "|", "awk", "-F", "x", "'{print $1}'").Output()
 		if err != nil {
 			//use the helper Shell script ./width.sh
