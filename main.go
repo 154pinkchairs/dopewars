@@ -1,8 +1,8 @@
 package main
 
 import (
-	"dopewars/basegame"
-	"dopewars/core"
+	"github.com/154pinkchairs/dopewars2d/basegame"
+	"github.com/154pinkchairs/dopewars2d/core"
 	"fmt"
 	"image/color"
 	_ "image/png"

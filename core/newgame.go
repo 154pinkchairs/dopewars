@@ -3,8 +3,8 @@ package core
 import (
 	"fmt"
 	"image/color"
-	"dopewars/basegame"
-	"dopewars/helpers"
+	"dopewars2d/basegame"
+	"dopewars2d/helpers"
 	"log"
 	"os"
 	"strconv"
