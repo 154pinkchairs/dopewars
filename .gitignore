@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+dopewars2d
 
 # Test binary, built with `go test -c`
 *.test
@@ -16,6 +17,5 @@
 toolchain/typefix.go
 .env
 *.xcf
-.vscode/i
-dopewars
+.vscode/*
 .vscode/settings.json
