@@ -66,10 +66,7 @@ func NewGame(c *basegame.Character) error {
 func (g *Game) IsRunning() bool {
 	//check if the game is running
 	_, err := os.Stat("game.lock")
-	if os.IsNotExist(err) {
-		return false
-	}
-	return true
+	return !os.IsNotExist(err)
 }
 
 func Keys(c *basegame.Character) error {

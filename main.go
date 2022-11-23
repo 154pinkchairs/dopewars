@@ -130,7 +130,6 @@ func (g *Game) StartGame(c *basegame.Character) error {
 	clearScreen()
 	c.InitDefault()
 	core.NewGame(c)
-	g.CG.HasStarted = true
 	return nil
 }
 
@@ -290,8 +289,7 @@ func (g *Game) setupUI() {
 		quitBtn(),
 	)
 	//if core.NewGame function has started, then .RemoveAll is called on the gameUI
-	//NOTE: got segfault here
-	if g.CG.HasStarted {
+	if g.CG.IsRunning() {
 		g.gameUI.RemoveAll()
 	}
 }
