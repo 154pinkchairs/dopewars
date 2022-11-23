@@ -1,4 +1,5 @@
 # Dopewars 2D
+[![Go Report Card](https://goreportcard.com/badge/github.com/154pinkchairs/dopewars2d)](https://goreportcard.com/report/github.com/154pinkchairs/dopewars2d)
 
 This game is being created with the intention of being the best Dopewars game ever. Initially it was meant to be just a text-based adventure,
 but I've decided to use [Ebiten](https://github.com/hajimeoshi/ebiten)
