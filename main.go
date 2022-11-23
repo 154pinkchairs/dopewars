@@ -43,16 +43,16 @@ var quitimg_hoover *ebiten.Image
 
 func init() {
 	var err error
-	bg, _, err = ebitenutil.NewImageFromFile("assets/menu_bg.png")
-	newgameimg, _, err = ebitenutil.NewImageFromFile("assets/newgame.png")
-	loadsave, _, err = ebitenutil.NewImageFromFile("assets/loadsave.png")
-	donate, _, err = ebitenutil.NewImageFromFile("assets/donate.png")
-	issues, _, err = ebitenutil.NewImageFromFile("assets/issues.png")
-	quitimg, _, err = ebitenutil.NewImageFromFile("assets/quit.png")
-	loadsave_hoover, _, err = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
-	newgameimg_hoover, _, err = ebitenutil.NewImageFromFile("assets/newgame_hoover.png")
-	donate_hoover, _, err = ebitenutil.NewImageFromFile("assets/donate_hoover.png")
-	issues_hoover, _, err = ebitenutil.NewImageFromFile("assets/issues_hoover.png")
+	bg, _, _ = ebitenutil.NewImageFromFile("assets/menu_bg.png")
+	newgameimg, _, _ = ebitenutil.NewImageFromFile("assets/newgame.png")
+	loadsave, _, _ = ebitenutil.NewImageFromFile("assets/loadsave.png")
+	donate, _, _ = ebitenutil.NewImageFromFile("assets/donate.png")
+	issues, _, _ = ebitenutil.NewImageFromFile("assets/issues.png")
+	quitimg, _, _ = ebitenutil.NewImageFromFile("assets/quit.png")
+	loadsave_hoover, _, _ = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
+	newgameimg_hoover, _, _ = ebitenutil.NewImageFromFile("assets/newgame_hoover.png")
+	donate_hoover, _, _ = ebitenutil.NewImageFromFile("assets/donate_hoover.png")
+	issues_hoover, _, _ = ebitenutil.NewImageFromFile("assets/issues_hoover.png")
 	quitimg_hoover, _, err = ebitenutil.NewImageFromFile("assets/quit_hoover.png")
 	if err != nil {
 		log.Fatal(err)
