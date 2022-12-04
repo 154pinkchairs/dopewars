@@ -155,6 +155,7 @@ func (g *Game) setupUI() {
 			Position:     0,
 			Handler: &components.Button{Text: "", OnClick: func() {
 				g.Update()
+
 				g.StartGame(&g.Character, &g.CG)
 			},
 			},
@@ -182,12 +183,7 @@ func (g *Game) setupUI() {
 				basegame.Loadsave(&basegame.Character{})
 				//if savegame.json file does not exist, create it
 				basegame.NewGame(&basegame.Game{})
-				bg.Clear()
-				newgameimg.Clear()
-				loadsave.Clear()
-				donate.Clear()
-				issues.Clear()
-				quitimg.Clear()
+				clearScreen()
 			},
 			},
 		})
