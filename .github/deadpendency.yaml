@@ -1,0 +1,3 @@
+ignore-failures:
+  - golang
+    - github.com/lxn/win
