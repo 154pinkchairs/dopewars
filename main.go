@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"image/color"
 	"log"
 	"os"
@@ -285,7 +286,11 @@ func main() {
 	ebiten.SetWindowSize(960, 540)
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 	ebiten.SetWindowTitle("Dopewars 2D")
-	if err := ebiten.RunGame(&Game{}); err != nil {
+	debug := flag.Bool("debug", false, "debug mode")
+	flag.Parse()
+	if *debug {
+		log.Println("Debug mode enabled")
+	} else if err := ebiten.RunGame(&Game{}); err != nil {
 		log.Fatal(err)
 	}
 }
