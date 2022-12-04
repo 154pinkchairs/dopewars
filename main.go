@@ -129,12 +129,8 @@ func (g *Game) StartGame(c *basegame.Character, cg *core.Game) error {
 	//run the game
 	clearScreen()
 	c.InitDefault()
-<<<<<<< HEAD
-	core.NewGame(c)
-=======
 	core.NewGame(c, cg)
 	g.CG.HasStarted = true
->>>>>>> fac8704 (rm lockfile on exit, log if resdetect fails)
 	return nil
 }
 
@@ -293,12 +289,7 @@ func (g *Game) setupUI() {
 		issuesBtn(),
 		quitBtn(),
 	)
-<<<<<<< HEAD
-	//if core.NewGame function has started, then .RemoveAll is called on the gameUI
-	if g.CG.IsRunning() {
-=======
 	if g.CG.HasStarted {
->>>>>>> fac8704 (rm lockfile on exit, log if resdetect fails)
 		g.gameUI.RemoveAll()
 	}
 }
