@@ -69,11 +69,10 @@ func GetMaxX() int {
 	for i := 0; i < len(widthnew); i++ {
 		xstr += widthnew[i]
 	}
-	fmt.Println(xstr)
 	x, _ = strconv.Atoi(xstr)
-	fmt.Println(x)
 	if x == 0 {
-		x = 1920
+		x = 1152
+		log.Println("Failed to get screen width, using default value of 1152")
 	}
 	return x
 }
@@ -114,7 +113,8 @@ func GetMaxY() int {
 	y, _ = strconv.Atoi(ystr)
 	fmt.Println(y)
 	if y == 0 {
-		y = 1080
+		y = 864
+		log.Println("Failed to get screen height, using default value of 864")
 	}
 	return y
 }
