@@ -7,12 +7,12 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"sync"
 
 	"github.com/154pinkchairs/dopewars2d/basegame"
 	"github.com/154pinkchairs/dopewars2d/core"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/tinne26/etxt"
 	"github.com/yohamta/furex/v2"
 	"github.com/yohamta/furex/v2/components"
@@ -20,7 +20,6 @@ import (
 )
 
 type Game struct {
-	init        bool
 	gameUI      *furex.View
 	screen      screen.Screen
 	Character   basegame.Character
@@ -30,97 +29,66 @@ type Game struct {
 	ebiten.Game
 }
 
-var bg *ebiten.Image
-
-var loadsave *ebiten.Image
-var newgameimg *ebiten.Image
-var donate *ebiten.Image
-var issues *ebiten.Image
-var quitimg *ebiten.Image
-var loadsave_hoover *ebiten.Image
-var newgameimg_hoover *ebiten.Image
-var donate_hoover *ebiten.Image
-var issues_hoover *ebiten.Image
-var quitimg_hoover *ebiten.Image
-
-func init() {
-	var err error
-	bg, _, _ = ebitenutil.NewImageFromFile("assets/menu_bg.png")
-	newgameimg, _, _ = ebitenutil.NewImageFromFile("assets/newgame.png")
-	loadsave, _, _ = ebitenutil.NewImageFromFile("assets/loadsave.png")
-	donate, _, _ = ebitenutil.NewImageFromFile("assets/donate.png")
-	issues, _, _ = ebitenutil.NewImageFromFile("assets/issues.png")
-	quitimg, _, _ = ebitenutil.NewImageFromFile("assets/quit.png")
-	loadsave_hoover, _, _ = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
-	newgameimg_hoover, _, _ = ebitenutil.NewImageFromFile("assets/newgame_hoover.png")
-	donate_hoover, _, _ = ebitenutil.NewImageFromFile("assets/donate_hoover.png")
-	issues_hoover, _, _ = ebitenutil.NewImageFromFile("assets/issues_hoover.png")
-	quitimg_hoover, _, err = ebitenutil.NewImageFromFile("assets/quit_hoover.png")
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func (g *Game) Update() error {
-	if !g.init {
-		g.init = true
-		g.setupUI()
-	}
+	g.setupUI()
 	g.gameUI.UpdateWithSize(ebiten.WindowSize())
 	return nil
 }
 
-func (g *Game) Draw(screen *ebiten.Image) {
-	screen.DrawImage(bg, nil)
+func (g *Game) Draw(screen *ebiten.Image, wg *sync.WaitGroup) {
+	//TODO: to prevent data races and subsequent segfaults, we need to wait for the UI to finish drawing before we draw the game
+	wg.Wait()
+
+	screen.DrawImage(core.Bg, nil)
 	g.gameUI.Draw(screen)
 	pos1 := &ebiten.DrawImageOptions{}
 	pos1.GeoM.Translate(340, 150)
-	screen.DrawImage(newgameimg, pos1)
+	screen.DrawImage(core.Newgameimg, pos1)
 	if mouseOverButton(340, 150, 200, 50) {
-		screen.DrawImage(newgameimg_hoover, pos1)
+		screen.DrawImage(core.Newgameimg_hoover, pos1)
 	}
 	// add a handler for the new game button using MouseleftButtonHandler from furex
 
 	pos2 := &ebiten.DrawImageOptions{}
 	pos2.GeoM.Translate(340, 200)
-	screen.DrawImage(loadsave, pos2)
+	screen.DrawImage(core.Loadsave, pos2)
 	if mouseOverButton(340, 200, 200, 50) {
-		screen.DrawImage(loadsave_hoover, pos2)
+		screen.DrawImage(core.Loadsave_hoover, pos2)
 	}
 
 	pos3 := &ebiten.DrawImageOptions{}
 	pos3.GeoM.Translate(340, 250)
-	screen.DrawImage(donate, pos3)
+	screen.DrawImage(core.Donate, pos3)
 	if mouseOverButton(340, 250, 200, 50) {
-		screen.DrawImage(donate_hoover, pos3)
+		screen.DrawImage(core.Donate_hoover, pos3)
 	}
 
 	pos4 := &ebiten.DrawImageOptions{}
 	pos4.GeoM.Translate(340, 300)
-	screen.DrawImage(issues, pos4)
+	screen.DrawImage(core.Issues, pos4)
 	if mouseOverButton(340, 300, 200, 50) {
-		screen.DrawImage(issues_hoover, pos4)
+		screen.DrawImage(core.Issues_hoover, pos4)
 	}
 
 	pos5 := &ebiten.DrawImageOptions{}
 	pos5.GeoM.Translate(340, 350)
-	screen.DrawImage(quitimg, pos5)
+	screen.DrawImage(core.Quitimg, pos5)
 	if mouseOverButton(340, 350, 280, 50) {
-		screen.DrawImage(quitimg_hoover, pos5)
+		screen.DrawImage(core.Quitimg_hoover, pos5)
 	}
 }
 
 func clearScreen() error {
-	bg.Clear()
-	newgameimg.Clear()
-	loadsave.Clear()
-	donate.Clear()
-	issues.Clear()
-	quitimg.Clear()
-	loadsave_hoover.Clear()
-	donate_hoover.Clear()
-	issues_hoover.Clear()
-	quitimg_hoover.Clear()
+	core.Bg.Clear()
+	core.Newgameimg.Clear()
+	core.Loadsave.Clear()
+	core.Donate.Clear()
+	core.Issues.Clear()
+	core.Quitimg.Clear()
+	core.Loadsave_hoover.Clear()
+	core.Donate_hoover.Clear()
+	core.Issues_hoover.Clear()
+	core.Quitimg_hoover.Clear()
 	return nil
 }
 
