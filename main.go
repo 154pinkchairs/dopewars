@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"image/color"
 	"log"
 	"os"
-	"os/exec"
-	"runtime"
 	"sync"
+
+	"github.com/154pinkchairs/dopewars2d/helpers"
 
 	"github.com/154pinkchairs/dopewars2d/basegame"
 	"github.com/154pinkchairs/dopewars2d/core"
@@ -35,9 +34,13 @@ func (g *Game) Update() error {
 	return nil
 }
 
-func (g *Game) Draw(screen *ebiten.Image, wg *sync.WaitGroup) {
+func (g *Game) Draw(screen *ebiten.Image) {
 	//TODO: to prevent data races and subsequent segfaults, we need to wait for the UI to finish drawing before we draw the game
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	go core.Init()
 	wg.Wait()
+	wg.Done()
 
 	screen.DrawImage(core.Bg, nil)
 	g.gameUI.Draw(screen)
@@ -167,7 +170,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://www.liberapay.com/") }}, //TODO: setup donations
+			Handler:      &components.Button{Text: "", OnClick: func() { helpers.Openbrowser("https://www.liberapay.com/") }}, //TODO: setup donations
 		})
 	}
 
@@ -181,7 +184,7 @@ func (g *Game) setupUI() {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
+			Handler:      &components.Button{Text: "", OnClick: func() { helpers.Openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
 			Wrap:         furex.NoWrap,
 		})
 	}
@@ -269,25 +272,6 @@ func mouseOverButton(x, y, width, height int) bool {
 		}
 	}
 	return false
-}
-
-func openbrowser(url string) {
-	var err error
-
-	switch runtime.GOOS {
-	case "linux":
-		err = exec.Command("xdg-open", url).Start()
-	case "windows":
-		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
-	case "darwin":
-		err = exec.Command("open", url).Start()
-	default:
-		err = fmt.Errorf("unsupported platform")
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
-
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
