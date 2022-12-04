@@ -12,18 +12,16 @@ import (
 	"github.com/154pinkchairs/dopewars2d/core"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/tinne26/etxt"
 	"github.com/yohamta/furex/v2"
 	"github.com/yohamta/furex/v2/components"
 	"golang.org/x/exp/shiny/screen"
 )
 
 type Game struct {
-	gameUI      *furex.View
-	screen      screen.Screen
-	Character   basegame.Character
-	txtRenderer *etxt.Renderer
-	CG          core.Game
+	gameUI    *furex.View
+	screen    screen.Screen
+	Character basegame.Character
+	CG        core.Game
 	//must implement ebiten.Game interface
 	ebiten.Game
 }
@@ -39,6 +37,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	go core.Init()
+	wg.Wait()
+	wg.Done()
+	wg.Add(1)
+	go g.setupUI()
+	go g.gameUI.Draw(screen)
 	wg.Wait()
 	wg.Done()
 
