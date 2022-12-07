@@ -4,6 +4,7 @@ package helpers
 
 // This file contains utilities and data structures for interacting with the environmental variables and system metrics
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -59,21 +60,11 @@ func GetMaxX() int {
 	}
 	//width is a byte slice that contains the ascii table values (in dec notation) for each digit of the width
 	//we must convert it to an int
-	widthnew := make([]string, len(width))
-	//do not iterate on the last byte, as it is a newline character
-	for i := 0; i < len(width)-1; i++ {
-		widthnew[i] = string(width[i])
-	}
-	//convert the widthmap to an int: chain each index of the slice to a single string, then convert the string to an int
-	var xstr string
-	for i := 0; i < len(widthnew); i++ {
-		xstr += widthnew[i]
-	}
-	fmt.Println(xstr)
+	xstr := bytes.NewBuffer(width).String()
 	x, _ = strconv.Atoi(xstr)
-	fmt.Println(x)
 	if x == 0 {
-		x = 1920
+		x = 1152
+		log.Println("Failed to get screen width, using default value of 1152")
 	}
 	return x
 }
@@ -102,19 +93,11 @@ func GetMaxY() int {
 			panic(err)
 		}
 	}
-	heightnew := make([]string, len(height))
-	for i := 0; i < len(height)-1; i++ {
-		heightnew[i] = string(height[i])
-	}
-	var ystr string
-	for i := 0; i < len(heightnew); i++ {
-		ystr += heightnew[i]
-	}
-	fmt.Println(ystr)
+	ystr := bytes.NewBuffer(height).String()
 	y, _ = strconv.Atoi(ystr)
-	fmt.Println(y)
 	if y == 0 {
-		y = 1080
+		y = 864
+		log.Println("Failed to get screen height, using default value of 864")
 	}
 	return y
 }

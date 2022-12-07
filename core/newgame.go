@@ -20,7 +20,7 @@ type Game struct {
 	HasStarted bool
 }
 
-func NewGame(c *basegame.Character) error {
+func NewGame(c *basegame.Character, g *Game) error {
 	//check if this map is not nil
 	if c.Weapons != nil {
 		c.Weapons = make(map[basegame.Weapon]int)
@@ -60,6 +60,7 @@ func NewGame(c *basegame.Character) error {
 	if err != nil {
 		return err
 	}
+	//g.exit()
 	return nil
 }
 
@@ -106,4 +107,9 @@ func Keys(c *basegame.Character) error {
 	//TODO: create a menu to choose the weapon about which to display info
 	return nil
 
+}
+
+func (g *Game) exit() {
+	//remove the game.lock file
+	os.Remove("game.lock")
 }
