@@ -2,6 +2,7 @@ package core
 
 import (
 	"log"
+	"sync"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -19,10 +20,13 @@ var (
 	Donate_hoover     *ebiten.Image
 	Issues_hoover     *ebiten.Image
 	Quitimg_hoover    *ebiten.Image
+	InitDone          chan bool
+	wg                sync.WaitGroup
 )
 
-func Init() {
+func Init() error {
 	var err error
+	wg.Add(1)
 	Bg, _, _ = ebitenutil.NewImageFromFile("assets/menu_bg.png")
 	Newgameimg, _, _ = ebitenutil.NewImageFromFile("assets/newgame.png")
 	Loadsave, _, _ = ebitenutil.NewImageFromFile("assets/loadsave.png")
@@ -37,4 +41,21 @@ func Init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	InitDone <- true
+	wg.Done()
+	return nil
+}
+
+func ClearScreen() error {
+	Bg.Clear()
+	Newgameimg.Clear()
+	Loadsave.Clear()
+	Donate.Clear()
+	Issues.Clear()
+	Quitimg.Clear()
+	Loadsave_hoover.Clear()
+	Donate_hoover.Clear()
+	Issues_hoover.Clear()
+	Quitimg_hoover.Clear()
+	return nil
 }
