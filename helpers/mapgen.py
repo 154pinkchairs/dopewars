@@ -63,15 +63,15 @@ class Borough:
         #self.map.fill(Tile.grass)
 
 bronx = Borough('bronx', 300, 300)
-queens = Borough('queens', int(bronx.width * 2.3), int(bronx.height * 2.3))
-manhattan = Borough('manhattan', int(bronx.width * 1.5), int(bronx.height * 1.9))
-staten_island = Borough('staten_island', int(bronx.width * 1.2), int(bronx.height * 1.2))
-brooklyn = Borough('brooklyn', int(bronx.width * 1.8), int(bronx.height * 1.8))
+queens = Borough('queens', int(bronx.width * 2.3), int(bronx.length * 2.3))
+manhattan = Borough('manhattan', int(bronx.width * 1.5), int(bronx.length * 1.9))
+staten_island = Borough('staten_island', int(bronx.width * 1.2), int(bronx.length * 1.2))
+brooklyn = Borough('brooklyn', int(bronx.width * 1.8), int(bronx.length * 1.8))
 
 boroughs = [bronx, queens, manhattan, staten_island, brooklyn]
 
 for borough in boroughs:
-    map_array = np.random.randint(1,19, size=(borough.length, borugh.width))
+    map_array = np.random.randint(1,19, size=(borough.length, borough.width))
 
 def write_map(width, length, filename):
   # create a directory for the map files if it does not exist
@@ -90,27 +90,9 @@ def write_map(width, length, filename):
         x += dx
         y += dy
         map_array[y][x] = random.choice([Tile.horiz_st, Tile.vert_st, Tile.alley_horiz, Tile.alley_vert])
-        #move in the selected random direction
-        if random.randint(0, 1) == 0:
-            #move horizontally
-            x += direction
-            #ensure that buildings form frontages no longer than 5 tiles
-            if x > 0 and x < width-1 and map_array[y][x-1] == map_array[y][x+1]:
-                #if the previous and next tiles are the same, then we are in the middle of a frontage
-                map_array[y][x] = random.choice([Tile.horiz_st, Tile.alley_horiz])
-            else:
-                #otherwise, we are at the end of a frontage
-                map_array[y][x] = random.choice([Tile.horiz_st, Tile.alley_horiz, Tile.building_a, Tile.building_b, Tile.building_c])
-        else:
-            #move vertically
-            y += direction
-            if y > 0 and y < length-1 and map_array[y-1][x] == map_array[y+1][x]:
-                map_array[y][x] = random.choice([Tile.vert_st, Tile.alley_vert])
-            else:
-                map_array[y][x] = random.choice([Tile.vert_st, Tile.alley_vert, Tile.building_a, Tile.building_b, Tile.building_c])
     #place the trees on the map. Trees must be surrounded by grass. In Manhattan, we'll create Central Park
-  for i in range(0, width):
-        for j in range(0, length):
+  for i in range(0, borough.width):
+        for j in range(0, borough.length):
             if map_array[i][j] == Tile.grass:
                 if i < 0 or i >= len(map_array):
                     continue
@@ -167,8 +149,8 @@ def write_map(width, length, filename):
   # write the map array to a file
   np.savetxt('../maps/' + filename + '.map', symbol_map_array, fmt='%s', delimiter='')
 
-write_map(bronx_width, bronx_length, 'bronx')
-write_map(manhattan_width, manhattan_length, 'manhattan')
-write_map(staten_island_width, staten_island_length, 'staten_island')
-write_map(brooklyn_width, brooklyn_length, 'brooklyn')
-write_map(queens_width, queens_length, 'queens')
+write_map(bronx.width, bronx.length, 'bronx')
+write_map(manhattan.width, manhattan.length, 'manhattan')
+write_map(staten.island.width, staten.island.length, 'staten.island')
+write_map(brooklyn.width, brooklyn.length, 'brooklyn')
+write_map(queens.width, queens.length, 'queens')
