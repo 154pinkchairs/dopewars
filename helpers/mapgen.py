@@ -65,10 +65,10 @@ class Borough:
 bronx = Borough('bronx', 300, 300)
 queens = Borough('queens', int(bronx.width * 2.3), int(bronx.length * 2.3))
 manhattan = Borough('manhattan', int(bronx.width * 1.5), int(bronx.length * 1.9))
-staten_island = Borough('staten_island', int(bronx.width * 1.2), int(bronx.length * 1.2))
+coney_island = Borough('staten_island', int(bronx.width * 1.2), int(bronx.length * 1.2))
 brooklyn = Borough('brooklyn', int(bronx.width * 1.8), int(bronx.length * 1.8))
 
-boroughs = [bronx, queens, manhattan, staten_island, brooklyn]
+boroughs = [bronx, queens, manhattan, coney_island, brooklyn]
 
 for borough in boroughs:
     map_array = np.random.randint(1,19, size=(borough.length, borough.width))
@@ -151,6 +151,6 @@ def write_map(width, length, filename):
 
 write_map(bronx.width, bronx.length, 'bronx')
 write_map(manhattan.width, manhattan.length, 'manhattan')
-write_map(staten.island.width, staten.island.length, 'staten.island')
+write_map(coney_island.width, coney_island.length, 'coney.island')
 write_map(brooklyn.width, brooklyn.length, 'brooklyn')
 write_map(queens.width, queens.length, 'queens')

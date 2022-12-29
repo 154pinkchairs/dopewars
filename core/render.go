@@ -1,46 +1,45 @@
 package core
 
 import (
-    "bufio"
-		"os"
-		"log"
-		"sync"
-    "github.com/hajimehoshi/ebiten/v2"
-    "github.com/hajimehoshi/ebiten/v2/ebitenutil"
-    "github.com/154pinkchairs/dopewars2d/basegame"
+	"bufio"
+	"log"
+	"os"
+
+	"github.com/154pinkchairs/dopewars2d/basegame"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type MapDrawer interface {
-    Draw(screen *ebiten.Image) error
+	Draw(screen *ebiten.Image) error
 }
 
 type Tile rune
 
 const (
-	building_a Tile = 'a'
-	building_b Tile = 'b'
+	building_a  Tile = 'a'
+	building_b  Tile = 'b'
 	alley_horiz Tile = '_'
-	alley_vert Tile = '!'
-	horiz_st Tile = '-' //horizontal street
-	vert_st Tile = '|' //vertical street
-	police_st Tile = 'p'
-	hosp Tile = 'h'
-	bank Tile = '$'
-	traphouse Tile = 't'
-	gunshop Tile = 'g'
-	loan_shark Tile = 'l'
-	grass Tile = ' '
-	water Tile = '~'
-	dirt Tile = '#'
-	metro Tile = 'm'
+	alley_vert  Tile = '!'
+	horiz_st    Tile = '-' //horizontal street
+	vert_st     Tile = '|' //vertical street
+	police_st   Tile = 'p'
+	hosp        Tile = 'h'
+	bank        Tile = '$'
+	traphouse   Tile = 't'
+	gunshop     Tile = 'g'
+	loan_shark  Tile = 'l'
+	grass       Tile = ' '
+	water       Tile = '~'
+	dirt        Tile = '#'
+	metro       Tile = 'm'
 )
 
 type Dist_map struct {
-	Map [][]Tile
+	Map      [][]Tile
 	District *basegame.District
 }
 
-//create the file reader, then the render function/method/interface that translates the characters into tile files to be rendered by ebitenutil.NewImageFromFile
+// create the file reader, then the render function/method/interface that translates the characters into tile files to be rendered by ebitenutil.NewImageFromFile
 func renderMap(screen *ebiten.Image, mapDrawer MapDrawer, srcfile string) (error, *ebiten.Image, *Dist_map) {
 	//open the file
 	file, err := os.Open(srcfile)
@@ -60,4 +59,19 @@ func renderMap(screen *ebiten.Image, mapDrawer MapDrawer, srcfile string) (error
 		}
 		idx++
 	}
+	dist_map := &Dist_map{
+		Map: make([][]Tile, len(mapLines)),
+	}
 
+	for i := range dist_map.Map {
+		dist_map.Map[i] = make([]Tile, maxRow)
+	}
+
+	for i, line := range mapLines {
+		for j, char := range line {
+			dist_map.Map[i][j] = Tile(char)
+		}
+	}
+
+	return nil, nil, dist_map
+}
