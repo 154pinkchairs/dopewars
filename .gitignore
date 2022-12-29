@@ -19,3 +19,7 @@ toolchain/typefix.go
 *.xcf
 .vscode/*
 .vscode/settings.json
+
+# procedurally generated
+maps/*.map
+*.rar
