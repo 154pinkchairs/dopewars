@@ -20,7 +20,8 @@ jobs:
             - go-mod-v4-{{ checksum "go.sum" }}
       - run:
           name: Install Dependencies
-          command: go mod download
+          command: go mod download && grep -v "edge" /etc/apk/repositories | sed -i '/community/ s/^#//' \
+          && apk add alsa-lib-dev libx11-dev libxrandr-dev libxcursor-dev libxinerama-dev libxi-dev mesa-dev pkgconf
       - save_cache:
           key: go-mod-v4-{{ checksum "go.sum" }}
           paths:
