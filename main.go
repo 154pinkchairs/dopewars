@@ -23,6 +23,7 @@ type Game struct {
 	CG        core.Game
 	//must implement ebiten.Game interface
 	ebiten.Game
+	UI GameUI
 }
 
 var (
@@ -42,36 +43,67 @@ var (
 )
 
 func init() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	var err error
-	bg, _, _ = ebitenutil.NewImageFromFile("assets/menu_bg.png")
-	newgameimg, _, _ = ebitenutil.NewImageFromFile("assets/newgame.png")
-	loadsave, _, _ = ebitenutil.NewImageFromFile("assets/loadsave.png")
-	donate, _, _ = ebitenutil.NewImageFromFile("assets/donate.png")
-	issues, _, _ = ebitenutil.NewImageFromFile("assets/issues.png")
-	quitimg, _, _ = ebitenutil.NewImageFromFile("assets/quit.png")
-	loadsave_hoover, _, _ = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
+	bg, _, err = ebitenutil.NewImageFromFile("assets/menu_bg.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading background image")
+	}
+	newgameimg, _, err = ebitenutil.NewImageFromFile("assets/newgame.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading new game image")
+	}
+	loadsave, _, err = ebitenutil.NewImageFromFile("assets/loadsave.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading load/save image")
+	}
+	donate, _, err = ebitenutil.NewImageFromFile("assets/donate.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading donate image")
+	}
+	issues, _, err = ebitenutil.NewImageFromFile("assets/issues.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading issues image")
+	}
+	quitimg, _, err = ebitenutil.NewImageFromFile("assets/quit.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading quit image")
+	}
+	loadsave_hoover, _, err = ebitenutil.NewImageFromFile("assets/loadsave_hoover.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading load/save hoover image")
+	}
 	newgameimg_hoover, _, _ = ebitenutil.NewImageFromFile("assets/newgame_hoover.png")
-	donate_hoover, _, _ = ebitenutil.NewImageFromFile("assets/donate_hoover.png")
-	issues_hoover, _, _ = ebitenutil.NewImageFromFile("assets/issues_hoover.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading new game hoover image")
+	}
+	donate_hoover, _, err = ebitenutil.NewImageFromFile("assets/donate_hoover.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading donate hoover image")
+	}
+	issues_hoover, _, err = ebitenutil.NewImageFromFile("assets/issues_hoover.png")
+	if err != nil {
+		log.Panic().AnErr("error", err).Msg("Error loading issues hoover image")
+	}
 	quitimg_hoover, _, err = ebitenutil.NewImageFromFile("assets/quit_hoover.png")
 	if err != nil {
-		log.Fatal(err)
+		log.Panic().AnErr("error", err).Msg("Error loading quit hoover image")
 	}
 }
 
 func (g *Game) Close(mode string) error {
 	switch mode {
 	case "fatal":
-		log.Default().Fatalf().Msg("Fatal error. Quitting.")
+		log.Fatal().Msg("Fatal error. Quitting.")
 		return nil
 	case "error":
-		log.Default().Error().Msg("Error. Quitting.")
+		log.Error().Msg("Error. Quitting.")
 		return errors.New("Error. Quitting.")
 	case "graceful":
-		log.Default().Info().Msg("Gracefully quitting.")
+		log.Info().Msg("Gracefully quitting.")
 		return nil
 	default:
-		log.Default().Info().Msg("Gracefully quitting.")
+		log.Info().Msg("Gracefully quitting.")
 		return nil
 	}
 }
@@ -79,7 +111,7 @@ func (g *Game) Close(mode string) error {
 func (g *Game) Update() error {
 	if !g.init {
 		g.init = true
-		g.setupUI()
+		g.UI.()
 	}
 	g.gameUI.UpdateWithSize(ebiten.WindowSize())
 	return nil
@@ -87,7 +119,7 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(bg, nil)
-	g.gameUI.Draw(screen)
+	g.gameUI.DrawMenu(screen)
 	pos1 := &ebiten.DrawImageOptions{}
 	pos1.GeoM.Translate(340, 150) // f64, f64
 	screen.DrawImage(newgameimg, pos1)

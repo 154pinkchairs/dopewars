@@ -4,6 +4,8 @@ import (
 	"image/color"
 
 	"github.com/154pinkchairs/dopewars2d/core"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/furex/v2"
 )
 
@@ -32,11 +34,16 @@ type Button struct {
 	Sprite    string
 }
 
+func (gu *GameUI) DrawMenu(ebiten.Image) {
+	screen := ebiten.NewImage(960, 540)
+	ebitenutil.DrawRect(screen, 0, 0, 960, 540, color.RGBA{0, 0, 0, 255})
+}
+
 func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 	g := &Game{}
 	cg := core.Game{}
 	if err := g.StartGame(&g.Character, &cg); err != nil {
-		g.Close()
+		g.Close("error")
 		return nil, err
 	}
 	return (&furex.View{
