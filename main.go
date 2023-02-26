@@ -1,8 +1,8 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"os/exec"
 	"runtime"
 
@@ -12,6 +12,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/furex/v2"
+
+	"github.com/rs/zerolog/log"
 )
 
 type Game struct {
@@ -54,6 +56,23 @@ func init() {
 	quitimg_hoover, _, err = ebitenutil.NewImageFromFile("assets/quit_hoover.png")
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func (g *Game) Close(mode string) error {
+	switch mode {
+	case "fatal":
+		log.Default().Fatalf().Msg("Fatal error. Quitting.")
+		return nil
+	case "error":
+		log.Default().Error().Msg("Error. Quitting.")
+		return errors.New("Error. Quitting.")
+	case "graceful":
+		log.Default().Info().Msg("Gracefully quitting.")
+		return nil
+	default:
+		log.Default().Info().Msg("Gracefully quitting.")
+		return nil
 	}
 }
 
@@ -128,7 +147,7 @@ func (g *Game) StartGame(c *basegame.Character, cg *core.Game) error {
 		return err
 	}
 	c.InitDefault()
-	err := core.NewGame(c, cg)
+	err = core.NewGame(c, cg)
 	if err != nil {
 		return err
 	}
@@ -170,7 +189,7 @@ func openbrowser(url string) {
 		err = fmt.Errorf("unsupported platform")
 	}
 	if err != nil {
-		log.Fatal(err)
+		log.Error().Err(err).Msg("Failed to open browser")
 	}
 
 }
@@ -184,7 +203,7 @@ func main() {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 	ebiten.SetWindowTitle("Dopewars 2D")
 	if err := ebiten.RunGame(&Game{}); err != nil {
-		log.Fatal(err)
+		log.Default().Fatal().Err(err).Msg("Failed to run game")
 	}
 }
 

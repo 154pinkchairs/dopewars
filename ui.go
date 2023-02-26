@@ -2,10 +2,9 @@ package main
 
 import (
 	"image/color"
-	"os"
 
+	"github.com/154pinkchairs/dopewars2d/core"
 	"github.com/yohamta/furex/v2"
-	"github.com/yohamta/furex/v2/components"
 )
 
 type UI interface {
@@ -17,46 +16,58 @@ type UI interface {
 }
 
 type GameUI struct {
-	NewGameBtn   *furex.View
-	LoadSaveBtn  *furex.View
-	DonateBtn    *furex.View
-	IssuesBtn    *furex.View
-	QuitBtn      *furex.View
-	NewGameImg   *furex.View
+	NewGBtn     *furex.View
+	LoadSaveBtn *furex.View
+	DonateBtn   *furex.View
+	IssuesBtn   *furex.View
+	QuitBtn     *furex.View
+	NewGameImg  *furex.View
+}
+
+type Button struct {
+	OnClick   func()
+	Color     color.RGBA
+	mouseover bool
+	pressed   bool
+	Sprite    string
 }
 
 func (gu *GameUI) NewGameBtn() (*furex.View, error) {
-g := &Game{}
-if err := g.StartGame(&g.Character, &cg); err != nil {
+	g := &Game{}
+	cg := core.Game{}
+	if err := g.StartGame(&g.Character, &cg); err != nil {
 		g.Close()
 		return nil, err
 	}
 	return (&furex.View{
-			Left:         340,
-			Top:          210,
-			Width:        200,
-			Height:       40,
-			MarginLeft:   360,
-			MarginTop:    25,
-			MarginRight:  5,
-			MarginBottom: 5,
-			Position:     0,
-			Handler: &components.Button{Text: "", OnClick: func() {
-				g.Update()
-				cg := core.Game{}
-				g.StartGame(&g.Character, &cg)
-			},
-			},
-			Direction:    0,
-			Wrap:         0,
-			Justify:      0,
-			AlignItems:   0,
-			AlignContent: 0,
-			Grow:         0,
-			Shrink:       0,
-		})
-	}
+		Left:         340,
+		Top:          210,
+		Width:        200,
+		Height:       40,
+		MarginLeft:   360,
+		MarginTop:    25,
+		MarginRight:  5,
+		MarginBottom: 5,
+		Position:     0,
+		Handler: &Button{Color: color.RGBA{255, 255, 255, 0}, OnClick: func() { //FIXME: correct types
+			g.Update()
+			cg := core.Game{}
+			g.StartGame(&g.Character, &cg)
+			//g.Clear() //TODO: clear the screen
+		},
+			Sprite: "assets/newgame.png",
+		},
+		Direction:    0,
+		Wrap:         0,
+		Justify:      0,
+		AlignItems:   0,
+		AlignContent: 0,
+		Grow:         0,
+		Shrink:       0,
+	}), nil
+}
 
+/*
 func (g *Game) setupUI() error {
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
@@ -188,4 +199,4 @@ func (g *Game) setupUI() error {
 		g.gameUI.RemoveAll()
 	}
 }
-
+*/
