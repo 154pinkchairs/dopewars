@@ -1,0 +1,46 @@
+run:
+  concurrency: 4
+  timeout: 4m
+  skip-dirs:
+    - models
+  modules-download-mode: mod
+output:
+  format: colored-line-number,tab,github-actions
+  print-issued-lines: true
+  print-linter-name: true
+  uniq-by-line: false
+  sort-results: true
+#enabled by default are: errcheck, gosimple, govet, ineffassign, staticcheck, typecheck, unused
+linters:
+  enable:
+    - asciicheck
+    - bodyclose
+    - dupl
+    - depguard
+    - exhaustruct
+    - funlen
+    - gocognit
+    - gochecknoglobals
+    - gocritic
+    - gocyclo
+    - gosec
+    - musttag
+    - nilnil
+    - prealloc
+    - usestdlibvars
+linters-settings:
+  gocritic:
+    # Which checks should be enabled; can't be combined with 'disabled-checks'.
+    # See https://go-critic.github.io/overview#checks-overview.
+    # To check which checks are enabled run `GL_DEBUG=gocritic golangci-lint run`.
+    # By default, list of stable checks is used.
+    enabled-checks:
+      - nestingReduce
+      - ruleguard
+      - truncateCmp
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+  funlen:
+    lines: 75
