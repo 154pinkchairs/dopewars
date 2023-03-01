@@ -5,10 +5,10 @@ run:
     - models
   modules-download-mode: mod
 output:
-  format: colored-line-number,tab,github-actions
+  format: colored-line-number
   print-issued-lines: true
   print-linter-name: true
-  uniq-by-line: false
+  uniq-by-line: true
   sort-results: true
 #enabled by default are: errcheck, gosimple, govet, ineffassign, staticcheck, typecheck, unused
 linters:
@@ -34,10 +34,6 @@ linters-settings:
     # See https://go-critic.github.io/overview#checks-overview.
     # To check which checks are enabled run `GL_DEBUG=gocritic golangci-lint run`.
     # By default, list of stable checks is used.
-    enabled-checks:
-      - nestingReduce
-      - ruleguard
-      - truncateCmp
     enabled-tags:
       - diagnostic
       - style
