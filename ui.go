@@ -1,11 +1,13 @@
 package main
 
 import (
+	"image"
 	"image/color"
+	"path"
 
 	"github.com/154pinkchairs/dopewars2d/core"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	eu "github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/furex/v2"
 )
 
@@ -32,18 +34,33 @@ type Button struct {
 	mouseover bool
 	pressed   bool
 	Sprite    string
+	DrawHan   *FXDHandlerImpl
+}
+
+type FXDHandlerImpl struct {
+	furex.DrawHandler
+}
+
+func (f *FXDHandlerImpl) Draw(screen *ebiten.Image, frame image.Rectangle) int8 {
+	eu.DrawRect(screen, float64(frame.Min.X), float64(frame.Min.Y), float64(frame.Dx()), float64(frame.Dy()), color.RGBA{0, 0, 0, 255})
+	return Button.DrawHan.Draw(screen, frame)
 }
 
 func (gu *GameUI) DrawMenu(ebiten.Image) {
 	screen := ebiten.NewImage(960, 540)
-	ebitenutil.DrawRect(screen, 0, 0, 960, 540, color.RGBA{0, 0, 0, 255})
+	eu.DrawRect(screen, 0, 0, 960, 540, color.RGBA{0, 0, 0, 255})
 }
 
 func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 	g := &Game{}
+	f := FXDHandlerImpl{}
 	cg := core.Game{}
 	if err := g.StartGame(&g.Character, &cg); err != nil {
 		g.Close("error")
+		return nil, err
+	}
+	sprite, _, err := eu.NewImageFromFile(path.Join("assets", "newgame.png"))
+	if err != nil {
 		return nil, err
 	}
 	return (&furex.View{
@@ -56,14 +73,7 @@ func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 		MarginRight:  5,
 		MarginBottom: 5,
 		Position:     0,
-		Handler: &Button{Color: color.RGBA{255, 255, 255, 0}, OnClick: func() { //FIXME: correct types
-			g.Update()
-			cg := core.Game{}
-			g.StartGame(&g.Character, &cg)
-			//g.Clear() //TODO: clear the screen
-		},
-			Sprite: "assets/newgame.png",
-		},
+		Handler:      f.Draw(sprite, image.Rect(0, 0, 200, 40)),
 		Direction:    0,
 		Wrap:         0,
 		Justify:      0,
@@ -206,4 +216,5 @@ func (g *Game) setupUI() error {
 		g.gameUI.RemoveAll()
 	}
 }
+
 */

@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"runtime"
 
@@ -13,6 +14,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/furex/v2"
 
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -111,7 +113,6 @@ func (g *Game) Close(mode string) error {
 func (g *Game) Update() error {
 	if !g.init {
 		g.init = true
-		g.UI.()
 	}
 	g.gameUI.UpdateWithSize(ebiten.WindowSize())
 	return nil
@@ -119,7 +120,7 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(bg, nil)
-	g.gameUI.DrawMenu(screen)
+	g.UI.DrawMenu(*ebiten.NewImageFromImage(bg))
 	pos1 := &ebiten.DrawImageOptions{}
 	pos1.GeoM.Translate(340, 150) // f64, f64
 	screen.DrawImage(newgameimg, pos1)
@@ -235,7 +236,7 @@ func main() {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 	ebiten.SetWindowTitle("Dopewars 2D")
 	if err := ebiten.RunGame(&Game{}); err != nil {
-		log.Default().Fatal().Err(err).Msg("Failed to run game")
+		log.Fatal().Err(err).Msg("Failed to run game")
 	}
 }
 
