@@ -1,3 +1,6 @@
+# <span style="color:red"> This project is not currently maintained. I hope to revive it someday, although it'll probably be a rewrite from scratch due to the design flaws in the original project, the time that has passed since I did anything on it and the amount of breaking changes in Ebiten. sorry 
+:(</span>
+
 # Dopewars 2D
 [![Go Report Card](https://goreportcard.com/badge/github.com/154pinkchairs/dopewars2d)](https://goreportcard.com/report/github.com/154pinkchairs/dopewars2d)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/154pinkchairs/dopewars2d/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/154pinkchairs/dopewars2d/tree/main)
