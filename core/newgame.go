@@ -60,7 +60,7 @@ func NewGame(c *basegame.Character, g *Game) error {
 	if err != nil {
 		return err
 	}
-	//g.exit()
+	g.exit()
 	return nil
 }
 

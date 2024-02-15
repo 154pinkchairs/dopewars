@@ -156,19 +156,14 @@ func mouseOverButton(x, y, width, height int) bool {
 	return false
 }
 
-func openbrowser(url string) {
-	var err error
-
-	switch runtime.GOOS {
-	case "linux":
-		err = exec.Command("xdg-open", url).Start()
-	case "windows":
-		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
-	case "darwin":
-		err = exec.Command("open", url).Start()
-	default:
-		err = fmt.Errorf("unsupported platform")
+func resflag() (int, int) {
+	//get the resolution in intxint format, parsing the string and converting it to 2 ints
+	res := strings.Split(flag.Arg(0), "x")
+	resx, err := strconv.Atoi(res[0])
+	if err != nil {
+		panic(err)
 	}
+	resy, err := strconv.Atoi(res[1])
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to open browser")
 	}
