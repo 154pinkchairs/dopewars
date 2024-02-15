@@ -34,16 +34,19 @@ type Button struct {
 	mouseover bool
 	pressed   bool
 	Sprite    string
-	DrawHan   *FXDHandlerImpl
+	DrawHan   FXDHandler
 }
 
-type FXDHandlerImpl struct {
+type FXDHandler interface {
 	furex.DrawHandler
 }
 
-func (f *FXDHandlerImpl) Draw(screen *ebiten.Image, frame image.Rectangle) int8 {
+type FXHandlerImpl struct{}
+
+func (f FXHandlerImpl) HandleDraw(screen *ebiten.Image, frame image.Rectangle) {
+	var b Button
 	eu.DrawRect(screen, float64(frame.Min.X), float64(frame.Min.Y), float64(frame.Dx()), float64(frame.Dy()), color.RGBA{0, 0, 0, 255})
-	return Button.DrawHan.Draw(screen, frame)
+	b.DrawHan.HandleDraw(screen, frame)
 }
 
 func (gu *GameUI) DrawMenu(ebiten.Image) {
@@ -53,16 +56,18 @@ func (gu *GameUI) DrawMenu(ebiten.Image) {
 
 func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 	g := &Game{}
-	f := FXDHandlerImpl{}
+	f := FXHandlerImpl{}
 	cg := core.Game{}
 	if err := g.StartGame(&g.Character, &cg); err != nil {
 		g.Close("error")
 		return nil, err
 	}
-	sprite, _, err := eu.NewImageFromFile(path.Join("assets", "newgame.png"))
+	// TODO: sprite creation here (1st return value)
+	_, _, err := eu.NewImageFromFile(path.Join("assets", "newgame.png"))
 	if err != nil {
 		return nil, err
 	}
+
 	return (&furex.View{
 		Left:         340,
 		Top:          210,
@@ -73,7 +78,7 @@ func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 		MarginRight:  5,
 		MarginBottom: 5,
 		Position:     0,
-		Handler:      f.Draw(sprite, image.Rect(0, 0, 200, 40)),
+		Handler:      f,
 		Direction:    0,
 		Wrap:         0,
 		Justify:      0,
