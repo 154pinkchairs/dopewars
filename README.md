@@ -1,5 +1,6 @@
 # Dopewars 2D
 [![Go Report Card](https://goreportcard.com/badge/github.com/154pinkchairs/dopewars2d)](https://goreportcard.com/report/github.com/154pinkchairs/dopewars2d)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/154pinkchairs/dopewars2d/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/154pinkchairs/dopewars2d/tree/main)
 
 This game is being created with the intention of being the best Dopewars game ever. Initially it was meant to be just a text-based adventure,
 but I've decided to use [Ebiten](https://github.com/hajimeoshi/ebiten)
@@ -17,8 +18,8 @@ Roadmap:
 - [x] Create main menu
 - [x] Declare base game mechanics
 - [x] World assets – use [iso tiles by Screaming Brain Studios (public domain)](https://screamingbrainstudios.itch.io/)
-- [ ] Entity assets
-- [ ] Implement a basic map and movement
+- [x] Entity assets: WIP
+- [x] Implement a basic map and movement
 - [ ] Create maps for other districts, add travel between them
 - [ ] Implement trading, reputation and wanted level into frontend
 - [ ] Bring combat and weapons trading into fe, add hospitals
