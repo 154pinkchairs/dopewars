@@ -3,16 +3,15 @@ package main
 import (
 	"errors"
 	"fmt"
-
 	"os/exec"
 	"runtime"
 
 	"github.com/154pinkchairs/dopewars2d/basegame"
 	"github.com/154pinkchairs/dopewars2d/core"
+	"github.com/yohamta/furex/v2"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/yohamta/furex/v2"
 
 	"github.com/rs/zerolog/log"
 )
@@ -74,6 +73,14 @@ func initButtonImages() (err error) {
 	return nil
 }
 
+func initBackground() (err error) {
+	bg, _, err = ebitenutil.NewImageFromFile("assets/menu_bg.png")
+	if err != nil {
+		return fmt.Errorf("failed to load background image: %w", err)
+	}
+	return nil
+}
+
 func (g *Game) Close(mode string) error {
 	switch mode {
 	case "fatal":
@@ -95,11 +102,20 @@ func (g *Game) Update() error {
 	if !g.init {
 		g.init = true
 	}
+	if g.gameUI == nil {
+		return g.setupUI()
+	}
 	g.gameUI.UpdateWithSize(ebiten.WindowSize())
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+	if bg == nil {
+		if err := initBackground(); err != nil {
+			log.Fatal().Err(err).Msg("Failed to load background image")
+		}
+	}
+
 	screen.DrawImage(bg, nil)
 	g.UI.DrawMenu(*ebiten.NewImageFromImage(bg))
 
@@ -110,6 +126,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		{340, 250, 200, 50},
 		{340, 300, 200, 50},
 		{340, 350, 280, 50},
+	}
+
+	if err := initButtonImages(); err != nil {
+		log.Fatal().Err(err).Msg("Failed to initialize button images")
 	}
 
 	buttons := make([]button, len(buttonNames))

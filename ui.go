@@ -3,12 +3,15 @@ package main
 import (
 	"image"
 	"image/color"
+	"os"
 	"path"
 
+	"github.com/154pinkchairs/dopewars2d/basegame"
 	"github.com/154pinkchairs/dopewars2d/core"
 	"github.com/hajimehoshi/ebiten/v2"
 	eu "github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/furex/v2"
+	"github.com/yohamta/furex/v2/components"
 )
 
 type UI interface {
@@ -89,10 +92,23 @@ func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 	}), nil
 }
 
-/*
 func (g *Game) setupUI() error {
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
+			Top:          200,
+			Left:         340,
+			Width:        120,
+			Height:       40,
+			MarginLeft:   390,
+			MarginTop:    5,
+			MarginBottom: 5,
+			MarginRight:  5,
+			Handler: &components.Button{Text: "", OnClick: func() {
+				basegame.NewGame(&basegame.Game{})
+				bg.Clear()
+			}},
+		})
+	}
 
 	loadSaveBtn := func() *furex.View {
 		return (&furex.View{
@@ -109,11 +125,9 @@ func (g *Game) setupUI() error {
 				//if savegame.json file does not exist, create it
 				basegame.NewGame(&basegame.Game{})
 				bg.Clear()
-				newgameimg.Clear()
-				loadsave.Clear()
-				donate.Clear()
-				issues.Clear()
-				quitimg.Clear()
+				for _, img := range buttonImages {
+					img.Clear()
+				}
 			},
 			},
 		})
@@ -217,9 +231,5 @@ func (g *Game) setupUI() error {
 	)
 	//if core.NewGame function has started, then .RemoveAll is called on the gameUI
 	//NOTE: got segfault here
-	if g.CG.HasStarted {
-		g.gameUI.RemoveAll()
-	}
+	return nil
 }
-
-*/
