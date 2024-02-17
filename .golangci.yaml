@@ -16,7 +16,6 @@ linters:
     - asciicheck
     - bodyclose
     - dupl
-    - depguard
     - exhaustruct
     - funlen
     - gocognit

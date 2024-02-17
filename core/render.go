@@ -40,7 +40,7 @@ type Dist_map struct {
 }
 
 // create the file reader, then the render function/method/interface that translates the characters into tile files to be rendered by ebitenutil.NewImageFromFile
-func renderMap(screen *ebiten.Image, mapDrawer MapDrawer, srcfile string) (error, *ebiten.Image, *Dist_map) {
+func RenderMap(screen *ebiten.Image, mapDrawer MapDrawer, srcfile string) (error, *ebiten.Image, *Dist_map) {
 	//open the file
 	file, err := os.Open(srcfile)
 	if err != nil {
