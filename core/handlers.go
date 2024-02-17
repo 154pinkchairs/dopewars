@@ -1,9 +1,13 @@
 package core
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/hajimehoshi/ebiten/v2"
+
+	"github.com/lafriks/go-tiled"
+	"github.com/lafriks/go-tiled/render"
 )
 
 func (g Game) Close() {
@@ -25,12 +29,35 @@ func (g Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight
 }
 
 func (g Game) Draw(screen *ebiten.Image) {
+	level0, err := loadAssets()
+	if err != nil {
+		fmt.Printf("fatal runtime error: %v", err)
+		os.Exit(2)
+	}
 
-	screen.DrawImage()
+	screen.DrawImage(level0, nil)
 }
 
-func loadAssets() ([]*ebiten.Image, error) {
+// FIXME: unsupported orientation error here
+func loadAssets() (*ebiten.Image, error) {
+	gameMap, err := tiled.LoadFile("assets/tiles/Building Tiles/map.tmx")
+	if err != nil {
+		return nil, fmt.Errorf("error opening map: %v", err)
+	}
+	renderer, err := render.NewRenderer(gameMap)
+	if err != nil {
+		return nil, fmt.Errorf("error starting renderer: %w", err)
+	}
 
+	if err = renderer.RenderVisibleLayers(); err != nil {
+		return nil, fmt.Errorf("error rendering layers: %w", err)
+	}
+
+	img := renderer.Result
+
+	renderer.Clear()
+
+	return ebiten.NewImageFromImage(img), nil
 }
 
 func (h *GameHandler) DrawMenu(screen *ebiten.Image) {
