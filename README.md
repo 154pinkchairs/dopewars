@@ -1,5 +1,6 @@
-# <span style="color:red"> This project is not currently maintained. I hope to revive it someday, although it'll probably be a rewrite from scratch due to the design flaws in the original project, the time that has passed since I did anything on it and the amount of breaking changes in Ebiten. sorry 
-:(</span>
+# NOTE about the project status
+
+Recently (February 2024) I've decided to finally revive this project. But I'm not really sure if I'll continue developing it, especially since Godot isn't really the best framework out there with it's heavy use of singletons and poor optimization (blank map using almost 500 MB!). Maybe I'll rewrite it in Godot or something else with better community, performance, expressiveness and less imposing of sketchy code standards.
 
 # Dopewars 2D
 [![Go Report Card](https://goreportcard.com/badge/github.com/154pinkchairs/dopewars2d)](https://goreportcard.com/report/github.com/154pinkchairs/dopewars2d)
