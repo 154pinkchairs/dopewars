@@ -1,4 +1,4 @@
-package main
+package core
 
 import (
 	"image"
@@ -7,7 +7,7 @@ import (
 	"path"
 
 	"github.com/154pinkchairs/dopewars2d/basegame"
-	"github.com/154pinkchairs/dopewars2d/core"
+	"github.com/154pinkchairs/dopewars2d/helpers"
 	"github.com/hajimehoshi/ebiten/v2"
 	eu "github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/furex/v2"
@@ -58,13 +58,7 @@ func (gu *GameUI) DrawMenu(ebiten.Image) {
 }
 
 func (gu *GameUI) NewGameBtn() (*furex.View, error) {
-	g := &Game{}
 	f := FXHandlerImpl{}
-	cg := core.Game{}
-	if err := g.StartGame(&g.Character, &cg); err != nil {
-		g.Close("error")
-		return nil, err
-	}
 	// TODO: sprite creation here (1st return value)
 	_, _, err := eu.NewImageFromFile(path.Join("assets", "newgame.png"))
 	if err != nil {
@@ -92,7 +86,7 @@ func (gu *GameUI) NewGameBtn() (*furex.View, error) {
 	}), nil
 }
 
-func (g *Game) setupUI() error {
+func (g *GameHandler) setupUI() error {
 	newGameBtn := func() *furex.View {
 		return (&furex.View{
 			Top:          200,
@@ -104,8 +98,9 @@ func (g *Game) setupUI() error {
 			MarginBottom: 5,
 			MarginRight:  5,
 			Handler: &components.Button{Text: "", OnClick: func() {
-				basegame.NewGame(&basegame.Game{})
 				bg.Clear()
+				g.g.gameUI.RemoveAll()
+				g.NewGame(g.c)
 			}},
 		})
 	}
@@ -120,15 +115,15 @@ func (g *Game) setupUI() error {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler: &components.Button{Text: "", OnClick: func() {
-				basegame.Loadsave(&basegame.Character{})
-				//if savegame.json file does not exist, create it
-				basegame.NewGame(&basegame.Game{})
-				bg.Clear()
-				for _, img := range buttonImages {
-					img.Clear()
-				}
-			},
+			Handler: &components.Button{
+				Text: "", OnClick: func() {
+					playerdata := basegame.Loadsave()
+					g.NewGame(playerdata)
+					bg.Clear()
+					for _, img := range buttonImages {
+						img.Clear()
+					}
+				},
 			},
 		})
 	}
@@ -143,7 +138,7 @@ func (g *Game) setupUI() error {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://www.liberapay.com/") }}, //TODO: setup donations
+			Handler:      &components.Button{Text: "", OnClick: func() { helpers.Openbrowser("https://www.liberapay.com/") }}, // TODO: setup donations
 		})
 	}
 
@@ -157,7 +152,7 @@ func (g *Game) setupUI() error {
 			MarginTop:    5,
 			MarginRight:  5,
 			MarginBottom: 5,
-			Handler:      &components.Button{Text: "", OnClick: func() { openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
+			Handler:      &components.Button{Text: "", OnClick: func() { helpers.Openbrowser("https://github.com/154pinkchairs/dopewars/issues") }},
 			Wrap:         furex.NoWrap,
 		})
 	}
@@ -176,12 +171,12 @@ func (g *Game) setupUI() error {
 		})
 	}
 
-	g.gameUI = (&furex.View{
+	g.g.gameUI = (&furex.View{
 		Width:        960,
 		Height:       540,
 		Direction:    furex.Column,
 		Justify:      furex.JustifyCenter,
-		AlignItems:   furex.AlignItemStart, //place items in the center, one below the other
+		AlignItems:   furex.AlignItemStart, // place items in the center, one below the other
 		AlignContent: furex.AlignContentCenter,
 		Wrap:         furex.NoWrap,
 	}).AddChild(
@@ -229,7 +224,6 @@ func (g *Game) setupUI() error {
 		issuesBtn(),
 		quitBtn(),
 	)
-	//if core.NewGame function has started, then .RemoveAll is called on the gameUI
-	//NOTE: got segfault here
+	// if core.NewGame function has started, then .RemoveAll is called on the gameUI
 	return nil
 }

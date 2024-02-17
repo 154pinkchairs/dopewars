@@ -8,7 +8,6 @@ require (
 	github.com/rs/zerolog v1.29.0
 	github.com/tinne26/etxt v0.0.6
 	github.com/yohamta/furex/v2 v2.1.7
-	golang.org/x/exp/shiny v0.0.0-20220916125017-b168a2c6b86b
 )
 
 require (
@@ -18,6 +17,7 @@ require (
 	github.com/jezek/xgb v1.0.1 // indirect
 	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	golang.org/x/exp/shiny v0.0.0-20220916125017-b168a2c6b86b // indirect
 	golang.org/x/image v0.0.0-20220722155232-062f8c9fd539 // indirect
 	golang.org/x/mobile v0.0.0-20220722155234-aaac322e2105 // indirect
 	golang.org/x/sys v0.0.0-20220818161305-2296e01440c6 // indirect
